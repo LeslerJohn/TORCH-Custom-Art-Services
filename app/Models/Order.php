@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Order extends Model
+{
+    protected $table = 'order';
+    protected $fillable = [
+        'client_id',
+        'total',
+        'delivery_id',
+        'status'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(ClientProfile::class, 'client_id');
+    }
+
+    public function delivery()
+    {
+        return $this->belongsTo(Delivery::class, 'delivery_id');
+    }
+}
