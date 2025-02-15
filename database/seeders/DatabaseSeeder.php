@@ -38,7 +38,6 @@ class DatabaseSeeder extends Seeder
             'username' => 'artist1',
             'birthdate' => '1990-01-01',
             'bio' => 'An amazing artist.',
-            'verified' => true,
             'is_suspended' => false,
             'rating' => 5.0,
             'available' => true,
