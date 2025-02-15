@@ -17,25 +17,25 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen">
-        @include('layouts.admin-navigation')
-
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white dark:bg-gray-800 shadow">
+    <div class="min-h-screen grid grid-rows-[auto_1fr] grid-cols-[20%_1fr] overflow-hidden">
+        <header class="bg-white dark:bg-gray-800 shadow col-span-2">
+            @include('layouts.admin-navigation')
+            @isset($header)
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
-            </header>
-        @endisset
-
-        @include('layouts.admin-sidebar')
-
-        <!-- Page Content -->
-        <main class="max-w-8xl mx-auto ml-[260px] pl-8 py-6">
+            @endisset
+        </header>
+        <aside class="bg-gray-100 dark:bg-gray-900 overflow-y-auto mt-16">
+            @include('layouts.admin-sidebar')
+        </aside>
+        <main class="bg-gray-100 dark:bg-gray-800 p-6 overflow-y-auto mt-16">
             {{ $slot }}
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    @stack('scripts')
 </body>
 
 </html>
