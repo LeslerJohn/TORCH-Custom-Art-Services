@@ -1,4 +1,4 @@
-<nav class="fixed pt-4 pr-1 min-h-screen w-64 bg-white shadow-lg border-r-4 border-orange-400 mt-16 z-10">
+<nav class="fixed pt-4 pr-1 min-h-screen w-64 bg-white shadow-lg border-r-4 border-orange-400 mt-16 z-5">
 
     <!-- Navigation Links -->
     <div class=" pl-4 space-y-2">

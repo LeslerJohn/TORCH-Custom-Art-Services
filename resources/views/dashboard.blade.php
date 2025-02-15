@@ -126,11 +126,11 @@
                                             </svg>
                                         </button>
 
-                                        <div class="flex gap-2">
+                                        <div class="flex gap-4">
                                             <!-- Carousel Section -->
-                                            <div class="w-2/3 relative">
+                                            <div class="w-1/2 relative">
                                                 <div id="carousel-items"
-                                                    class="relative h-72 overflow-hidden rounded-lg"></div>
+                                                    class="relative h-full overflow-hidden rounded-lg"></div>
 
                                                 <!-- Carousel Controls -->
                                                 <button type="button"
@@ -163,7 +163,7 @@
                                             </div>
 
                                             <!-- Artwork Details -->
-                                            <div class="1/3">
+                                            <div class="w-1/2">
                                                 <div class="flex items-center gap-2 mt-2">
                                                     <img id="modal-artist-image" src="" alt="Artist"
                                                         class="w-10 h-10 rounded-full border border-white">

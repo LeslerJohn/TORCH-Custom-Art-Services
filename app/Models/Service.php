@@ -12,7 +12,8 @@ class Service extends Model
         'category_id',
         'price_rate',
         'rush_price_rate',
-        'timeframe',
+        'normal_timeframe',
+        'rush_timeframe',
         'status',
     ];
 

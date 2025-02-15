@@ -41,7 +41,6 @@ class ArtworkController extends Controller
             'category_id' => 'required|exists:category,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'medium' => 'required|string|max:255',
             'dimension' => 'required|string|max:255',
             'price' => 'required|numeric',
             'is_showcase' => 'nullable|boolean',
@@ -55,7 +54,6 @@ class ArtworkController extends Controller
             'is_showcase' => $request->is_showcase ?? false,
             'title' => $request->title,
             'description' => $request->description,
-            'medium' => $request->medium,
             'dimension' => $request->dimension,
             'price' => $request->price,
         ]);
@@ -112,7 +110,6 @@ class ArtworkController extends Controller
             'is_showcase' => 'nullable|boolean',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'medium' => 'required|string|max:255',
             'dimension' => 'required|string|max:255',
             'price' => 'required|numeric',
             'tags' => 'nullable',
@@ -124,7 +121,6 @@ class ArtworkController extends Controller
             'is_showcase' => $request->is_showcase ?? false,
             'title' => $request->title,
             'description' => $request->description,
-            'medium' => $request->medium,
             'dimension' => $request->dimension,
             'price' => $request->price,
         ]);
