@@ -10,7 +10,8 @@
                 <h1 class="text-3xl font-bold-300">{{$service->category->name}}</h1>
                 <p><strong>Price per square cm:</strong> ₱{{$service->price_rate}}</p>
                 <p><strong>Rush order price:</strong> ₱{{$service->rush_price_rate}}</p>
-                <p><strong>Estimated completion time:</strong> {{$service->timeframe}} days</p>
+                <p><strong>Estimated normal completion time:</strong> {{$service->normal_timeframe}} days</p>
+                <p><strong>Estimated rush completion time:</strong> {{$service->rush_timeframe}} days</p>
                 
                 <div class="flex flex-wrap gap-2 w-1/2">
                     @foreach ($service->tags as $tag)

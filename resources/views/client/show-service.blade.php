@@ -56,7 +56,8 @@
 
             <div class="flex w-1/2 flex-col">
                     <h1 class="text-3xl font-bold font-bold-300">{{ $service->category->name }}</h1>
-                    <p class="text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per square centimeter.</strong></p>
+                    <p class="text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per square inch.</strong></p>
+                    <p class="text-lg text-gray-500">Completion time: {{$service->normal_timeframe}} days</p>
                 
                     <div class="flex items-center gap-2 mt-2">
                         <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
@@ -80,7 +81,8 @@
 
                 <div>
                     <h2 class="text-xl font-semibold">Rush Order</h2>
-                    <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square centimeter.</p>
+                    <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square inch.</p>
+                    <p class="text-lg text-gray-500">Completion time: {{$service->rush_timeframe}} days</p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($service->tags as $tag)
                             <span
@@ -151,7 +153,7 @@
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full">
-                    <div class="relative p-4 w-full max-w-3xl max-h-full">
+                    <div class="relative p-4 w-full max-w-7xl max-h-full">
                         <!-- Modal content -->
                         <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                             <!-- Modal header -->
@@ -172,20 +174,40 @@
                                 </button>
                             </div>
                             <!-- Modal body -->
-                            <div class="flex gap-2 justify-center p-4 md:p-5">
+                            <div class="flex gap-2 w-full justify-center p-4 md:p-5">
                                 <div class="w-1/2">
-                                    <p class="mb-3 text-xl text-red-600 font-bold"><strong>Total: </strong>₱{{number_format($service->price, 0, '.', ',')}}</p>
-                                    <div class="flex gap-4 items-center">
-                                        <img src="{{ $service->images->first()?->attachment ? asset('storage/' . $service->images->first()->attachment->path) : asset('images/default.image.jpg') }}"
-                                        alt="{{ $service->title }}"
-                                        class="w-16 h-16 object-cover rounded-lg">
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                            class="w-10 h-10 rounded-full border border-white">
                                         <div>
-                                            <h1 class="text-lg font-bold">{{ $service->title }}</h1>
-                                            <p class="text-sm text-gray-500">{{ $service->artist->user->name ?? 'Unknown' }}</p>
+                                            <p class="text-sm font-medium flex items-center">
+                                                {{ $service->artist->user->name ?? 'John Doe' }}
+                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                </svg>
+                                            </p>
+                                            <p class="text-sm text-gray-400">{{ '@' . $service->artist->username }}</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center mt-4 w-full border border-black rounded-md p-2">
-                                        <p class="text-sm mr-4">Accepts</p>
+                                    <div class="mt-4">
+                                        <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow mb-4">
+                                            <p><strong>Price Rate:</strong> ₱{{ number_format($service->price_rate, 0, '.', ',') }} per square inch</p>
+                                            <p>Completion time: {{$service->normal_timeframe}} days</p>
+                                        </div>
+                                        <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow">
+                                            <p><strong>Rush Price Rate:</strong> ₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square inch</p>
+                                            <p>Completion time: {{$service->rush_timeframe}} days</p>
+                                        </div>
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            @foreach ($service->tags as $tag)
+                                                <span class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center mt-4 w-full max-w-sm border border-black rounded-md p-2">
+                                        <p class="text-sm mx-4">Accepts</p>
                                         <img src="{{asset('images/paymongo.png')}}" alt="Paymongo" class="h-4">
                                     </div>
                                     <div class="mt-4 flex flex-col gap-2">
@@ -209,38 +231,118 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2" action="#">
-                                    <h1 class="text-xl font-bold">Address</h1>
+                                <form class="space-y-4 w-1/2" action="{{route('client.request.store', $service)}}" method="POST" enctype="multipart/form-data" x-data="orderForm()">
+                                    @csrf
+                                    <h1 class="text-xl font-bold">Request an Artwork</h1>
+                                
+                                    <!-- Description -->
                                     <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contact_number" :value="__('Contact Number')" />
-                                        <div class="flex">
-                                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
-                                            <x-text-input id="contact_number" class="block w-full rounded-l-none" type="text" name="contact_number"
-                                                placeholder="9123456789" :value="old('contact_number')" required autocomplete="username" />
+                                        <x-input-label for="description" :value="__('Artwork Description')" />
+                                        <textarea id="description" name="description" class="block w-full border-gray-300 rounded-md shadow-sm"
+                                            placeholder="Describe the details of your artwork..." required></textarea>
+                                        <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                                    </div>
+                                
+                                    <!-- Dimensions -->
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <x-input-label for="width" :value="__('Width')" />
+                                            <div class="flex">
+                                                <x-text-input id="width" class="block w-full" type="number" name="width" x-model="width" min="1" required />
+                                                <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit">
+                                                    <option value="cm">cm</option>
+                                                    <option value="in">inches</option>
+                                                </select>
+                                            </div>
+                                            <small class="text-gray-500">Enter the width of your artwork.</small>
                                         </div>
-                                        <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
+                                
+                                        <div>
+                                            <x-input-label for="height" :value="__('Height')" />
+                                            <div class="flex">
+                                                <x-text-input id="height" class="block w-full" type="number" name="height" x-model="height" min="1" required />
+                                                <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit">
+                                                    <option value="cm">cm</option>
+                                                    <option value="in">inches</option>
+                                                </select>
+                                            </div>
+                                            <small class="text-gray-500">Enter the height of your artwork.</small>
+                                        </div>
                                     </div>
+                                
+                                    <!-- Deadline -->
                                     <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="barangay" :value="__('Barangay')" />
-                                        <x-text-input id="barangay" class="block mt-1 w-full" type="text" name="barangay"
-                                            placeholder="Canelar" :value="old('barangay')" required autocomplete="barangay" />
-                                        <x-input-error :messages="$errors->get('barangay')" class="mt-2" />
+                                        <x-input-label for="deadline" :value="__('Deadline')" />
+                                        <x-text-input id="deadline" class="block w-full" type="date" name="deadline" x-model="deadline" required />
+                                        <small class="text-gray-500">Rush orders may increase the price.</small>
                                     </div>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="street" :value="__('Street/Drive')" />
-                                        <x-text-input id="street" class="block mt-1 w-full" type="text" name="street"
-                                            placeholder="Gregorio" :value="old('street')" required autocomplete="street" />
-                                        <x-input-error :messages="$errors->get('street')" class="mt-2" />
+                                
+                                    <!-- References (Multiple Image Upload) -->
+                                    <div x-data="{ files: [] }">
+                                        <x-input-label for="references" :value="__('Reference Images')" />
+                                        <input id="references" type="file" name="references[]" multiple class="block w-full border-gray-300 rounded-md shadow-sm" @change="files = Array.from($event.target.files)">
+                                        <small class="text-gray-500">Upload images that help illustrate your request (max 5 images).</small>
+                                        <x-input-error :messages="$errors->get('references')" class="mt-2" />
+                                        
+                                        <!-- Display selected images -->
+                                        <div class="mt-4 grid grid-cols-2 gap-4">
+                                            <template x-for="file in files" :key="file.name">
+                                                <div class="relative">
+                                                    <img :src="URL.createObjectURL(file)" class="w-full h-32 object-cover rounded-md">
+                                                    <button type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1" @click="files = files.filter(f => f !== file)">
+                                                        &times;
+                                                    </button>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="house_number" :value="__('House Number')" />
-                                        <x-text-input id="house_number" class="block mt-1 w-full" type="text" name="house_number"
-                                            placeholder="C-1276" :value="old('house_number')" required autocomplete="house_number" />
-                                        <x-input-error :messages="$errors->get('house_number')" class="mt-2" />
+                                
+                                    <!-- Price Calculator -->
+                                    <div class="p-4 bg-gray-100 rounded-md shadow">
+                                        <h2 class="text-lg font-semibold">Price Calculator</h2>
+                                        <p class="text-gray-600">Formula: (Width x Height) × Base Price</p>
+                                        <p class="text-xl font-bold text-indigo-600" x-text="'₱' + totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></p>
                                     </div>
+                                
+                                    <!-- Submit Button -->
                                     <button type="submit"
-                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Place Order</button>
+                                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md">
+                                        Submit Request
+                                    </button>
                                 </form>
+                                <!-- Alpine.js for Live Calculation -->
+                                <script>
+                                function orderForm() {
+                                    return {
+                                        width: 0,
+                                        height: 0,
+                                        unit: 'cm',
+                                        base_price: {{ $service->price_rate }},
+                                        rush_price: {{ $service->rush_price_rate }},
+                                        normal_timeframe: {{ $service->normal_timeframe }},
+                                        rush_timeframe: {{ $service->rush_timeframe }},
+                                        deadline: '',
+                                        get totalPrice() {
+                                            let widthInInches = this.unit === 'cm' ? this.width / 2.54 : this.width;
+                                            let heightInInches = this.unit === 'cm' ? this.height / 2.54 : this.height;
+                                            let area = widthInInches * heightInInches;
+                                            let baseTotal = area * this.base_price;
+                                            let rushTotal = area * this.rush_price;
+                                            let selectedDate = new Date(this.deadline);
+                                            let currentDate = new Date();
+                                            let timeDiff = (selectedDate - currentDate) / (1000 * 60 * 60 * 24);
+                                            if (timeDiff < this.rush_timeframe) {
+                                                return 'Request cannot go through. Deadline is too soon.';
+                                            } else if (timeDiff >= this.rush_timeframe && timeDiff < this.normal_timeframe) {
+                                                return rushTotal;
+                                            } else {
+                                                return baseTotal;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                </script>                                
                             </div>
                         </div>
                     </div>

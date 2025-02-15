@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('category')->cascadeOnDelete();
             $table->string('title', 255);
             $table->text('description');
-            $table->string('medium', 50);
             $table->string('dimension', 50);
             $table->decimal('price', 10, 2);
             $table->integer('stock')->default(1);

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('category')->cascadeOnDelete();
             $table->decimal('price_rate', 10, 2);
             $table->decimal('rush_price_rate', 10, 2);
-            $table->string('timeframe', 255);
+            $table->string('normal_timeframe', 255);
+            $table->string('rush_timeframe', 255);
             $table->string('status', 50)->default('open');
             $table->timestamps();
         });

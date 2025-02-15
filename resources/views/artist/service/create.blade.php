@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <x-input-label for="price_rate" class="text-sm" :value="__('Price per square centimeter')" />
+                        <x-input-label for="price_rate" class="text-sm" :value="__('Price per square inch')" />
                         <x-text-input id="price_rate" class="block mt-1 w-full" type="number" name="price_rate" required placeholder="Set base price per cm." />
                         <x-input-error :messages="$errors->get('price_rate')" class="mt-2" />
                     </div>
@@ -41,9 +41,15 @@
                     </div>
     
                     <div class="mt-6">
-                        <x-input-label for="timeframe" class="text-sm" :value="__('Timeframe (days)')" />
-                        <x-text-input id="timeframe" class="block mt-1 w-full" type="number" name="timeframe" required placeholder="No. of days completion." />
-                        <x-input-error :messages="$errors->get('timeframe')" class="mt-2" />
+                        <x-input-label for="normal_timeframe" class="text-sm" :value="__('Normal Timeframe (days)')" />
+                        <x-text-input id="normal_timeframe" class="block mt-1 w-full" type="number" name="normal_timeframe" required placeholder="No. of days completion." />
+                        <x-input-error :messages="$errors->get('normal_timeframe')" class="mt-2" />
+                    </div>
+
+                    <div class="mt-6">
+                        <x-input-label for="rush_timeframe" class="text-sm" :value="__('Rush Timeframe (days)')" />
+                        <x-text-input id="rush_timeframe" class="block mt-1 w-full" type="number" name="rush_timeframe" required placeholder="No. of days completion." />
+                        <x-input-error :messages="$errors->get('rush_timeframe')" class="mt-2" />
                     </div>
                     
                     <script>
@@ -181,7 +187,7 @@
         </form>
     </div>
 
-    <div id="success-message" class="hidden z-100 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+    <div id="success-message" class="hidden z-500 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <p class="text-lg font-semibold">Service created successfully</p>
         </div>
