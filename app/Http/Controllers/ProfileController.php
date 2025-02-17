@@ -57,4 +57,14 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function showClientProfile()
+    {
+        return view('client.profile.profile');
+    }
+
+    public function showArtistProfile()
+    {
+        return view('artist.profile.profile');
+    }
 }

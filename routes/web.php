@@ -16,6 +16,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
+    Route::get('/client/profile', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
 });
 
 Route::get('/artwork/{artwork}', [HomeController::class, 'show_artwork'])->name('artwork.show');
@@ -23,6 +25,6 @@ Route::get('/service/{service}', [HomeController::class, 'show_service'])->name(
 
 Route::post('/artwork/{artwork}', [OrderController::class, 'store'])->name('client.order.store');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/artist.php';
-require __DIR__.'/admin.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/artist.php';
+require __DIR__ . '/admin.php';
