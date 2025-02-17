@@ -27,11 +27,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $categories = [
-            'Painting' => ['Oil Paint', 'Acrylic', 'Watercolor'],
-            'Drawing' => ['Charcoal', 'Ink', 'Pencil'],
-            'Sculpture' => ['Clay', 'Stone', 'Metal'],
-            'Photography' => ['Digital', 'Film', 'Drone'],
-            'Digital Art' => ['Photoshop', 'Illustrator', 'Procreate'],
+            'Painting' => ['Oil Paint', 'Acrylic', 'Watercolor', 'Tempera', 'Enamel'],
+            'Drawing' => ['Charcoal', 'Ink', 'Pencil', 'Pastels', 'Colored Pencils', 'Graphite', 'Markers'],
+            'Landscape' => ['Acrylic', 'Oil', 'Watercolor', 'Pastels'],
+            'Mural' => ['Acrylic', 'Spray Paint', 'Oil', 'Latex Paint'],
+            'Portrait' => ['Oil', 'Acrylic', 'Charcoal', 'Graphite', 'Colored Pencils', 'Pastels'],
         ];
 
         foreach ($categories as $categoryName => $tags) {
