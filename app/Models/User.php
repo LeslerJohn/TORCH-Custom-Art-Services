@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasOne(ArtistProfile::class, 'id', 'id');
     }
 
+    public function isArtist()
+    {
+        return $this->role === 'artist';
+    }
+
     public function profileImage()
     {
         return $this->hasOne(Attachment::class, 'id', 'profile_image_id');

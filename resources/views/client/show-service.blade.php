@@ -229,6 +229,12 @@
                                             </svg>                                              
                                             <p class="text-sm">Quality assured.</p>                                            
                                         </div>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 6l12 12M6 18L18 6"/>
+                                            </svg>                                              
+                                            <p class="text-sm">No cancellation once accepted.</p>                                            
+                                        </div>
                                     </div>
                                 </div>
                                 <form class="space-y-4 w-1/2" action="{{route('client.request.store', $service)}}" method="POST" enctype="multipart/form-data" x-data="orderForm()">
@@ -280,7 +286,7 @@
                                     <!-- References (Multiple Image Upload) -->
                                     <div x-data="{ files: [] }">
                                         <x-input-label for="references" :value="__('Reference Images')" />
-                                        <input id="references" type="file" name="references[]" multiple class="block w-full border-gray-300 rounded-md shadow-sm" @change="files = Array.from($event.target.files)">
+                                        <input id="references" type="file" name="references[]" accept="image/*" multiple class="block w-full border-gray-300 rounded-md shadow-sm" @change="files = Array.from($event.target.files)">
                                         <small class="text-gray-500">Upload images that help illustrate your request (max 5 images).</small>
                                         <x-input-error :messages="$errors->get('references')" class="mt-2" />
                                         
@@ -302,6 +308,7 @@
                                         <h2 class="text-lg font-semibold">Price Calculator</h2>
                                         <p class="text-gray-600">Formula: (Width x Height) × Base Price</p>
                                         <p class="text-xl font-bold text-indigo-600" x-text="'₱' + totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></p>
+                                        <input type="hidden" name="total_price" x-model="totalPrice">
                                     </div>
                                 
                                     <!-- Submit Button -->

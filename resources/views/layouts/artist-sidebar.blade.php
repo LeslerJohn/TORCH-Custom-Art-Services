@@ -3,8 +3,8 @@
     <!-- Navigation Links -->
     <div class=" pl-4 space-y-2">
         <x-responsive-nav-link
-            {{-- :href="route('artist.portfolio.dashboard')"
-            :active="request()->routeIs('artist.portfolio.dashboard')" --}}
+            :href="route('artist.dashboard')"
+            :active="request()->routeIs('artist.dashboard')"
             class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-user">
                 <path d="M14 2v4a2 2 0 0 0 2 2h4" />
@@ -50,8 +50,8 @@
 
         <p class="text-sm mt-2">Request</p>
         <x-responsive-nav-link
-            {{-- :href="route('artist.commissions.dashboard')"
-            :active="request()->routeIs('artist.commissions.dashboard')" --}}
+            :href="route('artist.commission.index')"
+            :active="request()->routeIs('artist.commission.index')"
             class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins">
                 <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" />
@@ -64,8 +64,8 @@
         </x-responsive-nav-link>
 
         <x-responsive-nav-link
-            {{-- :href="route('artist.commissions.dashboard')"
-            :active="request()->routeIs('artist.commissions.dashboard')" --}}
+            :href="route('artist.order.index')"
+            :active="request()->routeIs('artist.order.index')"
             class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins">
                 <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" />

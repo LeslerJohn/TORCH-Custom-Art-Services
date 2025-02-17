@@ -72,7 +72,7 @@
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
-                            <x-dropdown-link :href="route('profile.edit')">
+                            <x-dropdown-link :href="route('client.request.index')">
                                 {{ __('Requests') }}
                             </x-dropdown-link>
 
@@ -84,7 +84,15 @@
                                 {{ __('Collections') }}
                             </x-dropdown-link>
 
-                            <p class="w-full h-0.5 border-b border-gray-400 my-4"></p>
+                            <p class="w-full h-0.5 border-b border-gray-400 mt-4"></p>
+
+                            @if(Auth::user()->isArtist())
+                                <x-dropdown-link :href="route('artist.dashboard')">
+                                    {{ __('Artist Dashboard') }}
+                                </x-dropdown-link>
+                            @endif
+
+                            <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
 
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Settings') }}

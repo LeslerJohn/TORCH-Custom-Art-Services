@@ -31,7 +31,7 @@ class Request extends Model
 
     public function images()
     {
-        return $this->hasMany(RequestImage::class, 'id', 'request_id');
+        return $this->hasMany(RequestImage::class, 'request_id', 'id');
     }
 
     public function commissions()

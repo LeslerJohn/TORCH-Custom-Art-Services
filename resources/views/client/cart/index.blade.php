@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold mb-4">Your Cart ({{ $cart->items->count() }} items)</h1>
 
         @if ($cart && $cart->items->count() > 0)
-            <form action="{{ route('client.cart.order') }}" method="POST" id="checkout-form">
+            <form action="{{ route('client.cart.checkout') }}" method="POST" id="checkout-form">
                 @csrf
 
                 <div class="space-y-6">
@@ -32,7 +32,9 @@
 
                                     <!-- Artwork Image -->
                                     @php
-                                        $thumbnail = $item->artwork->images->first()?->attachment;
+                                        $thumbnail = $item->artwork->images->first()
+                                            ? $item->artwork->images->first()->attachment
+                                            : null;
                                     @endphp
                                     <img src="{{ $thumbnail ? asset("storage/{$thumbnail->path}") : asset('images/default-image.jpg') }}"
                                         alt="{{ $item->artwork->title }}" class="w-36 h-36 object-cover rounded-md">
