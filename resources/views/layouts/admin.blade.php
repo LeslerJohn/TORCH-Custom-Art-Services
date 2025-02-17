@@ -32,7 +32,7 @@
                     </div>
                 @endisset
             </header>
-            <main class="bg-gray-100 dark:bg-gray-800 p-6 mt-16 overflow-y-auto">
+            <main class="bg-gray-100 dark:bg-gray-800 p-6 mt-16 overflow-y-auto h-screen">
                 {{ $slot }}
             </main>
         </div>
