@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Artist\ArtworkController;
+use App\Http\Controllers\Artist\CommissionController;
+use App\Http\Controllers\Artist\OrderController;
 use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Artist\ShowcaseController;
@@ -55,4 +57,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/artist/artwork/{artwork}/edit', [ArtworkController::class, 'edit'])->name('artist.artwork.edit');
     Route::put('/artist/artwork/{artwork}', [ArtworkController::class, 'update'])->name('artist.artwork.update');
     Route::delete('/artist/artwork/{artwork}', [ArtworkController::class, 'destroy'])->name('artist.artwork.destroy');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/order', [OrderController::class, 'index'])->name('artist.order.index');
+    Route::get('/artist/order/create', [OrderController::class, 'create'])->name('artist.order.create');
+    Route::post('/artist/order', [OrderController::class, 'store'])->name('artist.order.store');
+    Route::get('/artist/order/{order}', [OrderController::class, 'show'])->name('artist.order.show');
+    Route::post('/artist/order/{order}/deliver', [OrderController::class, 'deliver'])->name('artist.order.deliver');
+    Route::post('/artist/order/{order}/delivered', [OrderController::class, 'delivered'])->name('artist.order.delivered');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/commission', [CommissionController::class, 'index'])->name('artist.commission.index');
+    Route::get('/artist/request/{request}', [CommissionController::class, 'showRequest'])->name('artist.request.show');
+    Route::post('/artist/request/{request}/accept', [CommissionController::class, 'accept'])->name('artist.request.accept');
+    Route::post('/artist/request/{request}/reject', [CommissionController::class, 'reject'])->name('artist.request.reject');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/commission/{commission}', [CommissionController::class, 'show'])->name('artist.commission.show');
+    Route::post('/artist/commission/{commission}/start', [CommissionController::class, 'start'])->name('artist.commission.start');
+    Route::post('/artist/commission/{commission}/done', [CommissionController::class, 'done'])->name('artist.commission.done');
+    Route::post('/artist/commission/{commission}/deliver', [CommissionController::class, 'deliver'])->name('artist.commission.deliver');
+    Route::post('/artist/commission/{commission}/delivered', [CommissionController::class, 'delivered'])->name('artist.commission.delivered');
+    Route::post('/artist/commission/{commission}/draft', [CommissionController::class, 'draft'])->name('artist.commission.draft');
 });

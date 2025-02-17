@@ -126,11 +126,11 @@
                                             </svg>
                                         </button>
 
-                                        <div class="flex gap-2">
+                                        <div class="flex gap-4">
                                             <!-- Carousel Section -->
-                                            <div class="w-2/3 relative">
+                                            <div class="w-1/2 relative">
                                                 <div id="carousel-items"
-                                                    class="relative h-72 overflow-hidden rounded-lg"></div>
+                                                    class="relative h-full overflow-hidden rounded-lg"></div>
 
                                                 <!-- Carousel Controls -->
                                                 <button type="button"
@@ -163,7 +163,7 @@
                                             </div>
 
                                             <!-- Artwork Details -->
-                                            <div class="1/3">
+                                            <div class="w-1/2">
                                                 <div class="flex items-center gap-2 mt-2">
                                                     <img id="modal-artist-image" src="" alt="Artist"
                                                         class="w-10 h-10 rounded-full border border-white">
@@ -343,57 +343,31 @@
             class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
             <h1 class="text-6xl text-orange-500 font-bold">Hear from our users</h1>
             <div class="flex gap-6 mt-8 items-center justify-center">
-                <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
-                    <img src="{{ asset('images/profile.default.jpg') }}" alt="User"
-                        class="w-16 h-16 rounded-full border-2 border-orange-500">
-                    <p class="text-lg font-semibold mt-4">John Doe</p>
-                    <p class="text-sm text-gray-500">Artist</p>
-                    <p class="text-md text-orange-500 text-center mt-4">"Filipino Art made it so easy to find the
-                        perfect piece for my home. Highly Recommended!"</p>
-                    <div class="flex gap-1 justify-center items-center mt-4">
-                        @for ($i = 0; $i < 5; $i++)
-                            <svg class="w-5 h-5 text-yellow-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
-                            </svg>
-                        @endfor
+                @foreach ($reviews as $review)
+                    <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
+                        <img src="{{ $review->order->client->user->profileImage ? asset('storage/' . $review->order->client->user->profileImage->attachment->path) : asset('images/profile.default.jpg') }}" alt="User"
+                            class="w-16 h-16 rounded-full border-2 border-orange-500">
+                        <p class="text-lg font-semibold mt-4">{{$review->order->client->user->name}}</p>
+                        <p class="text-sm text-gray-500">{{ucfirst($review->order->client->user->role)}}</p>
+                        <p class="text-md text-orange-500 text-center mt-4">"{{$review->comment}}"</p>
+                        <div class="flex gap-1 justify-center items-center mt-4">
+                            @for ($i = 0; $i < $review->rating; $i++)
+                                <svg class="w-5 h-5 text-yellow-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                </svg>
+                            @endfor
+                            @for ($i = $review->rating; $i < 5; $i++)
+                                <svg class="w-5 h-5 text-gray-300" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                </svg>
+                            @endfor
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
-                    <img src="{{ asset('images/profile.default.jpg') }}" alt="User"
-                        class="w-16 h-16 rounded-full border-2 border-orange-500">
-                    <p class="text-lg font-semibold mt-4">John Doe</p>
-                    <p class="text-sm text-gray-500">Artist</p>
-                    <p class="text-md text-orange-500 text-center mt-4">"Filipino Art made it so easy to find the
-                        perfect piece for my home. Highly Recommended!"</p>
-                    <div class="flex gap-1 justify-center items-center mt-4">
-                        @for ($i = 0; $i < 5; $i++)
-                            <svg class="w-5 h-5 text-yellow-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
-                            </svg>
-                        @endfor
-                    </div>
-                </div>
-                <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
-                    <img src="{{ asset('images/profile.default.jpg') }}" alt="User"
-                        class="w-16 h-16 rounded-full border-2 border-orange-500">
-                    <p class="text-lg font-semibold mt-4">John Doe</p>
-                    <p class="text-sm text-gray-500">Artist</p>
-                    <p class="text-md text-orange-500 text-center mt-4">"Filipino Art made it so easy to find the
-                        perfect piece for my home. Highly Recommended!"</p>
-                    <div class="flex gap-1 justify-center items-center mt-4">
-                        @for ($i = 0; $i < 5; $i++)
-                            <svg class="w-5 h-5 text-yellow-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
-                            </svg>
-                        @endfor
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
 

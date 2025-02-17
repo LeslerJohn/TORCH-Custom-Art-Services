@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('commission', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('request_id')->constrained('request')->cascadeOnDelete();
+            $table->foreignId('delivery_id')->constrained('delivery')->cascadeOnDelete();
+            $table->date('deadline')->nullable();
+            $table->enum('status', ['pending', 'ready', 'wip', 'done', 'completed'])->default('pending');
+            $table->timestamps();
+        });
+
+        Schema::create('draft', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('commission_id')->constrained('commission')->cascadeOnDelete();
+            $table->string('description', 255);
+            $table->foreignId('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('commission');
+        Schema::dropIfExists('draft');
+    }
+};

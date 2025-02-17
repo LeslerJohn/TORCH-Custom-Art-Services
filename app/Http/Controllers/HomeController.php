@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ArtistProfile;
 use App\Models\Artwork;
+use App\Models\OrderReview;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,9 @@ class HomeController extends Controller
         $artworks = Artwork::latest()->get();
         $artists = ArtistProfile::latest()->get();
         $services = Service::latest()->get();
+        $reviews = OrderReview::latest()->take(3)->get();
 
-        return view('dashboard', compact('artworks', 'artists', 'services'));
+        return view('dashboard', compact('artworks', 'artists', 'services', 'reviews'));
     }
 
     /**

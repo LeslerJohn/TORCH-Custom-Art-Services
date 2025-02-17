@@ -85,15 +85,18 @@
                 </div>
 
                 <div class="mt-4 flex gap-4 justify-end">
-                    <a href=""
-                        class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                        Add to cart
-                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
-                        </svg>
-                    </a>
+                    <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                            Add to cart
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                            </svg>
+                        </button>
+                    </form>
                     <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
                     class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
@@ -160,9 +163,16 @@
                                             </svg>                                              
                                             <p class="text-sm">Quality assured.</p>                                            
                                         </div>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 6l12 12M6 18L18 6"/>
+                                            </svg>                                              
+                                            <p class="text-sm">Not refundable once paid.</p>                                            
+                                        </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2" action="#">
+                                <form class="space-y-4 w-1/2" action="{{ route('client.order.store', $artwork) }}" method="POST">
+                                    @csrf
                                     <h1 class="text-xl font-bold">Address</h1>
                                     <div>
                                         <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contact_number" :value="__('Contact Number')" />
