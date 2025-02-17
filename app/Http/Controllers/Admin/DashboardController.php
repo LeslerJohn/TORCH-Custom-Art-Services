@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ArtistProfile;
+use App\Models\Commission;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -16,6 +17,7 @@ class DashboardController extends Controller
         $clientStats = $this->getUserStats('client');
         $applicationStats = $this->getApplicationStats();
         $monthlyArtistStats = $this->getMonthlyArtistStats(now()->year);
+        $transactionsMonthly = $this->getMonthlyTransactionsStats(now()->year);
 
         // Return the data to the view
         return view('admin.dashboard', [
@@ -38,6 +40,13 @@ class DashboardController extends Controller
             'latestArtistCount' => $monthlyArtistStats['latestCount'],
             'artistPercentageChange' => $monthlyArtistStats['percentageChange'],
             'artistTrendIndicator' => $monthlyArtistStats['trendIndicator'],
+
+            'monthlyTransactionsLabels' => $transactionsMonthly['labels'],
+            'monthlyTransactionsData' => $transactionsMonthly['data'],
+            'latestTransactionsCount' => $transactionsMonthly['latestCount'],
+            'transactionsPercentageChange' => $transactionsMonthly['percentageChange'],
+            'transactionsTrendIndicator' => $transactionsMonthly['trendIndicator'],
+            
         ]);
     }
 
@@ -104,6 +113,45 @@ class DashboardController extends Controller
         $labels = [];
         $data = [];
         foreach ($artistsMonthly as $row) {
+            // Convert the numeric month (1..12) to a word
+            $monthName = \Carbon\Carbon::createFromFormat('m', $row->month_number)->format('M');
+            // e.g. if month_number = 1 -> "January"
+
+            $labels[] = $monthName;
+            $data[] = $row->total;
+        }
+
+        $latestCount = end($data) ?: 0;
+        $dataCount = count($data);
+        if ($dataCount > 1) {
+            $previousCount = $data[$dataCount - 2];
+            $difference = $latestCount - $previousCount;
+            $percentageChange = ($previousCount == 0) ? 0 : ($difference / $previousCount) * 100;
+        } else {
+            $percentageChange = 0;
+        }
+        $trendIndicator = ($percentageChange >= 0) ? '↑' : '↓';
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+            'latestCount' => $latestCount,
+            'percentageChange' => round($percentageChange),
+            'trendIndicator' => $trendIndicator,
+        ];
+    }
+
+    private function getMonthlyTransactionsStats($year)
+    {
+        $transactionsMonthly = Commission::select(DB::raw('strftime("%m", created_at) as month_number'), DB::raw('strftime("%m", created_at) as month'), DB::raw('strftime("%Y", created_at) as year'), DB::raw('COUNT(*) as total'))
+            ->whereYear('created_at', $year)
+            ->groupBy('year', 'month', 'month_number')
+            ->orderBy('month')
+            ->get();
+
+        $labels = [];
+        $data = [];
+        foreach ($transactionsMonthly as $row) {
             // Convert the numeric month (1..12) to a word
             $monthName = \Carbon\Carbon::createFromFormat('m', $row->month_number)->format('M');
             // e.g. if month_number = 1 -> "January"

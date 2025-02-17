@@ -112,23 +112,36 @@
             </div>
             {{-- TRANSACTION GRAPH --}}
             <div class="bg-white rounded-lg shadow p-6 w-full">
+                <h2 class="text-sm text-gray-500">Statistics</h2>
+                <h3 class="text-xl font-semibold mb-2">Total Transactions</h3>
                 <!-- Top Section -->
                 <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h2 class="text-sm text-gray-500">Statistics</h2>
-                        <h3 class="text-xl font-semibold">Total Transactions</h3>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-3xl font-bold">1,027</span>
-                        <div class="flex items-center justify-end text-green-500 text-sm">
-                            <!-- Up arrow icon (Heroicons or Font Awesome) -->
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3.293 10.293a1 1 0 011.414 0L10 15.586l5.293-5.293a1 1
-                                    0 011.414 1.414l-6 6a1 1 0 01-1.414
-                                    0l-6-6a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    <div class="flex items-center space-x-2">
+                        <!-- Big number -->
+                        <span class="text-3xl font-bold">{{ number_format($latestTransactionsCount) }}</span>
+                        <!-- Percentage & arrow -->
+
+                        @if ($transactionsTrendIndicator === '↑')
+                            <svg class="w-4 h-4 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.293 10.293a1 1 0 011.414 0L10
+                                          15.586l5.293-5.293a1 1 0 011.414
+                                          1.414l-6 6a1 1 0 01-1.414
+                                          0l-6-6a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                             </svg>
-                            12.75%
-                        </div>
+                            <span class="flex items-center text-green-500 text-sm">
+                                {{ $transactionsPercentageChange }}%
+                            </span>
+                        @else
+                            <svg class="w-4 h-4 mr-0.5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 9.293a1 1 0 00-1.414 0L10
+                                          14.586l-5.293-5.293a1 1 0 00-1.414
+                                          1.414l6 6a1 1 0 001.414
+                                          0l6-6a1 1 0 000-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="flex items-center text-red-500 text-sm">
+                                {{ $transactionsPercentageChange }}%
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -344,28 +357,29 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const ctx = document.getElementById('transactionsChart').getContext('2d');
 
-                // Create a gradient fill for the line
+                // 1) Convert Laravel data to JS
+                const labels = @json($monthlyTransactionsLabels); // e.g. ["Jan","Feb","Mar","Apr","May","Jun"]
+                const data = @json($monthlyTransactionsData); // e.g. [400,700,900,1000,900,700]
+
+                // 2) Create gradient fill
                 const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)'); // #6366F1 with alpha
-                gradient.addColorStop(1, 'rgba(99, 102, 241, 0)'); // fade to transparent
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)'); // #3B82F6 with alpha
+                gradient.addColorStop(1, 'rgba(59, 130, 246, 0)'); // fade to transparent
 
-                // Example data
-                const labels = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
-                const dataPoints = [450, 574, 800, 950, 850, 720];
-
+                // 3) Build the chart
                 new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
                         datasets: [{
                             label: 'Transactions',
-                            data: dataPoints,
-                            borderColor: '#6366F1', // Indigo-500
+                            data: data,
+                            borderColor: '#3B82F6',
                             backgroundColor: gradient,
                             fill: true,
                             tension: 0.4,
-                            pointRadius: 4,
-                            pointHoverRadius: 6
+                            pointRadius: 5,
+                            pointHoverRadius: 7
                         }]
                     },
                     options: {
@@ -374,9 +388,8 @@
                         scales: {
                             x: {
                                 grid: {
-                                    display: true,
-                                    color: '#E5E7EB', // Light gray lines
-                                    borderDash: [2, 2], // Dotted lines
+                                    color: '#E5E7EB', // light gray
+                                    drawBorder: true
                                 }
                             },
                             y: {
@@ -385,44 +398,34 @@
                                     color: '#E5E7EB'
                                 },
                                 ticks: {
-                                    color: '#6B7280' // Gray text
+                                    color: '#6B7280' // gray text
                                 }
                             }
                         },
                         plugins: {
                             legend: {
                                 display: false
-                            }, // Hide default legend
-                            // Annotation plugin for the dashed line & label at 12:00
-                            annotation: {
-                                annotations: {
-                                    lineAt12: {
-                                        type: 'line',
-                                        xMin: 1, // Index of '12:00' in labels array
-                                        xMax: 1,
-                                        borderColor: '#9CA3AF', // Gray-400
-                                        borderDash: [4, 4],
-                                        borderWidth: 2,
-                                        label: {
-                                            enabled: true,
-                                            content: dataPoints[1], // Show "574"
-                                            backgroundColor: '#ffffff',
-                                            color: '#374151',
-                                            padding: 6,
-                                            borderRadius: 4,
-                                            position: 'top'
-                                        }
-                                    }
-                                }
                             },
-                            tooltip: {
-                                enabled: true,
-                                callbacks: {
-                                    label: function(context) {
-                                        return ` ${context.parsed.y} transactions`;
-                                    }
-                                }
-                            }
+                            // (Optional) annotation if you want a dotted vertical line
+                            // annotation: {
+                            //   annotations: {
+                            //       lineAtFeb: {
+                            //           type: 'line',
+                            //           xMin: 1, // index for "Feb" if Jan=0, Feb=1
+                            //           xMax: 1,
+                            //           borderColor: '#3B82F6',
+                            //           borderWidth: 2,
+                            //           borderDash: [4,4],
+                            //           label: {
+                            //               enabled: true,
+                            //               content: 'Feb',
+                            //               position: 'end',
+                            //               backgroundColor: '#3B82F6',
+                            //               color: '#fff'
+                            //           }
+                            //       }
+                            //   }
+                            // }
                         },
                         interaction: {
                             mode: 'index',
