@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('/admin', 'App\Http\Controllers\Admin\DashBoardController@index')->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 Route::get('/admin/category', 'App\Http\Controllers\Admin\CategoryController@index')->name('admin.category.index');
 Route::get('/admin/category/create', 'App\Http\Controllers\Admin\CategoryController@create')->name('admin.category.create');
