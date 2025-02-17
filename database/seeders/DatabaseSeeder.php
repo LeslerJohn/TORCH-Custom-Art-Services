@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\ClientProfile;
 use App\Models\ArtistProfile;
+use App\Models\Commission;
+use App\Models\Delivery;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +29,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ArtistSeeder::class,
             ClientSeeder::class,
+            TagSeeder::class,
+            CategorySeeder::class,
+            CategoryTagSeeder::class,
+            ServiceSeeder::class,
+            AddressSeeder::class,
+            RequestSeeder::class,
+            DeliverySeeder::class,
+            CommissionSeeder::class,
         ]);
     }
 }
