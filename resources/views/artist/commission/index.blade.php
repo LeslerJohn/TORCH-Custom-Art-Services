@@ -176,7 +176,7 @@
                                 ₱{{ number_format($commission->request->total, 0, '.', ',') }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ ucfirst($commission->request->status) }}
+                                {{ ucfirst($commission->status) }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('artist.commission.show', $commission) }}"

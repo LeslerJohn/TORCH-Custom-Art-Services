@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderReview;
 use App\Http\Controllers\Controller;
+use App\Models\Commission;
+use App\Models\CommissionReview;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -28,7 +30,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Order $order)
+    public function order(Request $request, Order $order)
     {
         $request->validate([
             'rating' => 'required|numeric|min:1|max:5',
@@ -42,6 +44,22 @@ class ReviewController extends Controller
         ]);
 
         return redirect()->route('client.order.show', $order);
+    }
+
+    public function commission(Request $request, Commission $commission)
+    {
+        $request->validate([
+            'rating' => 'required|numeric|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+
+        CommissionReview::create([
+            'commission_id' => $commission->id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->route('client.commission.show', $commission);
     }
 
     /**

@@ -29,4 +29,9 @@ class Commission extends Model
     {
         return $this->hasMany(Draft::class, 'commission_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(CommissionReview::class, 'commission_id');
+    }
 }

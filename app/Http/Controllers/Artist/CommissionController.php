@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Artist;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
 use App\Models\Commission;
+use App\Models\Draft;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,7 +58,7 @@ class CommissionController extends Controller
             'status' => 'wip',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function done(Commission $commission) {
@@ -64,7 +66,7 @@ class CommissionController extends Controller
             'status' => 'done',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function deliver(Commission $commission) {
@@ -72,7 +74,7 @@ class CommissionController extends Controller
             'status' => 'in-transit',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function delivered(Commission $commission) {
@@ -80,7 +82,7 @@ class CommissionController extends Controller
             'status' => 'delivered',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function draft(Request $request, Commission $commission) {
@@ -89,6 +91,23 @@ class CommissionController extends Controller
             'image' => 'required|image',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = $image->store('drafts', 'public');
+
+            $attachment = Attachment::create([
+                'filename' => $image->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $image->getMimeType(),
+            ]);
+
+            Draft::create([
+                'description' => $request->description,
+                'commission_id' => $commission->id,
+                'attachment_id' => $attachment->id,
+            ]);
+        }
+
+        return redirect()->route('artist.commission.show', $commission);
     }
 }

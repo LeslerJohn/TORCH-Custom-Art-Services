@@ -38,7 +38,8 @@ Route::get('/order/{order}', [OrderController::class, 'show'])->name('client.ord
 Route::patch('/order/{order}', [OrderController::class, 'update'])->name('client.order.update');
 Route::delete('/order/{order}', [OrderController::class, 'destroy'])->name('client.order.destroy');
 
-Route::post('/order/{order}/review', [ReviewController::class, 'store'])->name('client.review.store');
+Route::post('/order/{order}/review', [ReviewController::class, 'order'])->name('client.review.order');
+Route::post('/commission/{commission}/review', [ReviewController::class, 'commission'])->name('client.review.commission');
 
 Route::get('/request', [RequestController::class, 'index'])->name('client.request.index');
 Route::post('/request/{service}', [RequestController::class, 'store'])->name('client.request.store');
@@ -49,6 +50,7 @@ Route::delete('/request/{request}', [RequestController::class, 'destroy'])->name
 Route::post('/commission/{modelrequest}', [CommissionController::class, 'store'])->name('client.commission.store');
 Route::get('/commission', [CommissionController::class, 'index'])->name('client.commission.index');
 Route::get('/commission/{commission}', [CommissionController::class, 'show'])->name('client.commission.show');
+Route::post('/commission/{commission}/receive', [CommissionController::class, 'receive'])->name('client.commission.receive');
 
 
 require __DIR__.'/auth.php';

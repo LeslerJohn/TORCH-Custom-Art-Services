@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-5xl my-4 mx-auto bg-white p-6 rounded-lg shadow-lg">
 
-        <h1 class="text-2xl font-bold mb-4">Your Cart ({{ $cart->items->count() }} items)</h1>
+        <h1 class="text-2xl font-bold mb-4">Your Cart ({{ $cart->items->count() ?? 0 }} items)</h1>
 
         @if ($cart && $cart->items->count() > 0)
             <form action="{{ route('client.cart.checkout') }}" method="POST" id="checkout-form">

@@ -55,4 +55,17 @@ class CommissionController extends Controller
 
         return redirect()->route('client.request.index')->with('success', 'Commission placed successfully!');
     }
+
+    public function receive(Commission $commission)
+    {
+        $commission->update([
+            'status' => 'completed',
+        ]);
+
+        $commission->delivery->update([
+            'status' => 'completed',
+        ]);
+
+        return redirect()->route('client.commission.show', $commission)->with('success', 'Commission received!');
+    }
 }

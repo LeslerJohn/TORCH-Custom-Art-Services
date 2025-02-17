@@ -140,7 +140,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form action="{{route('client.review.store', $order)}}" method="POST" class="p-4 md:p-5">
+                    <form action="{{route('client.review.order', $order)}}" method="POST" class="p-4 md:p-5">
                         @csrf
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="mb-4" x-data="{ rating: 0 }">

@@ -16,11 +16,13 @@
         </div>
 
         <!-- Status on Top Right -->
-        <div class="absolute top-6 right-6">
+        <div
+            class="absolute top-6 right-6 rounded-lg 
+            {{ $request->status == 'accepted' ? 'bg-green-100' : ($request->status == 'pending' ? 'bg-yellow-100' : 'bg-red-100') }}">
             <span
-                class="px-4 py-2 rounded-full text-white 
-            {{ $request->status == 'accepted' ? 'bg-green-500' : ($request->status == 'pending' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                {{ ucfirst($request->status ?? 'pending') }}
+            class="px-4 py-2 rounded-full text-white 
+            {{ $request->status == 'accepted' ? 'bg-green-300' : ($request->status == 'pending' ? 'bg-yellow-300' : 'bg-red-300') }}">
+            {{ ucfirst($request->status ?? 'pending') }}
             </span>
         </div>
 
