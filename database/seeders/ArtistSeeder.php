@@ -18,7 +18,7 @@ class ArtistSeeder extends Seeder
             'is_admin' => false,
         ])->each(function ($artist) {
             ArtistProfile::factory()->create([
-                'user_id' => $artist->id,
+                'id' => $artist->id,
             ]);
         });
     }

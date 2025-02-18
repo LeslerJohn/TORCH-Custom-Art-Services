@@ -18,7 +18,7 @@ class ClientSeeder extends Seeder
             'is_admin' => false,
         ])->each(function ($client) {
             ClientProfile::factory()->create([
-                'user_id' => $client->id,
+                'id' => $client->id,
             ]);
         });
     }
