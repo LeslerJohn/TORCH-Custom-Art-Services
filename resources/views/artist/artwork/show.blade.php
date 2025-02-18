@@ -10,8 +10,7 @@
                 <h1 class="text-3xl font-bold-300">{{$artwork->title}}</h1>
                 <p>{{$artwork->description}}</p>
                 <p><strong>Category:</strong>{{$artwork->category->name}}</p>
-                <p><strong>Medium:</strong> {{$artwork->medium}}</p>
-                <p><strong>Dimension:</strong> {{$artwork->dimension}}</p>
+                <p><strong>Dimension:</strong> {{$artwork->dimension}} inches</p>
                 <p><strong>Price:</strong> ₱{{$artwork->price}}</p>
                 @if ($artwork->is_showcase)
                     <span class="bg-green-500 h-8 text-white px-2 w-24 py-1 rounded-md">Showcased</span>

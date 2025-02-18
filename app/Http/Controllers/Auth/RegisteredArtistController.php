@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ArtistPortfolio;
 use App\Models\ArtistProfile;
 use App\Models\Attachment;
+use App\Models\ClientProfile;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -70,6 +71,12 @@ class RegisteredArtistController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'artist',
+        ]);
+
+        $client = ClientProfile::create([
+            'id' => $user->id,
+            'rating' => 0,
+            'is_suspended' => false,
         ]);
 
         $artist = ArtistProfile::create([

@@ -13,7 +13,6 @@ class Artwork extends Model
         'category_id',
         'title',
         'description',
-        'medium',
         'dimension',
         'price',
         'stock',

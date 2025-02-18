@@ -41,7 +41,8 @@ class ServiceController extends Controller
             'category_id' => 'required|exists:category,id',
             'price_rate' => 'required|numeric',
             'rush_price_rate' => 'required|numeric',
-            'timeframe' => 'required|numeric',
+            'normal_timeframe' => 'required|numeric',
+            'rush_timeframe' => 'required|numeric',
             'tags' => 'nullable',
             'thumbnails.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
@@ -51,7 +52,8 @@ class ServiceController extends Controller
             'category_id' => $request->category_id,
             'price_rate' => $request->price_rate,
             'rush_price_rate' => $request->rush_price_rate,
-            'timeframe' => $request->timeframe,
+            'normal_timeframe' => $request->normal_timeframe,
+            'rush_timeframe' => $request->rush_timeframe,
         ]);
 
         if ($request->hasFile('thumbnails')) {
@@ -105,7 +107,8 @@ class ServiceController extends Controller
             'category_id' => 'required|exists:category,id',
             'price_rate' => 'required|numeric',
             'rush_price_rate' => 'required|numeric',
-            'timeframe' => 'required|numeric',
+            'normal_timeframe' => 'required|numeric',
+            'rush_timeframe' => 'required|numeric',
             'tags' => 'nullable',
             'thumbnails.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
@@ -114,7 +117,8 @@ class ServiceController extends Controller
             'category_id' => $request->category_id,
             'price_rate' => $request->price_rate,
             'rush_price_rate' => $request->rush_price_rate,
-            'timeframe' => $request->timeframe,
+            'normal_timeframe' => $request->normal_timeframe,
+            'rush_timeframe' => $request->rush_timeframe,
         ]);
 
         // Check if there are new thumbnails uploaded
