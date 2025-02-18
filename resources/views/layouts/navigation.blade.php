@@ -17,15 +17,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{route('client.artwork')}}" class="text-md">
                         Explore
                     </a>
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{route('client.artist')}}" class="text-md">
                         Hire an Artist
                     </a>
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{route('client.service')}}" class="text-md">
                         Commission
                     </a>
                 </div>
@@ -90,9 +90,9 @@
                                 <x-dropdown-link :href="route('artist.dashboard')">
                                     {{ __('Artist Dashboard') }}
                                 </x-dropdown-link>
-                            @endif
 
-                            <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
+                                <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
+                            @endif
 
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Settings') }}
@@ -115,7 +115,7 @@
                     </x-dropdown>
                 @else
                     <div class="hidden sm:flex sm:items-center sm:ms-6 p-4 gap-2">
-                        <a href="{{ route('login') }}" class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-md px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign In</a>
+                        <a href="{{ route('login') }}" class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-full px-4 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign In</a>
                     </div>
                 @endauth
             </div>

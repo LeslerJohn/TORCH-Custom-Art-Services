@@ -3,6 +3,7 @@
 use App\Http\Controllers\Artist\ArtworkController;
 use App\Http\Controllers\Artist\CommissionController;
 use App\Http\Controllers\Artist\OrderController;
+use App\Http\Controllers\Artist\ReviewController;
 use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Artist\ShowcaseController;
@@ -82,4 +83,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/artist/commission/{commission}/deliver', [CommissionController::class, 'deliver'])->name('artist.commission.deliver');
     Route::post('/artist/commission/{commission}/delivered', [CommissionController::class, 'delivered'])->name('artist.commission.delivered');
     Route::post('/artist/commission/{commission}/draft', [CommissionController::class, 'draft'])->name('artist.commission.draft');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/review', [ReviewController::class, 'index'])->name('artist.review.index');
 });

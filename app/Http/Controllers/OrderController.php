@@ -70,6 +70,8 @@ class OrderController extends Controller
             'price' => $artwork->price,
         ]);
 
+        $artwork->update(['status' => 'sold']);
+
         return redirect()->route('client.order.index')->with('success', 'Order placed successfully!');
     }
 

@@ -22,6 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/client/artist', [HomeController::class, 'artist'])->name('client.artist');
+Route::get('/client/artwork', [HomeController::class, 'artwork'])->name('client.artwork');
+Route::get('/client/service', [HomeController::class, 'service'])->name('client.service');
+
 Route::get('/artwork/{artwork}', [HomeController::class, 'show_artwork'])->name('artwork.show');
 Route::get('/service/{service}', [HomeController::class, 'show_service'])->name('service.show');
 

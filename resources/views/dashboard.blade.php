@@ -295,44 +295,46 @@
                     aria-labelledby="contacts-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artworks as $artwork)
-                            @php
-                                $thumbnail = $artwork->images->first()?->attachment;
-                            @endphp
-                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                                <a href="{{route('artwork.show', $artwork)}}" >
-                                <!-- Background Image -->
-                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                    alt="Di Naluluma" class="w-full h-full object-cover">
+                            @if ($artwork->status == 'sale')
+                                @php
+                                    $thumbnail = $artwork->images->first()?->attachment;
+                                @endphp
+                                <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                    <a href="{{route('artwork.show', $artwork)}}" >
+                                    <!-- Background Image -->
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="Di Naluluma" class="w-full h-full object-cover">
 
-                                <!-- Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                                <!-- Text Content -->
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
-                                    <p class="text-sm">| {{ $artwork->category->name }}</p>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
+                                        <p class="text-sm">| {{ $artwork->category->name }}</p>
 
-                                    <!-- Artist Info -->
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-6 h-6 rounded-full border border-white">
-                                        <p class="text-sm font-medium flex items-center">
-                                            {{ $artwork->artist->user->name }}
-                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                            </svg>
-                                        </p>
+                                        <!-- Artist Info -->
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-6 h-6 rounded-full border border-white">
+                                            <p class="text-sm font-medium flex items-center">
+                                                {{ $artwork->artist->user->name }}
+                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                </svg>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Price -->
-                                <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
-                                    <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                    <!-- Price -->
+                                    <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
+                                        <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                    </div>
+                                </a>
                                 </div>
-                            </a>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
