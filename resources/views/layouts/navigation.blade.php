@@ -68,9 +68,15 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                        @if(Auth::user()->isArtist())
+                            <x-dropdown-link :href="route('artist.profile')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                        @else
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                        @endif
 
                         <x-dropdown-link :href="route('client.request.index')">
                             {{ __('Requests') }}
@@ -93,13 +99,6 @@
 
                                 <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
                             @endif
-                        @if(Auth::user()->isArtist())
-                        <x-dropdown-link :href="route('artist.dashboard')">
-                            {{ __('Artist Dashboard') }}
-                        </x-dropdown-link>
-                        @endif
-
-                        <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
 
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Settings') }}
@@ -124,9 +123,6 @@
                     <div class="hidden sm:flex sm:items-center sm:ms-6 p-4 gap-2">
                         <a href="{{ route('login') }}" class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-full px-4 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign In</a>
                     </div>
-                <div class="hidden sm:flex sm:items-center sm:ms-6 p-4 gap-2">
-                    <a href="{{ route('login') }}" class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-md px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign In</a>
-                </div>
                 @endauth
             </div>
 
