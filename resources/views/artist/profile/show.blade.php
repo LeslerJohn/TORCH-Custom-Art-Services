@@ -1,6 +1,8 @@
 <x-app-layout>
     <div class="w-full h-64 mt-14 bg-gray-200">
         <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}" class="w-full h-full object-cover rounded-lg" alt="Hero Banner">
+    <div class="w-full h-64 mt-14 bg-gray-200">
+        <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}" class="w-full h-full object-cover rounded-lg" alt="Hero Banner">
     </div>
 
     <div class="container mx-auto max-w-7xl px-6 mt-12">
@@ -36,7 +38,15 @@
                 </div>
 
                 <div x-show="tab === 'artworks'" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div x-show="tab === 'artworks'" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                     @forelse($artworks as $artwork)
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <img src="{{ asset('storage/' . $artwork->images->first()->attachment->path) }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">{{ $artwork->title }}</h4>
+                            <a href="{{ route('artwork.show', $artwork) }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 inline-block">Preview</a>
+                        </div>
+                    </div>
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                         <img src="{{ asset('storage/' . $artwork->images->first()->attachment->path) }}" class="w-full h-48 object-cover">
                         <div class="p-4">
@@ -46,9 +56,11 @@
                     </div>
                     @empty
                     <p>No artworks to show.</p>
+                    <p>No artworks to show.</p>
                     @endforelse
                 </div>
 
+                <div x-show="tab === 'services'" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div x-show="tab === 'services'" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                     @forelse($services as $service)
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -58,11 +70,20 @@
                             <a href="{{ route('service.show', $service) }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 inline-block">Request</a>
                         </div>
                     </div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <img src="{{ asset('storage/' . $service->images->first()->attachment->path) }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold">{{ $service->category->name }}</h4>
+                            <a href="{{ route('service.show', $service) }}" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 inline-block">Request</a>
+                        </div>
+                    </div>
                     @empty
+                    <p>No services to show.</p>
                     <p>No services to show.</p>
                     @endforelse
                 </div>
 
+                <div x-show="tab === 'about'" class="mt-6 p-6 bg-white rounded-lg shadow-lg text-center">
                 <div x-show="tab === 'about'" class="mt-6 p-6 bg-white rounded-lg shadow-lg text-center">
                     <h2 class="text-2xl font-bold">About Me</h2>
                     <p class="mt-4 text-gray-700">{{ $artist->bio }}</p>
