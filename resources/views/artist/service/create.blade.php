@@ -39,8 +39,10 @@
                         <x-text-input id="rush_price_rate" class="block mt-1 w-full" type="number" name="rush_price_rate" required placeholder="Set base price for rush order." />
                         <x-input-error :messages="$errors->get('rush_price_rate')" class="mt-2" />
                     </div>
-    
-                    <div class="mt-6">
+                    
+                    <p class="mt-6 text-sm">A grace period of 5 days will be automatically added.</p>
+                    <p class="text-sm">By going over your normal deadline a 2% charge will be deducted to your earning each day.</p>
+                    <div class="mt-1">
                         <x-input-label for="normal_timeframe" class="text-sm" :value="__('Normal Timeframe (days)')" />
                         <x-text-input id="normal_timeframe" class="block mt-1 w-full" type="number" name="normal_timeframe" required placeholder="No. of days completion." />
                         <x-input-error :messages="$errors->get('normal_timeframe')" class="mt-2" />

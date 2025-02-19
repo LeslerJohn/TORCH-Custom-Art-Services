@@ -206,6 +206,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artists as $artist)
                             <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                <a href="{{route('artist.profile', $artist)}}">
                                 <!-- Background Image -->
                                 <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
                                     alt="Di Naluluma" class="w-full h-full object-cover">
@@ -244,6 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </a>
                             </div>
                         @endforeach
                     </div>

@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                @if (auth()->user()->id !== $service->artist->user->id)
+                 @auth @if (auth()->user()->id !== $service->artist->user->id) @endauth
                     <div class="mt-4 flex flex-col gap-4 justify-center">
                         <div class="flex items-center">
                             <input id="terms" type="checkbox" class="mr-2">
@@ -150,7 +150,7 @@
                             });
                         </script>
                     </div>
-                @endif
+                @auth @endif @endauth
 
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
