@@ -130,25 +130,27 @@
                     </div>
                 </div>
 
-                <div class="mt-4 flex flex-col gap-4 justify-center">
-                    <div class="flex items-center">
-                        <input id="terms" type="checkbox" class="mr-2">
-                        <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a></label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button id="start-request-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                            class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
-                            type="button" disabled>
-                            Start your request
-                        </button>
-                    </div>
+                @if (auth()->user()->id !== $service->artist->user->id)
+                    <div class="mt-4 flex flex-col gap-4 justify-center">
+                        <div class="flex items-center">
+                            <input id="terms" type="checkbox" class="mr-2">
+                            <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a></label>
+                        </div>
+                        <div class="flex justify-center">
+                            <button id="start-request-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                                class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
+                                type="button" disabled>
+                                Start your request
+                            </button>
+                        </div>
 
-                    <script>
-                        document.getElementById('terms').addEventListener('change', function() {
-                            document.getElementById('start-request-btn').disabled = !this.checked;
-                        });
-                    </script>
-                </div>
+                        <script>
+                            document.getElementById('terms').addEventListener('change', function() {
+                                document.getElementById('start-request-btn').disabled = !this.checked;
+                            });
+                        </script>
+                    </div>
+                @endif
 
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"

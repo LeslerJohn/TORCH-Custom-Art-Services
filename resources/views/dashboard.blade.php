@@ -22,92 +22,48 @@
         </div>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="mb-6 flex justify-between items-center border-b border-gray-300">
-                <ul class="flex space-x-4 text-sm font-medium text-gray-600" id="default-tab" role="tablist">
-                    @php
-                        $tabs = [
-                            'showcase' => 'Showcases',
-                            'dashboard' => 'Artists',
-                            'settings' => 'Services',
-                            'contacts' => 'Sale',
-                        ];
-                    @endphp
-
-                    @foreach ($tabs as $id => $label)
-                        <li role="presentation">
-                            <button
-                                class="tab-button px-6 py-3 border-b-2 border-transparent rounded-t-md transition-colors 
-                            hover:text-orange-500 hover:border-orange-500 focus:outline-none"
-                                id="{{ $id }}-tab" data-tabs-target="#{{ $id }}" type="button"
-                                role="tab" aria-controls="{{ $id }}"
-                                aria-selected="false">{{ $label }}</button>
-                        </li>
-                    @endforeach
+            <div class="mb-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
+                    data-tabs-toggle="#default-tab-content" role="tablist">
+                    <li class="me-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="showcase-tab"
+                            data-tabs-target="#profile" type="button" role="tab" aria-controls="profile"
+                            aria-selected="false">Showcases</button>
+                    </li>
+                    <li class="me-2" role="presentation">
+                        <button
+                            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                            id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab"
+                            aria-controls="dashboard" aria-selected="false">Artists</button>
+                    </li>
+                    <li class="me-2" role="presentation">
+                        <button
+                            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                            id="settings-tab" data-tabs-target="#settings" type="button" role="tab"
+                            aria-controls="settings" aria-selected="false">Services</button>
+                    </li>
+                    <li role="presentation">
+                        <button
+                            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                            id="contacts-tab" data-tabs-target="#contacts" type="button" role="tab"
+                            aria-controls="contacts" aria-selected="false">Sale</button>
+                    </li>
                 </ul>
-
-                <div>
+                <div class="text-sm font-medium text-center">
                     <a href="#"
-                        class="flex items-center gap-2 text-gray-500 hover:text-orange-500 transition-colors">
-                        <span>See All</span>
-                        <svg class="w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m14 0-4 4m4-4-4-4" />
+                        class="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        See All
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 12H5m14 0-4 4m4-4-4-4" />
                         </svg>
                     </a>
                 </div>
             </div>
-
-            @push('scripts')
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const tabs = document.querySelectorAll(".tab-button");
-                        const tabContents = document.querySelectorAll('[role="tabpanel"]'); // Select all tab content elements
-
-                        function showTab(tabId) {
-                            // Hide all tab content
-                            tabContents.forEach(content => {
-                                content.classList.add('hidden');
-                            });
-
-                            // Show the selected tab content
-                            const selectedContent = document.getElementById(tabId);
-                            if (selectedContent) {
-                                selectedContent.classList.remove('hidden');
-                            }
-                        }
-
-
-                        function setActiveTab(activeTab) {
-                            tabs.forEach(tab => {
-                                tab.classList.remove("text-orange-500", "border-orange-500");
-                                tab.classList.add("text-gray-600", "border-transparent");
-                                tab.setAttribute("aria-selected", "false");
-                            });
-
-                            activeTab.classList.add("text-orange-500", "border-orange-500");
-                            activeTab.classList.remove("text-gray-600", "border-transparent");
-                            activeTab.setAttribute("aria-selected", "true");
-
-                            //Call showTab function to display the selected tab content
-                            const targetId = activeTab.getAttribute('data-tabs-target').substring(1); // Remove the #
-                            showTab(targetId);
-                        }
-
-                        // Set the first tab as active on page load
-                        setActiveTab(tabs[0]);
-
-
-                        tabs.forEach(tab => {
-                            tab.addEventListener("click", function() {
-                                setActiveTab(this);
-                            });
-                        });
-                    });
-                </script>
-            @endpush
-
-            {{-- Showcase Section --}}
             <div id="default-tab-content">
+                <!-- Artwork Grid -->
                 <div class="hidden rounded-lg dark:bg-gray-800" id="profile" role="tabpanel"
                     aria-labelledby="showcase-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -130,7 +86,7 @@
 
                                     <div class="relative w-full h-[250px] rounded-lg overflow-hidden cursor-pointer">
                                         <!-- Background Image -->
-                                        <img src="{{ $thumbnail ? asset("storage/{$thumbnail->path}") : asset('images/default-image.jpg') }}"
+                                        <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
                                             alt="{{ $artwork->title }}" class="w-full h-full object-cover">
 
                                         <!-- Overlay -->
@@ -187,7 +143,8 @@
                                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                         fill="none" viewBox="0 0 6 10">
                                                         <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                                                            stroke-linejoin="round" stroke-width="2"
+                                                            d="M5 1 1 5l4 4" />
                                                     </svg>
                                                 </button>
                                                 <button type="button"
@@ -244,58 +201,53 @@
                     </div>
                 </div>
 
-                {{-- Artist Section --}}
                 <div class="hidden rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                     aria-labelledby="dashboard-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artists as $artist)
                             <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                                <a href="{{ route('artist.profile', $artist) }}">
-                                    <!-- Background Image -->
-                                    <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
-                                        alt="Di Naluluma" class="w-full h-full object-cover">
+                                <!-- Background Image -->
+                                <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
+                                    alt="Di Naluluma" class="w-full h-full object-cover">
 
-                                    <!-- Overlay -->
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                <!-- Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                                    @if ($artist->available)
-                                        <div
-                                            class="absolute top-4 left-4 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                            Open
-                                        </div>
-                                    @else
-                                        <div
-                                            class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                            Closed
-                                        </div>
-                                    @endif
+                                @if ($artist->available)
+                                    <div
+                                        class="absolute top-4 left-4 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                        Open
+                                    </div>
+                                @else
+                                    <div
+                                        class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                        Closed
+                                    </div>
+                                @endif
 
-                                    <!-- Text Content -->
-                                    <div class="absolute bottom-4 left-4 text-white">
-                                        <!-- Artist Info -->
-                                        <div class="flex items-center gap-2 mt-2">
-                                            <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                                class="w-8 h-8 rounded-full border border-white">
-                                            <div>
-                                                <p class="text-sm font-medium flex items-center">
-                                                    {{ $artist->user->name ?? 'John Doe' }}
-                                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path
-                                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                                    </svg>
-                                                </p>
-                                                <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
-                                            </div>
+                                <!-- Text Content -->
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <!-- Artist Info -->
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                            class="w-8 h-8 rounded-full border border-white">
+                                        <div>
+                                            <p class="text-sm font-medium flex items-center">
+                                                {{ $artist->user->name ?? 'John Doe' }}
+                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                </svg>
+                                            </p>
+                                            <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
-
-                {{-- Service Section --}}
                 <div class="hidden rounded-lg dark:bg-gray-800" id="settings" role="tabpanel"
                     aria-labelledby="settings-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -342,8 +294,6 @@
                         @endforeach
                     </div>
                 </div>
-
-                {{-- Sale Section --}}
                 <div class="hidden rounded-lg dark:bg-gray-800" id="contacts" role="tabpanel"
                     aria-labelledby="contacts-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -396,7 +346,6 @@
             </div>
         </div>
 
-        {{-- Reviews Section --}}
         <div
             class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
             <h1 class="text-6xl text-orange-500 font-bold">Hear from our users</h1>

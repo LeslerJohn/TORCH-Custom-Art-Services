@@ -14,6 +14,7 @@ class Request extends Model
         'description',
         'height',
         'width',
+        'unit',
         'deadline',
         'service_id',
         'status',

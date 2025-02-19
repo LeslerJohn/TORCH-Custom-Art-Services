@@ -52,7 +52,7 @@
                             <div class="p-4">
                                 <h4>{{ $review->review }}</h4>
                                 <p class="mt-2 text-gray-600">Rating: {{ $review->rating }}</p>
-                                <p class="mt-2 text-gray-600">By: {{ $review->order->client->name ?? $review->commission->request->client->name }}</p>
+                                <p class="mt-2 text-gray-600">By: {{ $review->order->client->user->name ?? $review->commission->request->client->user->name }}</p>
                             </div>
                         </div>
                     @empty

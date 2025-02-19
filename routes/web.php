@@ -21,8 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
-    Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
 });
+
+Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
 
 Route::get('/client/artist', [HomeController::class, 'artist'])->name('client.artist');
 Route::get('/client/artwork', [HomeController::class, 'artwork'])->name('client.artwork');
