@@ -28,3 +28,6 @@ Route::get('/admin/artist-application/{artistApplication}/approve', 'App\Http\Co
 Route::get('/admin/artist-application/{artistApplication}/reject', 'App\Http\Controllers\Admin\ArtistApplicationController@reject')->name('admin.application.reject');
 
 Route::get('/admin/commission', [CommissionController::class, 'index'])->name('admin.commission.index');
+Route::get('/admin/commission/{commission}', [CommissionController::class, 'show'])->name('admin.commission.show');
+Route::get('/admin/commission/{commission}/refund', [CommissionController::class, 'refund'])->name('admin.commission.refund');
+Route::get('/admin/commission/{commission}/cancel', [CommissionController::class, 'cancel'])->name('admin.commission.cancel');

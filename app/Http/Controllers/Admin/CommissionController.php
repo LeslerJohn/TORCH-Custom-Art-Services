@@ -12,11 +12,19 @@ class CommissionController extends Controller
         return view('admin.commission.index');
     }
 
-
-    private function all_commission()
+    public function show()
     {
-
-        
-        return view('admin.commission.all-commission');
+        return view('admin.commission.show');
     }
+
+    public function refund()
+    {
+        return view('admin.commission.refund');
+    }
+
+    public function cancel()
+    {
+        return view('admin.commission.cancel');
+    }
+
 }
