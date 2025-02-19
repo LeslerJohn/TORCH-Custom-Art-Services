@@ -31,6 +31,12 @@
                     </x-responsive-nav-link>
                 </li>
                 <li>
+                    <x-responsive-nav-link :href="route('admin.commission.index')" :active="request()->routeIs('admin.commission.index')">
+                        <i class="material-icons">monetization_on</i>
+                        {{ __('Commissions') }}
+                    </x-responsive-nav-link>
+                </li>
+                <li>
                     <x-responsive-nav-link :href="route('admin.user.index')" :active="request()->routeIs('admin.user.index')">
                         <i class="material-icons">people</i>
                         {{ __('User Management') }}
