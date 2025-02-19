@@ -14,7 +14,7 @@ class Order extends Model
         'status'
     ];
 
-    public function user()
+    public function client()
     {
         return $this->belongsTo(ClientProfile::class, 'client_id');
     }
@@ -22,5 +22,15 @@ class Order extends Model
     public function delivery()
     {
         return $this->belongsTo(Delivery::class, 'delivery_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(OrderReview::class, 'order_id');
     }
 }

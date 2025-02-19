@@ -36,6 +36,7 @@ return new class extends Migration
 
         Schema::create('artist_profile', function (Blueprint $table) {
             $table->integer('id')->primary();
+            $table->softDeletes();
             $table->string('phone_number');
             $table->string('location');
             $table->string('gender');

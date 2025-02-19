@@ -23,12 +23,7 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
                     <div class="mt-6">
-                        <x-input-label for="medium" class="text-sm" :value="__('Medium')" />
-                        <x-text-input id="medium" class="block mt-1 w-full" type="text" name="medium" required placeholder="Specify the medium used (e.g., oil, watercolor)." />
-                        <x-input-error :messages="$errors->get('medium')" class="mt-2" />
-                    </div>
-                    <div class="mt-6">
-                        <x-input-label for="dimension" class="text-sm" :value="__('Dimension (cm)')" />
+                        <x-input-label for="dimension" class="text-sm" :value="__('Dimension (inch)')" />
                         <x-text-input id="dimension" class="block mt-1 w-full" type="text" name="dimension" required placeholder="Enter the dimensions (e.g., 24x36 centimeter)." />
                         <x-input-error :messages="$errors->get('dimension')" class="mt-2" />
                     </div>

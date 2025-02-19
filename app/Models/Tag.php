@@ -14,6 +14,11 @@ class Tag extends Model
         'name',
     ];
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_tag');
+    }
+
     public function artists()
     {
         return $this->belongsToMany(User::class, 'artist_tag', 'tag_id', 'artist_id');

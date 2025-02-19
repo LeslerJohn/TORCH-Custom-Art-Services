@@ -11,31 +11,35 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen">
-        @include('layouts.admin-navigation')
-
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
+    <div class="min-h-screen flex">
+        <aside class="bg-gray-100 dark:bg-gray-900 w-1/5 fixed h-full overflow-y-auto">
+            @include('layouts.admin-sidebar')
+        </aside>
+        <div class="flex-1 ml-[20%]">
+            <header class="bg-white dark:bg-gray-800 shadow w-full fixed top-0 left-0 z-10">
+                @include('layouts.admin-navigation')
+                @isset($header)
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                @endisset
             </header>
-        @endisset
-
-        @include('layouts.admin-sidebar')
-
-        <!-- Page Content -->
-        <main class="max-w-8xl mx-auto ml-[260px] pl-8 py-6">
-            {{ $slot }}
-        </main>
+            <main class="bg-gray-100 dark:bg-gray-800 p-6 mt-16 overflow-y-auto h-screen">
+                {{ $slot }}
+            </main>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    @stack('scripts')
 </body>
 
 </html>
