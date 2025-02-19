@@ -250,44 +250,46 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artists as $artist)
                             <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                                <!-- Background Image -->
-                                <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
-                                    alt="Di Naluluma" class="w-full h-full object-cover">
+                                <a href="{{ route('artist.profile', $artist) }}">
+                                    <!-- Background Image -->
+                                    <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
+                                        alt="Di Naluluma" class="w-full h-full object-cover">
 
-                                <!-- Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                                @if ($artist->available)
-                                    <div
-                                        class="absolute top-4 left-4 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                        Open
-                                    </div>
-                                @else
-                                    <div
-                                        class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                                        Closed
-                                    </div>
-                                @endif
+                                    @if ($artist->available)
+                                        <div
+                                            class="absolute top-4 left-4 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                            Open
+                                        </div>
+                                    @else
+                                        <div
+                                            class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                            Closed
+                                        </div>
+                                    @endif
 
-                                <!-- Text Content -->
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <!-- Artist Info -->
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-8 h-8 rounded-full border border-white">
-                                        <div>
-                                            <p class="text-sm font-medium flex items-center">
-                                                {{ $artist->user->name ?? 'John Doe' }}
-                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                                </svg>
-                                            </p>
-                                            <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <!-- Artist Info -->
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-8 h-8 rounded-full border border-white">
+                                            <div>
+                                                <p class="text-sm font-medium flex items-center">
+                                                    {{ $artist->user->name ?? 'John Doe' }}
+                                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                    </svg>
+                                                </p>
+                                                <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         @endforeach
                     </div>
@@ -394,6 +396,7 @@
             </div>
         </div>
 
+        {{-- Reviews Section --}}
         <div
             class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
             <h1 class="text-6xl text-orange-500 font-bold">Hear from our users</h1>

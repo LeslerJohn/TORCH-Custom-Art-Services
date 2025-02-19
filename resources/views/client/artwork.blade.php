@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         <div class="flex items-center justify-between w-full mb-4">
-            <h2 class="text-xl font-bold">Artists</h2>
+            <h2 class="text-xl font-bold">Artworks</h2>
         </div>
 
         <!-- Filters -->

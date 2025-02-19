@@ -40,6 +40,11 @@ class ArtistProfile extends Model
         return $this->hasMany(Service::class, 'artist_id', 'id');
     }
 
+    public function artworks()
+    {
+        return $this->hasMany(Artwork::class, 'artist_id', 'id');
+    }
+
     public function categories()
     {
         return $this->hasManyThrough(Category::class, Service::class, 'artist_id', 'id', 'id', 'category_id');
