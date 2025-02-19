@@ -14,8 +14,7 @@
 
         <!-- Filters -->
         <form method="GET" action="{{ route('client.artist') }}" class="mb-4">
-            <div
-                class="flex items-center gap-2 overflow-x-auto whitespace-nowrap py-2 border rounded-lg shadow-sm">
+            <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap py-2 border rounded-lg shadow-sm">
 
                 <!-- Verified -->
                 <button type="submit" name="verified" value="1"
@@ -76,26 +75,28 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
             @forelse ($artists as $artist)
                 <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                    <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
-                        class="w-full h-full object-cover">
+                    <a href="{{ route('artist.profile', $artist) }}">
+                        <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
+                            class="w-full h-full object-cover">
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                    <div class="absolute top-4 left-4 px-2 py-1 rounded text-white text-xs font-semibold"
-                        style="background-color: {{ $artist->available ? 'green' : 'red' }}">
-                        {{ $artist->available ? 'Open' : 'Closed' }}
-                    </div>
+                        <div class="absolute top-4 left-4 px-2 py-1 rounded text-white text-xs font-semibold"
+                            style="background-color: {{ $artist->available ? 'green' : 'red' }}">
+                            {{ $artist->available ? 'Open' : 'Closed' }}
+                        </div>
 
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/profile.default.jpg') }}"
-                                class="w-8 h-8 rounded-full border border-white">
-                            <div>
-                                <p class="text-sm font-medium">{{ $artist->user->name ?? 'John Doe' }}</p>
-                                <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <div class="flex items-center gap-2">
+                                <img src="{{ asset('images/profile.default.jpg') }}"
+                                    class="w-8 h-8 rounded-full border border-white">
+                                <div>
+                                    <p class="text-sm font-medium">{{ $artist->user->name ?? 'John Doe' }}</p>
+                                    <p class="text-sm text-gray-400">{{ '@' . $artist->username }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @empty
                 <p class="text-gray-500">No artists found.</p>

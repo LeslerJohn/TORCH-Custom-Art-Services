@@ -23,6 +23,8 @@ class HomeController extends Controller
         $services = Service::latest()->take(9)->get();
         $reviews = OrderReview::latest()->take(3)->get();
 
+        // dd(compact('artworks', 'artists', 'services', 'reviews'));
+
         return view('dashboard', compact('artworks', 'artists', 'services', 'reviews'));
     }
 
