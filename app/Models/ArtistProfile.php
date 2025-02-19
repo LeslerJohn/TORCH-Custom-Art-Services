@@ -35,6 +35,21 @@ class ArtistProfile extends Model
         return $this->belongsToMany(Tag::class, 'artist_tag', 'artist_id', 'tag_id');
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'artist_id', 'id');
+    }
+
+    public function artworks()
+    {
+        return $this->hasMany(Artwork::class, 'artist_id', 'id');
+    }
+
+    public function categories()
+    {
+        return $this->hasManyThrough(Category::class, Service::class, 'artist_id', 'id', 'id', 'category_id');
+    }
+
     public function portfolio()
     {
         return $this->hasOne(ArtistPortfolio::class, 'artist_id', 'id');

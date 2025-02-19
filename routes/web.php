@@ -20,7 +20,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
 });
+
+Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
+
+Route::get('/client/artist', [HomeController::class, 'artist'])->name('client.artist');
+Route::get('/client/artwork', [HomeController::class, 'artwork'])->name('client.artwork');
+Route::get('/client/service', [HomeController::class, 'service'])->name('client.service');
 
 Route::get('/artwork/{artwork}', [HomeController::class, 'show_artwork'])->name('artwork.show');
 Route::get('/service/{service}', [HomeController::class, 'show_service'])->name('service.show');
@@ -52,7 +59,6 @@ Route::get('/commission', [CommissionController::class, 'index'])->name('client.
 Route::get('/commission/{commission}', [CommissionController::class, 'show'])->name('client.commission.show');
 Route::post('/commission/{commission}/receive', [CommissionController::class, 'receive'])->name('client.commission.receive');
 
-
-require __DIR__.'/auth.php';
-require __DIR__.'/artist.php';
-require __DIR__.'/admin.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/artist.php';
+require __DIR__ . '/admin.php';

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b-2 border-gray-300">
+<nav x-data="{ open: false }" class="bg-white border-b-2 border-gray-300 fixed top-0 left-0 right-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -17,15 +17,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link> --}}
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{ route('client.artwork') }}" class="text-md">
                         Explore
                     </a>
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{ route('client.artist') }}" class="text-md">
                         Hire an Artist
                     </a>
 
-                    <a href="" class="text-md font-bold">
+                    <a href="{{ route('client.service') }}" class="text-md">
                         Commission
                     </a>
                 </div>
@@ -68,9 +68,15 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                            @if (Auth::user()->isArtist())
+                                <x-dropdown-link :href="route('artist.profile', Auth::user())">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @else
+                                <x-dropdown-link :href="route('client.profile')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @endif
 
                             <x-dropdown-link :href="route('client.request.index')">
                                 {{ __('Requests') }}
@@ -80,19 +86,25 @@
                                 {{ __('Orders') }}
                             </x-dropdown-link>
 
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Collections') }}
-                            </x-dropdown-link>
-
-                            <p class="w-full h-0.5 border-b border-gray-400 mt-4"></p>
-
-                            @if(Auth::user()->isArtist())
-                                <x-dropdown-link :href="route('artist.dashboard')">
-                                    {{ __('Artist Dashboard') }}
+                            @if (Auth::user()->isArtist())
+                                <x-dropdown-link :href="route('artist.profile', Auth::user())">
+                                    {{ __('Collections') }}
+                                </x-dropdown-link>
+                            @else
+                                <x-dropdown-link :href="route('client.profile')">
+                                    {{ __('Collections') }}
                                 </x-dropdown-link>
                             @endif
 
-                            <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
+                            <p class="w-full h-0.5 border-b border-gray-400 mt-4"></p>
+
+                            @if (Auth::user()->isArtist())
+                                <x-dropdown-link :href="route('artist.dashboard')">
+                                    {{ __('Artist Dashboard') }}
+                                </x-dropdown-link>
+
+                                <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
+                            @endif
 
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Settings') }}
@@ -115,7 +127,9 @@
                     </x-dropdown>
                 @else
                     <div class="hidden sm:flex sm:items-center sm:ms-6 p-4 gap-2">
-                        <a href="{{ route('login') }}" class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-md px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign In</a>
+                        <a href="{{ route('login') }}"
+                            class="text-md font-bold text-gray-800 dark:text-white border border-gray-800 dark:border-white rounded-full px-4 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">Sign
+                            In</a>
                     </div>
                 @endauth
             </div>
@@ -155,7 +169,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('client.profile')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

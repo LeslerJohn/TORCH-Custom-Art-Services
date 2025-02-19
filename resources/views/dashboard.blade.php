@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div>
+    <div class="bg-gradient-to-r from-white to-orange-100">
         <div class="w-full mx-auto bg-gradient-to-r from-white to-orange-100 min-h-screen flex items-center">
             <div class="container h-screen pb-16 mx-auto flex justify-between items-center px-12">
                 <!-- Text Section -->
@@ -121,8 +121,11 @@
                                         <!-- Close Button -->
                                         <button class="absolute top-5 right-5 text-gray-600 hover:text-gray-900"
                                             onclick="closeArtworkModal()">
-                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                             </svg>
                                         </button>
 
@@ -203,6 +206,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artists as $artist)
                             <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                <a href="{{route('artist.profile', $artist)}}">
                                 <!-- Background Image -->
                                 <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
                                     alt="Di Naluluma" class="w-full h-full object-cover">
@@ -241,6 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </a>
                             </div>
                         @endforeach
                     </div>
@@ -252,42 +257,42 @@
                             @php
                                 $thumbnail = $service->images->first()?->attachment;
                             @endphp
-                            <a href="{{route('service.show', $service)}}">
-                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                                <!-- Background Image -->
-                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                    alt="Di Naluluma" class="w-full h-full object-cover">
+                            <a href="{{ route('service.show', $service) }}">
+                                <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                    <!-- Background Image -->
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="Di Naluluma" class="w-full h-full object-cover">
 
-                                <!-- Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                                <!-- Text Content -->
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <h2 class="text-lg font-bold">{{ $service->category->name }}</h2>
-                                    <p class="text-sm">|
-                                        @foreach ($service->tags as $tag)
-                                            {{ $tag->name }}@if (!$loop->last)
-                                                ,
-                                            @endif
-                                        @endforeach
-                                    </p>
-
-                                    <!-- Artist Info -->
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-6 h-6 rounded-full border border-white">
-                                        <p class="text-sm font-medium flex items-center">
-                                            {{ $service->artist->user->name }}
-                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                            </svg>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h2 class="text-lg font-bold">{{ $service->category->name }}</h2>
+                                        <p class="text-sm">|
+                                            @foreach ($service->tags as $tag)
+                                                {{ $tag->name }}@if (!$loop->last)
+                                                    ,
+                                                @endif
+                                            @endforeach
                                         </p>
+
+                                        <!-- Artist Info -->
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-6 h-6 rounded-full border border-white">
+                                            <p class="text-sm font-medium flex items-center">
+                                                {{ $service->artist->user->name }}
+                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                </svg>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -295,44 +300,48 @@
                     aria-labelledby="contacts-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artworks as $artwork)
-                            @php
-                                $thumbnail = $artwork->images->first()?->attachment;
-                            @endphp
-                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                                <a href="{{route('artwork.show', $artwork)}}" >
-                                <!-- Background Image -->
-                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                    alt="Di Naluluma" class="w-full h-full object-cover">
+                            @if ($artwork->status == 'sale')
+                                @php
+                                    $thumbnail = $artwork->images->first()?->attachment;
+                                @endphp
+                                <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                    <a href="{{ route('artwork.show', $artwork) }}">
+                                        <!-- Background Image -->
+                                        <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                            alt="Di Naluluma" class="w-full h-full object-cover">
 
-                                <!-- Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                        <!-- Overlay -->
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent">
+                                        </div>
 
-                                <!-- Text Content -->
-                                <div class="absolute bottom-4 left-4 text-white">
-                                    <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
-                                    <p class="text-sm">| {{ $artwork->category->name }}</p>
+                                        <!-- Text Content -->
+                                        <div class="absolute bottom-4 left-4 text-white">
+                                            <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
+                                            <p class="text-sm">| {{ $artwork->category->name }}</p>
 
-                                    <!-- Artist Info -->
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-6 h-6 rounded-full border border-white">
-                                        <p class="text-sm font-medium flex items-center">
-                                            {{ $artwork->artist->user->name }}
-                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                            </svg>
-                                        </p>
-                                    </div>
+                                            <!-- Artist Info -->
+                                            <div class="flex items-center gap-2 mt-2">
+                                                <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                                    class="w-6 h-6 rounded-full border border-white">
+                                                <p class="text-sm font-medium flex items-center">
+                                                    {{ $artwork->artist->user->name }}
+                                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                    </svg>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price -->
+                                        <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
+                                            <span
+                                                class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                        </div>
+                                    </a>
                                 </div>
-
-                                <!-- Price -->
-                                <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
-                                    <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
-                                </div>
-                            </a>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -345,11 +354,11 @@
             <div class="flex gap-6 mt-8 items-center justify-center">
                 @foreach ($reviews as $review)
                     <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
-                        <img src="{{ $review->order->client->user->profileImage ? asset('storage/' . $review->order->client->user->profileImage->attachment->path) : asset('images/profile.default.jpg') }}" alt="User"
-                            class="w-16 h-16 rounded-full border-2 border-orange-500">
-                        <p class="text-lg font-semibold mt-4">{{$review->order->client->user->name}}</p>
-                        <p class="text-sm text-gray-500">{{ucfirst($review->order->client->user->role)}}</p>
-                        <p class="text-md text-orange-500 text-center mt-4">"{{$review->comment}}"</p>
+                        <img src="{{ $review->order->client->user->profileImage ? asset('storage/' . $review->order->client->user->profileImage->attachment->path) : asset('images/profile.default.jpg') }}"
+                            alt="User" class="w-16 h-16 rounded-full border-2 border-orange-500">
+                        <p class="text-lg font-semibold mt-4">{{ $review->order->client->user->name }}</p>
+                        <p class="text-sm text-gray-500">{{ ucfirst($review->order->client->user->role) }}</p>
+                        <p class="text-md text-orange-500 text-center mt-4">"{{ $review->comment }}"</p>
                         <div class="flex gap-1 justify-center items-center mt-4">
                             @for ($i = 0; $i < $review->rating; $i++)
                                 <svg class="w-5 h-5 text-yellow-400" aria-hidden="true"
