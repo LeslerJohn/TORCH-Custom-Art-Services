@@ -58,6 +58,7 @@ Route::get('/commission', [CommissionController::class, 'index'])->name('client.
 Route::get('/commission/{commission}', [CommissionController::class, 'show'])->name('client.commission.show');
 Route::post('/commission/{commission}/receive', [CommissionController::class, 'receive'])->name('client.commission.receive');
 
+Route::get('/profile', [ProfileController::class, 'index'])->name('client.profile');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/artist.php';
