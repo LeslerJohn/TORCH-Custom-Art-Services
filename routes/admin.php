@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CommissionController;
+use App\Http\Controllers\admin\ReportController;
 
 Route::get('/admin', 'App\Http\Controllers\Admin\DashBoardController@index')->middleware(['auth', 'verified'])->name('admin.dashboard');
 
@@ -31,3 +32,6 @@ Route::get('/admin/commission', [CommissionController::class, 'index'])->name('a
 Route::get('/admin/commission/{commission}', [CommissionController::class, 'show'])->name('admin.commission.show');
 Route::get('/admin/commission/{commission}/refund', [CommissionController::class, 'refund'])->name('admin.commission.refund');
 Route::get('/admin/commission/{commission}/cancel', [CommissionController::class, 'cancel'])->name('admin.commission.cancel');
+
+Route::get('/admin/report', [ReportController::class, 'index'])->name('admin.report.index');
+Route::get('/admin/report/{report}', [ReportController::class, 'show'])->name('admin.report.show');
