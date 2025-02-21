@@ -21,9 +21,12 @@
                     <p><strong>Rating:</strong> {{ $artist->rating }}</p>
                     <p><strong>Available:</strong> {{ $artist->available ? 'Yes' : 'No' }}</p>
                 </div>
+                <br>
 
                 @if (!$isOwner)
                 <button class="bg-green-500 text-white px-4 py-2 rounded-full mt-4 text-sm">Request Service</button>
+                @else
+                <a href="{{ route('profile.edit', $artist) }}" class="bg-blue-500 text-white px-4 py-2 rounded-full mt-4 text-sm">Edit Profile</a>
                 @endif
             </div>
 
