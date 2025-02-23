@@ -48,6 +48,12 @@
                         {{ __('Categories') }}
                     </x-responsive-nav-link>
                 </li>
+                <li>
+                    <x-responsive-nav-link :href="route('admin.report.index')" :active="request()->routeIs('admin.report.index')">
+                        <i class="material-icons">report</i>
+                        {{ __('Reports') }}
+                    </x-responsive-nav-link>
+                </li>
             </ul>
         </div>
     </aside>
