@@ -48,24 +48,24 @@
                     class="px-4 py-1 border rounded-full bg-gray-200 text-black">
                     <option value="">All Categories</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"
-                            {{ request('category') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
+                    <option value="{{ $category->id }}"
+                        {{ request('category') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
                     @endforeach
                 </select>
 
                 <!-- Tags (Scrollable) -->
                 <div class="flex items-center gap-2 overflow-x-auto">
                     @foreach ($tags as $tag)
-                        <label
-                            class="px-4 py-1 border rounded-full cursor-pointer
+                    <label
+                        class="px-4 py-1 border rounded-full cursor-pointer
                             {{ in_array($tag->id, request()->input('tags', [])) ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
-                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="hidden"
-                                onchange="this.form.submit()"
-                                {{ in_array($tag->id, request()->input('tags', [])) ? 'checked' : '' }}>
-                            {{ $tag->name }}
-                        </label>
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="hidden"
+                            onchange="this.form.submit()"
+                            {{ in_array($tag->id, request()->input('tags', [])) ? 'checked' : '' }}>
+                        {{ $tag->name }}
+                    </label>
                     @endforeach
                 </div>
             </div>
@@ -75,7 +75,8 @@
         <!-- Artist List -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
             @forelse ($artists as $artist)
-                <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                <a href="{{ route('artist.profile', $artist) }}">
                     <img src="{{ $artist->user->coverImage ? asset('storage/' . $artist->user->coverImage->path) : asset('images/default.image.jpg') }}"
                         class="w-full h-full object-cover">
 
@@ -96,9 +97,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
+            </div>
             @empty
-                <p class="text-gray-500">No artists found.</p>
+            <p class="text-gray-500">No artists found.</p>
             @endforelse
         </div>
 

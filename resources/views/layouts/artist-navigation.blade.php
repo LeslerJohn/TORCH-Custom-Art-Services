@@ -36,10 +36,10 @@
         <div class="hidden sm:flex sm:items-center sm:ms-6">
             <div class="flex text-white">
                 {{-- <a href="{{ route('artist.notifications')}} " class="inline-flex items-center px-2 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-black-600 hover:bg-black-500 focus:outline-none focus:border-black-700 focus:shadow-outline-black active:bg-black-700 transition ease-in-out duration-150"> --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="black lucide lucide-bell">
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                    </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="black lucide lucide-bell">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                </svg>
                 {{-- </a> --}}
             </div>
             <a href="{{ route('dashboard') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black focus:outline-none transition ease-in-out duration-150">Home</a>
@@ -47,7 +47,7 @@
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black-500 dark:text-black-400 bg-white dark:bg-black-800 hover:text-black-700 dark:hover:text-black-300 focus:outline-none transition ease-in-out duration-150">
-                        <div>{{ Auth::user()->first_name }}</div>
+                        <div>{{ Auth::user()->username }}</div>
 
                         <div class="ms-1">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -58,6 +58,9 @@
                 </x-slot>
 
                 <x-slot name="content">
+                    <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-600">
+                        <div class="font-medium text-base text-orange-500">{{ Auth::user()->username }}</div>
+                    </div>
                     {{-- <x-dropdown-link :href="route('artist.portfolio.dashboard')">
                             {{ __('Portfolio') }}
                     </x-dropdown-link>
@@ -119,7 +122,7 @@
             <!-- Responsive Settings Options -->
             <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600 bg-white">
                 <div class="px-4">
-                    <div class="font-medium text-base text-orange-500">{{ Auth::user()->first_name }}</div>
+                    <div class="font-medium text-base text-orange-500">{{ Auth::user()->username }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                 </div>
 
