@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="border-b-4 border-orange-400 dark:border-orange-700 fixed top-0 left-0 w-full z-50">
+<nav x-data="{ open: false }" class="bg-white border-b-4 border-orange-400 dark:border-orange-700 fixed top-0 left-0 w-full z-999">
     <!-- Primary Navigation Menu -->
     <div class="max-w-full mx-auto px-4 sm:px-4 lg:px-8">
         <div class="flex justify-between h-16">
@@ -59,7 +59,7 @@
 
                 <x-slot name="content">
                     <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-600">
-                        <div class="font-medium text-base text-orange-500">{{ Auth::user()->username }}</div>
+                        <div class="font-medium text-base text-orange-500">{{ Auth::user()->name }}</div>
                     </div>
                     {{-- <x-dropdown-link :href="route('artist.portfolio.dashboard')">
                             {{ __('Portfolio') }}
