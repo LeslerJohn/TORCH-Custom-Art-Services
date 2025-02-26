@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    use HasUlids;
     protected $table = 'cart';
     protected $fillable = [
         'client_id',

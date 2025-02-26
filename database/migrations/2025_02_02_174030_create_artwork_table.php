@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('artwork', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('artist_id')->constrained('artist_profile')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('category')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('artist_id')->constrained('artist_profile')->cascadeOnDelete();
+            $table->foreignUlid('category_id')->constrained('category')->cascadeOnDelete();
             $table->string('title', 255);
             $table->text('description');
             $table->string('dimension', 50);
@@ -26,20 +26,18 @@ return new class extends Migration
         });
 
         Schema::create('artwork_image', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('artwork_id')->constrained('artwork')->cascadeOnDelete();
-            $table->foreignId('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->foreignUlid('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->foreignUlid('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->primary(['artwork_id', 'attachment_id']);
             $table->timestamps();
         });
 
         Schema::create('artwork_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('artwork_id')->constrained('artwork')->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained('tag')->cascadeOnDelete();
+            $table->foreignUlid('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->foreignUlid('tag_id')->constrained('tag')->cascadeOnDelete();
+            $table->primary(['artwork_id', 'tag_id']);
             $table->timestamps();
         });
-
-
     }
 
     /**
@@ -47,6 +45,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('artwork_tag');
+        Schema::dropIfExists('artwork_image');
         Schema::dropIfExists('artwork');
     }
 };
