@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('client_liked', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_id')->constrained('client_profile')->cascadeOnDelete();
-            $table->foreignId('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
+            $table->foreignUlid('artwork_id')->constrained('artwork')->cascadeOnDelete();
             $table->timestamps();
         });
     }

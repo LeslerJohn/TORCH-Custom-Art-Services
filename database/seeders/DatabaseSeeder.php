@@ -35,11 +35,16 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($categories as $categoryName => $tags) {
+            // Create Category
             $category = Category::factory()->create(['name' => $categoryName]);
-            $tagModels = collect($tags)->map(function ($tagName) {
-            return Tag::factory()->create(['name' => $tagName]);
-            });
-            $category->tags()->attach($tagModels);
+        
+            // Create Tags & Extract IDs
+            $tagIds = collect($tags)->map(function ($tagName) {
+                return Tag::factory()->create(['name' => $tagName])->id; // Get ULID ID
+            })->toArray(); // Convert collection to array
+        
+            // Attach only the IDs (ULIDs)
+            $category->tags()->attach($tagIds);
         }
         
         $this->call([

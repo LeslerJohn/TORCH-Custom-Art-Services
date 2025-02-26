@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('commission', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('request_id')->constrained('request')->cascadeOnDelete();
-            $table->foreignId('delivery_id')->constrained('delivery')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('request_id')->constrained('request')->cascadeOnDelete();
+            $table->foreignUlid('delivery_id')->constrained('delivery')->cascadeOnDelete();
             $table->date('deadline')->nullable();
             $table->enum('status', ['pending', 'ready', 'wip', 'done', 'completed'])->default('pending');
             $table->timestamps();
         });
 
         Schema::create('draft', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('commission_id')->constrained('commission')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('commission_id')->constrained('commission')->cascadeOnDelete();
             $table->string('description', 255);
-            $table->foreignId('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->foreignUlid('attachment_id')->constrained('attachment')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -34,7 +34,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commission');
         Schema::dropIfExists('draft');
+        Schema::dropIfExists('commission');
     }
 };
