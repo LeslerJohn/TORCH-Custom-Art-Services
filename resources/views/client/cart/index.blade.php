@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-5xl pt-24 my-4 mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <div class="max-w-5xl my-4 mx-auto bg-white p-6 rounded-lg shadow-lg">
 
         <h1 class="text-2xl font-bold mb-4"> Your Cart
             {{-- Your Cart ({{ optional($cart)->items->count() ?? 0 }} items) --}}
@@ -78,7 +78,7 @@
                 <img src="{{ asset('images/cart-empty.png') }}" alt="Empty Cart" class="w-48 h-48 mb-4">
                 <h2 class="text-2xl font-semibold text-gray-700">Your cart is empty!</h2>
                 <p class="text-gray-500 mb-4">Looks like you haven’t added anything to your cart yet.</p>
-                <a href="" class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-600">
+                <a href="{{route('client.artwork')}}" class="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-600">
                     Browse Artworks
                 </a>
             </div>

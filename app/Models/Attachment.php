@@ -12,9 +12,4 @@ class Attachment extends Model
         'path',
         'mime_type',
     ];
-
-    public function showcaseImages()
-    {
-        return $this->hasMany(ShowcaseImage::class, 'attachment_id');
-    }
 }
