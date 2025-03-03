@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CommissionController;
 use App\Http\Controllers\admin\ReportController;
 
-Route::get('/admin', 'App\Http\Controllers\Admin\DashBoardController@index')->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('/admin', 'App\Http\Controllers\Admin\DashBoardController@index')->middleware(['auth', 'verified', 'role:admin'])->name('admin.dashboard');
 
 Route::get('/admin/category', 'App\Http\Controllers\Admin\CategoryController@index')->name('admin.category.index');
 Route::get('/admin/category/create', 'App\Http\Controllers\Admin\CategoryController@create')->name('admin.category.create');

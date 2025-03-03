@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArtistPayment;
 use App\Models\ArtistPortfolio;
 use App\Models\ArtistProfile;
 use App\Models\Attachment;
@@ -25,7 +26,8 @@ class RegisteredArtistController extends Controller
     public function create(): View
     {
         $tags = Tag::all();
-        return view('auth.register-artist', compact('tags'));
+        $user = Auth::user();
+        return view('auth.register-artist', compact('tags', 'user'));
     }
 
     /**
@@ -35,24 +37,31 @@ class RegisteredArtistController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //dd($request->tags);
         $request->merge(['email' => strtolower($request->email)]);
 
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'string', 'email', 'max:255', function ($value, $fail) {
+                if (Auth::user() && Auth::user()->email !== $value && User::where('email', $value)->exists()) {
+                    $fail('The email has already been taken.');
+                }
+            }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'birthdate' => ['required', 'date'],
             'gender' => ['required', 'string', 'max:255'],
-            'contact_number' => ['required', 'string', 'max:255'],
+            'contact_number' => ['nullable', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'bio' => ['required', 'string'],
+            'max_commissions' => ['required', 'integer', 'min:1'],
             'portfolio' => ['nullable', 'file', 'mimes:pdf,doc,docx'],
             'portfolio_link' => ['nullable', 'url'],
             'tags' => ['nullable'],
+            'payment_method' => ['required', 'string', 'max:255'],
+            'payment_number' => ['required', 'string', 'max:255'],
+            'payment_name' => ['required', 'string', 'max:255'],
         ]);
 
         $portfolio = null;
@@ -66,19 +75,22 @@ class RegisteredArtistController extends Controller
             ];
         }
 
-        $user = User::create([
-            'name' => trim($request->first_name . ' ' . ($request->middle_name ? $request->middle_name . ' ' : '') . $request->last_name),
-            'email' => $request->email,
-            'phone_number' => $request->contact_number,
-            'password' => Hash::make($request->password),
-            'role' => 'artist',
-        ]);
+        $user = Auth::user();
+        if (!$user || $user->email !== $request->email) {
+            $user = User::create([
+                'name' => "{$request->first_name} " . ($request->middle_name ? "{$request->middle_name} " : '') . "{$request->last_name}",
+                'email' => $request->email,
+                'phone_number' => $request->contact_number,
+                'password' => Hash::make($request->password),
+                'role' => 'artist',
+            ]);
 
-        $client = ClientProfile::create([
-            'id' => $user->id,
-            'rating' => 0,
-            'is_suspended' => false,
-        ]);
+            ClientProfile::create([
+                'id' => $user->id,
+                'rating' => 0,
+                'is_suspended' => false,
+            ]);
+        }
 
         $artist = ArtistProfile::create([
             'id' => $user->id,
@@ -86,11 +98,23 @@ class RegisteredArtistController extends Controller
             'gender' => $request->gender,
             'location' => $request->location,
             'bio' => $request->bio,
+            'max_commissions' => $request->max_commissions,
             'username' => $request->username,
             'status' => 'pending',
             'is_suspended' => false,
             'rating' => 0,
             'available' => true,
+        ]);
+
+        if ($user->role === 'client') {
+            $user->update(['role' => 'artist']);
+        }
+
+        ArtistPayment::create([
+            'artist_id' => $artist->id,
+            'payment_method' => $request->payment_method,
+            'account_number' => $request->payment_number,
+            'account_name' => $request->payment_name,
         ]);
 
         if ($portfolio) {

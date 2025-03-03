@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('portfolio', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('artist_id')->constrained('artist_profile')->cascadeOnDelete();
-            $table->foreignUlid('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->foreignUlid('portfolio_id')->constrained('attachment')->cascadeOnDelete();
+            $table->string('link')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

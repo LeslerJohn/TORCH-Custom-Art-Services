@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('height', 50);
             $table->string('width', 50);
             $table->string('unit', 50);
+            $table->integer('quantity');
             $table->date('deadline')->nullable();
             $table->decimal('total_price', 10, 2);
             $table->string('status', 50)->default('pending');

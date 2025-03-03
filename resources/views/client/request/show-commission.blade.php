@@ -36,7 +36,7 @@
                 {{ $commission->request->height }}
                 {{ $commission->request->unit }}</p>
             <p class="mb-2"><strong>Deadline:</strong>
-                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('F j, Y') }}</p>
+                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
         </div>
 
         <!-- Drafts -->

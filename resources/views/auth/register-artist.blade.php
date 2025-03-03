@@ -60,6 +60,7 @@
 
             <div id="personal-section">
                 <!-- Name -->
+                @guest
                 <div class="flex justify-between">
                     <div>
                         <x-input-label for="first_name" :value="__('First Name')" />
@@ -80,7 +81,11 @@
                         <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                     </div>
                 </div>
-
+                @else
+                <input type="hidden" name="first_name" value="{{ old('first_name', $user->name ?? '') }}">
+                <input type="hidden" name="middle_name" value="{{ old('middle_name', $user->middle_name ?? '') }}">
+                <input type="hidden" name="last_name" value="{{ old('last_name', $user->name ?? '') }}">
+                @endguest
 
                 <div class="flex mt-4">
                     <!-- Birthdate -->
@@ -90,9 +95,9 @@
                             :value="old('birthdate')" required />
                         <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
                     </div> --}}
-                    <div class="w-1/2 pr-2">
+                    <div class="w-1/2 pr-2 relative">
                         <x-input-label for="birthdate" :value="__('Birthdate')" />
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <div class="absolute inset-y-0 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path
@@ -100,8 +105,8 @@
                             </svg>
                         </div>
                         <input datepicker id="default-datepicker" name="birthdate" type="text"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Select date">
+                            class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Select date" max="{{ now()->format('Y-m-d') }}">
                     </div>
 
                     <!-- Gender -->
@@ -118,6 +123,7 @@
                     </div>
                 </div>
 
+                @guest
                 <!-- Email Address -->
                 <div class="mt-4">
                     <x-input-label for="email" :value="__('Email')" />
@@ -125,8 +131,12 @@
                         placeholder="john@example.com" :value="old('email')" required autocomplete="username" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
+                @else
+                <input type="hidden" name="email" value="{{ old('email', $user->email ?? '') }}">
+                @endguest
 
                 <div class="flex gap-6">
+                    @guest
                     <div class="mt-4 w-full">
                         <x-input-label for="contact_number" :value="__('Contact Number')" />
                         <div class="flex">
@@ -138,6 +148,9 @@
                         </div>
                         <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
                     </div>
+                    @else
+                    <input type="hidden" name="contact_number" value="{{ old('contact_number', $user->phone_number ?? '') }}">
+                    @endguest
 
                     <div class="mt-4 w-full">
                         <x-input-label for="username" :value="__('Username')" />
@@ -183,24 +196,53 @@
                     </svg>
                 </button>
 
-                <!-- Password -->
+                @guest
+                    <!-- Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password" :value="__('Password')" />
+
+                        <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                            placeholder="password" :value="old('password', $user->password ?? '')" required autocomplete="new-password" />
+
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+                        <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                            placeholder="password" name="password_confirmation" :value="($user->password ?? '')" required autocomplete="new-password" />
+
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    </div>
+                @else
+                    <input type="hidden" name="password" value="{{ old('password', $user->password ?? '') }}">
+                    <input type="hidden" name="password_confirmation" value="{{ old('password_confirmation', $user->password ?? '') }}">
+                @endguest
+
                 <div class="mt-4">
-                    <x-input-label for="password" :value="__('Password')" />
-
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                        placeholder="password" required autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="mt-4">
-                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                        placeholder="password" name="password_confirmation" required autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    <label for="max-commissions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max Commissions:</label>
+                    <div class="relative flex items-center max-w-[11rem]">
+                        <button type="button" id="decrement-commissions" data-input-counter-decrement="max-commissions" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                            </svg>
+                        </button>
+                        <input type="text" id="max-commissions" name="max_commissions" data-input-counter data-input-counter-min="1" data-input-counter-max="50" aria-describedby="commissions-helper-text" class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ old('max-commissions', 10) }}" required />
+                        <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
+                            <svg class="w-2.5 h-2.5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"/>
+                            </svg>
+                            <span>Commissions</span>
+                        </div>
+                        <button type="button" id="increment-commissions" data-input-counter-increment="max-commissions" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="commissions-helper-text" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Please select the max number of commissions.</p>
                 </div>
 
                 <div class="mt-4 border border-gray-300 p-4 rounded-md">
@@ -241,9 +283,9 @@
 
                 <div class="w-full">
                     <label for="tags" class="block mb-2 text-lg font-medium">Select your tag</label>
-                    <div id="tags-container" class="grid grid-cols-2 gap-4">
+                    <div id="tags-container" class="flex justify-start flex-wrap gap-2">
                         @foreach ($tags as $tag)
-                            <div class="tag-card border-2 border-gray-300 text-lg rounded-lg p-4 cursor-pointer"
+                            <div class="tag-card border-2 border-gray-300 text-sm rounded-full py-2 px-4 cursor-pointer"
                                 data-tag-id="{{ $tag->id }}">
                                 {{ $tag->name }}
                             </div>
@@ -251,6 +293,37 @@
                     </div>
                     <input type="hidden" id="selected-tags" name="tags[]" value="">
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const tagsContainer = document.getElementById('tags-container');
+                        const selectedTagsInput = document.getElementById('selected-tags');
+                        let selectedTags = [];
+
+                        tagsContainer.addEventListener('click', function(event) {
+                            const tagCard = event.target.closest('.tag-card');
+                            if (tagCard) {
+                                const tagId = tagCard.getAttribute('data-tag-id');
+                                if (selectedTags.includes(tagId)) {
+                                    selectedTags = selectedTags.filter(id => id !== tagId);
+                                    tagCard.classList.remove('selected-tag');
+                                } else {
+                                    selectedTags.push(tagId);
+                                    tagCard.classList.add('selected-tag');
+                                }
+                                selectedTagsInput.value = selectedTags.join(',');
+                            }
+                        });
+                    });
+                </script>
+
+                <style>
+                    .tag-card.selected-tag {
+                        background-color: #d66f15;
+                        color: white;
+                        border-color: #d66f15;
+                    }
+                </style>
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -300,14 +373,44 @@
 
                 <div class="mt-4">
                     <x-input-label for="payment_method" :value="__('Payment Method')" />
-                    <select id="payment_method" name="payment_method"
-                        class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="">{{ __('Select Payment Method') }}</option>
-                        <option value="gcash">{{ __('GCash') }}</option>
-                        <option value="paymaya">{{ __('PayMaya') }}</option>
-                    </select>
+                    <div id="payment-method-container" class="flex gap-4 mt-2">
+                        <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
+                            data-method="gcash">
+                            {{ __('GCash') }}
+                        </div>
+                        <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
+                            data-method="paymaya">
+                            {{ __('PayMaya') }}
+                        </div>
+                    </div>
+                    <input type="hidden" id="payment_method" name="payment_method" value="{{ old('payment_method') }}">
                     <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const paymentMethodContainer = document.getElementById('payment-method-container');
+                        const paymentMethodInput = document.getElementById('payment_method');
+                        const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+
+                        paymentMethodContainer.addEventListener('click', function(event) {
+                            const card = event.target.closest('.payment-method-card');
+                            if (card) {
+                                paymentMethodCards.forEach(card => card.classList.remove('selected-method'));
+                                card.classList.add('selected-method');
+                                paymentMethodInput.value = card.getAttribute('data-method');
+                            }
+                        });
+                    });
+                </script>
+
+                <style>
+                    .payment-method-card.selected-method {
+                        background-color: #d66f15;
+                        color: white;
+                        border-color: #d66f15;
+                    }
+                </style>
 
                 <div class="mt-4">
                     <x-input-label for="payment_name" :value="__('Name')" />
@@ -388,10 +491,4 @@
             document.getElementById('payment-circle').classList.add('bg-orange-500');
         }
     </script>
-
-    <style>
-        .selected-tag {
-            border-color: #3b82f6 !important;
-        }
-    </style>
 </x-guest-artist-layout>

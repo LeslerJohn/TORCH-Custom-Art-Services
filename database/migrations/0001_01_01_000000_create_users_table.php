@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('gender');
             $table->string('username');
             $table->date('birthdate');
+            $table->integer('max_commissions')->default(5);
             $table->string('bio');
             $table->enum('status', ['pending', 'semi-verified', 'fully-verified', 'unverified'])->default('pending');
             $table->boolean('is_suspended')->default(false);
@@ -50,6 +51,15 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::create('artist_socials', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->string('instagram')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('facebook')->nullable();
+
+            $table->foreign('id')->references('id')->on('artist_profile')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

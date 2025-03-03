@@ -19,6 +19,7 @@ class ArtistProfile extends Model
         'username',
         'birthdate',
         'bio',
+        'max_commissions',
         'status',
         'is_suspended',
         'rating',
