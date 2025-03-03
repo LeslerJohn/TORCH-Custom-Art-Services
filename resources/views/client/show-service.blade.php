@@ -57,7 +57,7 @@
             <div class="flex w-1/2 flex-col">
                     <h1 class="text-3xl font-bold font-bold-300">{{ $service->category->name }}</h1>
                     <p class="text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per square inch.</strong></p>
-                    <p class="text-lg text-gray-500">Completion time: {{$service->normal_timeframe}} days</p>
+                    <p class="text-lg text-gray-500">Completion time: {{$service->normal_timeframe}} - {{$service->normal_timeframe + 5}} days</p>
                 
                     <div class="flex items-center gap-2 mt-2">
                         <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
@@ -82,7 +82,7 @@
                 <div>
                     <h2 class="text-xl font-semibold">Rush Order</h2>
                     <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square inch.</p>
-                    <p class="text-lg text-gray-500">Completion time: {{$service->rush_timeframe}} days</p>
+                    <p class="text-lg text-gray-500">Completion time: {{$service->rush_timeframe}} - {{$service->normal_timeframe - 1}} days</p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($service->tags as $tag)
                             <span
@@ -95,7 +95,7 @@
                     <h2 class="text-xl font-semibold mt-4">Contact</h2>
                     <p class="mt-2"><strong>Email:</strong> {{ $service->artist->user->email ?? 'test@email.com' }}
                     </p>
-                    <p class="mt-1"><strong>Phone:</strong> {{ $service->artist->phone_number }}</p>
+                    <p class="mt-1"><strong>Phone:</strong> {{ $service->artist->user->phone_number }}</p>
                 </div>
 
                 <div class="flex flex-col gap-4 p-4 bg-white rounded-md mt-4 border border-gray-300 shadow-sm">
@@ -130,27 +130,35 @@
                     </div>
                 </div>
 
-                 @auth @if (auth()->user()->id !== $service->artist->user->id) @endauth
-                    <div class="mt-4 flex flex-col gap-4 justify-center">
-                        <div class="flex items-center">
-                            <input id="terms" type="checkbox" class="mr-2">
-                            <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a></label>
-                        </div>
-                        <div class="flex justify-center">
-                            <button id="start-request-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                                class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
-                                type="button" disabled>
-                                Start your request
-                            </button>
-                        </div>
+                @auth
+                    @if (auth()->user()->id !== $service->artist->user->id)
+                        @if ($service->artist->available)
+                            <div class="mt-4 flex flex-col gap-4 justify-center">
+                                <div class="flex items-center">
+                                    <input id="terms" type="checkbox" class="mr-2">
+                                    <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a></label>
+                                </div>
+                                <div class="flex justify-center">
+                                    <button id="start-request-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                                        class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
+                                        type="button" disabled>
+                                        Start your request
+                                    </button>
+                                </div>
 
-                        <script>
-                            document.getElementById('terms').addEventListener('change', function() {
-                                document.getElementById('start-request-btn').disabled = !this.checked;
-                            });
-                        </script>
-                    </div>
-                @auth @endif @endauth
+                                <script>
+                                    document.getElementById('terms').addEventListener('change', function() {
+                                        document.getElementById('start-request-btn').disabled = !this.checked;
+                                    });
+                                </script>
+                            </div>
+                        @else
+                            <div class="mt-4 flex flex-col gap-4 justify-center">
+                                <p class="text-red-500 text-center">The artist is currently not available for commissions.</p>
+                            </div>
+                        @endif
+                    @endif
+                @endauth
 
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
@@ -196,11 +204,11 @@
                                     <div class="mt-4">
                                         <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow mb-4">
                                             <p><strong>Price Rate:</strong> ₱{{ number_format($service->price_rate, 0, '.', ',') }} per square inch</p>
-                                            <p>Completion time: {{$service->normal_timeframe}} days</p>
+                                            <p>Completion time: {{$service->normal_timeframe}} - {{$service->normal_timeframe + 5}} days</p>
                                         </div>
                                         <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow">
                                             <p><strong>Rush Price Rate:</strong> ₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square inch</p>
-                                            <p>Completion time: {{$service->rush_timeframe}} days</p>
+                                            <p>Completion time: {{$service->rush_timeframe}} - {{$service->normal_timeframe - 1}} days</p>
                                         </div>
                                         <div class="flex flex-wrap gap-2 mt-2">
                                             @foreach ($service->tags as $tag)
@@ -278,10 +286,13 @@
                                         </div>
                                     </div>
                                 
-                                    <!-- Deadline -->
+                                    <!-- Order Type -->
                                     <div>
-                                        <x-input-label for="deadline" :value="__('Deadline')" />
-                                        <x-text-input id="deadline" class="block w-full" type="date" name="deadline" x-model="deadline" required />
+                                        <x-input-label for="order_type" :value="__('Order Type')" />
+                                        <select id="order_type" name="order_type" x-model="orderType" class="block w-full border-gray-300 rounded-md shadow-sm" required>
+                                            <option value="normal">Normal Order</option>
+                                            <option value="rush">Rush Order</option>
+                                        </select>
                                         <small class="text-gray-500">Rush orders may increase the price.</small>
                                     </div>
                                 
@@ -326,32 +337,20 @@
                                         width: 0,
                                         height: 0,
                                         unit: 'cm',
+                                        orderType: 'normal',
                                         base_price: {{ $service->price_rate }},
                                         rush_price: {{ $service->rush_price_rate }},
-                                        normal_timeframe: {{ $service->normal_timeframe }},
-                                        rush_timeframe: {{ $service->rush_timeframe }},
-                                        deadline: '',
                                         get totalPrice() {
                                             let widthInInches = this.unit === 'cm' ? this.width / 2.54 : this.width;
                                             let heightInInches = this.unit === 'cm' ? this.height / 2.54 : this.height;
                                             let area = widthInInches * heightInInches;
                                             let baseTotal = area * this.base_price;
                                             let rushTotal = area * this.rush_price;
-                                            let selectedDate = new Date(this.deadline);
-                                            let currentDate = new Date();
-                                            let timeDiff = (selectedDate - currentDate) / (1000 * 60 * 60 * 24);
-                                            if (timeDiff < this.rush_timeframe) {
-                                                return 'Request cannot go through. Deadline is too soon.';
-                                            } else if (timeDiff >= this.rush_timeframe && timeDiff < this.normal_timeframe) {
-                                                return rushTotal;
-                                            } else {
-                                                return baseTotal;
-                                            }
+                                            return this.orderType === 'rush' ? rushTotal : baseTotal;
                                         }
                                     }
                                 }
-                                
-                                </script>                                
+                                </script>
                             </div>
                         </div>
                     </div>

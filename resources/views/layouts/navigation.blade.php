@@ -52,7 +52,7 @@
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>
-                                <img src="{{ Auth::user()->profileImage->path ?? asset('images/profile.default.jpg') }}"
+                                <img src="{{ Auth::user()->profileImage->path ? Storage::url(Auth::user()->profileImage->path) : asset('images/profile.default.jpg') }}"
                                     alt="Profile Image" class="h-8 w-8 rounded-full">
                             </div>
 

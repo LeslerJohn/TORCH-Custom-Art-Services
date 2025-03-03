@@ -14,7 +14,6 @@ class ArtistProfile extends Model
     protected $table = 'artist_profile';
     protected $fillable = [
         'id',
-        'phone_number',
         'location',
         'gender',
         'username',

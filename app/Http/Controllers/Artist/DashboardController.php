@@ -91,4 +91,14 @@ class DashboardController extends Controller
         // Or, if budget comes from commissions:
         // return $artist->commissions()->sum('total_price'); // If your commissions table has a total price
     }
+
+    public function availability()
+    {
+        $artist = Auth::user()->artist;
+        $artist->update([
+            'available' => request('available')
+        ]);
+
+        return back()->with('success', 'Availability updated successfully!');
+    }
 }

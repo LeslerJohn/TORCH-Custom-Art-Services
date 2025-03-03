@@ -28,8 +28,12 @@
                                 <div class="flex gap-4 p-2 bg-gray-50 rounded-lg">
                                     <!-- Checkbox -->
                                     <div class="flex items-center justify-center">
-                                        <input type="checkbox" name="selected_items[]" value="{{ $item->id }}"
-                                            class="artwork-checkbox" data-price="{{ $item->artwork->price }}">
+                                        @if ($item->artwork->status === 'sold')
+                                            <span class="text-red-500 font-bold">Sold</span>
+                                        @else
+                                            <input type="checkbox" name="selected_items[]" value="{{ $item->id }}"
+                                                class="artwork-checkbox" data-price="{{ $item->artwork->price }}">
+                                        @endif
                                     </div>
 
                                     <!-- Artwork Image -->

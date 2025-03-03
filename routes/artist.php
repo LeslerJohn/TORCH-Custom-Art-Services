@@ -22,6 +22,8 @@ Route::get('/get-tags/{categoryId}', function ($categoryId) {
     return response()->json($tags);
 });
 
+Route::post('/artist/availability', [App\Http\Controllers\Artist\DashboardController::class, 'availability'])->middleware(['auth', 'verified'])->name('artist.availability');
+
 // Showcase Routes
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::get('/artist/showcase', 'App\Http\Controllers\Artist\ShowcaseController@index')->name('artist.showcase.index');

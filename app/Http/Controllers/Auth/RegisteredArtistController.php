@@ -69,6 +69,7 @@ class RegisteredArtistController extends Controller
         $user = User::create([
             'name' => trim($request->first_name . ' ' . ($request->middle_name ? $request->middle_name . ' ' : '') . $request->last_name),
             'email' => $request->email,
+            'phone_number' => $request->contact_number,
             'password' => Hash::make($request->password),
             'role' => 'artist',
         ]);
@@ -83,7 +84,6 @@ class RegisteredArtistController extends Controller
             'id' => $user->id,
             'birthdate' => $request->birthdate,
             'gender' => $request->gender,
-            'phone_number' => $request->contact_number,
             'location' => $request->location,
             'bio' => $request->bio,
             'username' => $request->username,

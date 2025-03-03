@@ -35,46 +35,48 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($orders as $order)
-                    @php
-                    $firstItem = $order->items->first();
-                    $artwork = $firstItem ? $firstItem->artwork : null;
-                    $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
-                    @endphp
+                        @php
+                            $firstItem = $order->items->first();
+                            $artwork = $firstItem ? $firstItem->artwork : null;
+                            $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
+                        @endphp
 
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                        <a href="{{ route('client.order.show', $order) }}">
-                            <!-- Background Image -->
-                            <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
+                        <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                            <a href="{{ route('client.order.show', $order) }}">
+                                <!-- Background Image -->
+                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                    alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
 
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                <!-- Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                <p class="text-sm font-medium flex items-center">
-                                    {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
-                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                    </svg>
-                                </p>
-                                <span
-                                    class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
-                            </div>
-                            <!-- Text Content -->
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
-                                <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
-                            </div>
+                                <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                    <span class="font-bold text-white">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                </div>
+                                <!-- Text Content -->
+                                <div class="absolute bottom-4 left-4 text-white">
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-sm">{{ $artwork->category->name ?? 'Uncategorized' }}  |</p>
+                                        <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
+                                    </div>
+                                    
+                                    <p class="text-sm text-white font-medium flex items-center">
+                                        {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
+                                        <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                        </svg>
+                                    </p>
+                                </div>
 
-                            <!-- Price & Delivery Status -->
-                            <div class="absolute bottom-4 right-4 text-white">
-                                <p class="text-sm mt-1"><span
-                                        class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
-                                </p>
-                            </div>
-                        </a>
-                    </div>
+                                <!-- Price & Delivery Status -->
+                                <div class="absolute bottom-4 right-4 text-white">
+                                    <p class="text-sm mt-1">
+                                        <span class="text-xl text-white font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
 
@@ -83,49 +85,49 @@
                 aria-labelledby="dashboard-tab">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($orders as $order)
-                    @php
-                    $firstItem = $order->items->first();
-                    $artwork = $firstItem ? $firstItem->artwork : null;
-                    $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
-                    @endphp
+                        @php
+                            $firstItem = $order->items->first();
+                            $artwork = $firstItem ? $firstItem->artwork : null;
+                            $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
+                        @endphp
 
-                    @if ($order->delivery->status == 'pending')
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                        <a href="{{ route('client.order.show', $order) }}">
-                            <!-- Background Image -->
-                            <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
+                        @if ($order->delivery->status == 'pending')
+                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                <a href="{{ route('client.order.show', $order) }}">
+                                    <!-- Background Image -->
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
 
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                <p class="text-sm font-medium flex items-center">
-                                    {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
-                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                    </svg>
-                                </p>
-                                <span
-                                    class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                        <p class="text-sm font-medium flex items-center">
+                                            {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
+                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                            </svg>
+                                        </p>
+                                        <span
+                                            class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    </div>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
+                                        <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
+                                    </div>
+
+                                    <!-- Price & Delivery Status -->
+                                    <div class="absolute bottom-4 right-4 text-white">
+                                        <p class="text-sm mt-1"><span
+                                                class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        </p>
+                                    </div>
+                                </a>
                             </div>
-                            <!-- Text Content -->
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
-                                <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
-                            </div>
-
-                            <!-- Price & Delivery Status -->
-                            <div class="absolute bottom-4 right-4 text-white">
-                                <p class="text-sm mt-1"><span
-                                        class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -133,49 +135,49 @@
                 aria-labelledby="settings-tab">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($orders as $order)
-                    @php
-                    $firstItem = $order->items->first();
-                    $artwork = $firstItem ? $firstItem->artwork : null;
-                    $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
-                    @endphp
+                        @php
+                            $firstItem = $order->items->first();
+                            $artwork = $firstItem ? $firstItem->artwork : null;
+                            $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
+                        @endphp
 
-                    @if ($order->delivery->status == 'in-transit')
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                        <a href="{{ route('client.order.show', $order) }}">
-                            <!-- Background Image -->
-                            <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
+                        @if ($order->delivery->status == 'in-transit')
+                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                <a href="{{ route('client.order.show', $order) }}">
+                                    <!-- Background Image -->
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
 
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                <p class="text-sm font-medium flex items-center">
-                                    {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
-                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                    </svg>
-                                </p>
-                                <span
-                                    class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                        <p class="text-sm font-medium flex items-center">
+                                            {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
+                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                            </svg>
+                                        </p>
+                                        <span
+                                            class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    </div>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
+                                        <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
+                                    </div>
+
+                                    <!-- Price & Delivery Status -->
+                                    <div class="absolute bottom-4 right-4 text-white">
+                                        <p class="text-sm mt-1"><span
+                                                class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        </p>
+                                    </div>
+                                </a>
                             </div>
-                            <!-- Text Content -->
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
-                                <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
-                            </div>
-
-                            <!-- Price & Delivery Status -->
-                            <div class="absolute bottom-4 right-4 text-white">
-                                <p class="text-sm mt-1"><span
-                                        class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -183,49 +185,49 @@
                 aria-labelledby="contacts-tab">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($orders as $order)
-                    @php
-                    $firstItem = $order->items->first();
-                    $artwork = $firstItem ? $firstItem->artwork : null;
-                    $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
-                    @endphp
+                        @php
+                            $firstItem = $order->items->first();
+                            $artwork = $firstItem ? $firstItem->artwork : null;
+                            $thumbnail = $artwork ? $artwork->images->first()?->attachment : null;
+                        @endphp
 
-                    @if ($order->delivery->status == 'completed')
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                        <a href="{{ route('client.order.show', $order) }}">
-                            <!-- Background Image -->
-                            <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
+                        @if ($order->delivery->status == 'completed')
+                            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                <a href="{{ route('client.order.show', $order) }}">
+                                    <!-- Background Image -->
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="{{ $artwork->title ?? 'Artwork' }}" class="w-full h-full object-cover">
 
-                            <!-- Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                            <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                <p class="text-sm font-medium flex items-center">
-                                    {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
-                                    <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                    </svg>
-                                </p>
-                                <span
-                                    class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                        <p class="text-sm font-medium flex items-center">
+                                            {{ $artwork->artist->user->name ?? 'Unknown Artist' }}
+                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                            </svg>
+                                        </p>
+                                        <span
+                                            class="text-xl font-semibold">₱{{ number_format($order->total, 0, '.', ',') }}</span>
+                                    </div>
+                                    <!-- Text Content -->
+                                    <div class="absolute bottom-4 left-4 text-white">
+                                        <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
+                                        <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
+                                    </div>
+
+                                    <!-- Price & Delivery Status -->
+                                    <div class="absolute bottom-4 right-4 text-white">
+                                        <p class="text-sm mt-1"><span
+                                                class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        </p>
+                                    </div>
+                                </a>
                             </div>
-                            <!-- Text Content -->
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h2 class="text-lg font-bold">{{ $artwork->title ?? 'Unknown Title' }}</h2>
-                                <p class="text-sm">| {{ $artwork->category->name ?? 'Uncategorized' }}</p>
-                            </div>
-
-                            <!-- Price & Delivery Status -->
-                            <div class="absolute bottom-4 right-4 text-white">
-                                <p class="text-sm mt-1"><span
-                                        class="font-bold">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
+                        @endif
                     @endforeach
                 </div>
             </div>

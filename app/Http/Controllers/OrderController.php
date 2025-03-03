@@ -37,29 +37,16 @@ class OrderController extends Controller
      */
     public function store(Request $request, Artwork $artwork)
     {
-        $request->validate([
-            'contact_number' => 'required|string|max:15',
-            'barangay' => 'required|string|max:255',
-            'street' => 'required|string|max:255',
-            'house_number' => 'required|string|max:255',
-        ]);
-
-        $address = Address::create([
-            'client_id' => Auth::user()->id,
-            'barangay' => $request->barangay,
-            'street' => $request->street,
-            'house_number' => $request->house_number,
-        ]);
+        $user = $request->user();
 
         $delivery = Delivery::create([
-            'contact_number' => $request->contact_number,
-            'address_id' => $address->id,
+            'address_id' => $user->address->id,
             'expected_delivery' => now()->addDays(7),
             'status' => 'pending',
         ]);
 
         $order = Order::create([
-            'client_id' => Auth::user()->id,
+            'client_id' => $user->id,
             'total' => $artwork->price,
             'status' => 'pending',
             'delivery_id' => $delivery->id,
@@ -113,7 +100,12 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->delete();
+        $order->items()->each(function ($item) {
+            $item->artwork->update(['status' => 'sale']);
+        });
+
+        $order->status->update(['status' => 'cancelled']);
+        $order->delivery->update(['status' => 'cancelled']);
 
         return redirect()->route('client.order.index')->with('success', 'Order deleted successfully!');
     }

@@ -30,7 +30,6 @@ return new class extends Migration
 
         Schema::create('delivery', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('contact_number');
             $table->date('expected_delivery')->nullable();
             $table->foreignUlid('address_id')->constrained('address')->cascadeOnDelete();
             $table->enum('status', ['pending', 'in-transit', 'completed', 'cancelled'])->default('pending');

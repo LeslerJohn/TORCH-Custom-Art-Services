@@ -100,8 +100,8 @@
 
                                             <!-- Artist Info -->
                                             <div class="flex items-center gap-2 mt-2">
-                                                <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                                    class="w-6 h-6 rounded-full border border-white">
+                                                <img src="{{ $artwork->artist->user->profileImage ? asset('storage/' . $artwork->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-6 h-6 rounded-full border border-white">
                                                 <p class="text-sm font-medium flex items-center">
                                                     {{ $artwork->artist->user->name }}
                                                     <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
@@ -230,8 +230,8 @@
                                 <div class="absolute bottom-4 left-4 text-white">
                                     <!-- Artist Info -->
                                     <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-8 h-8 rounded-full border border-white">
+                                        <img src="{{ $artist->user->profileImage ? asset('storage/' . $artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-6 h-6 rounded-full border border-white">
                                         <div>
                                             <p class="text-sm font-medium flex items-center">
                                                 {{ $artist->user->name ?? 'John Doe' }}
@@ -279,7 +279,7 @@
 
                                         <!-- Artist Info -->
                                         <div class="flex items-center gap-2 mt-2">
-                                            <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
+                                            <img src="{{ $service->artist->user->profileImage ? asset('storage/' . $service->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
                                                 class="w-6 h-6 rounded-full border border-white">
                                             <p class="text-sm font-medium flex items-center">
                                                 {{ $service->artist->user->name }}
@@ -321,8 +321,8 @@
 
                                             <!-- Artist Info -->
                                             <div class="flex items-center gap-2 mt-2">
-                                                <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                                    class="w-6 h-6 rounded-full border border-white">
+                                                <img src="{{ $artwork->artist->user->profileImage ? asset('storage/' . $artwork->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                                                class="w-6 h-6 rounded-full border border-white">
                                                 <p class="text-sm font-medium flex items-center">
                                                     {{ $artwork->artist->user->name }}
                                                     <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
@@ -354,7 +354,7 @@
             <div class="flex gap-6 mt-8 items-center justify-center">
                 @foreach ($reviews as $review)
                     <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">
-                        <img src="{{ $review->order->client->user->profileImage ? asset('storage/' . $review->order->client->user->profileImage->attachment->path) : asset('images/profile.default.jpg') }}"
+                        <img src="{{ $review->order->client->user->profileImage ? asset('storage/' . $review->order->client->user->profileImage->path) : asset('images/profile.default.jpg') }}"
                             alt="User" class="w-16 h-16 rounded-full border-2 border-orange-500">
                         <p class="text-lg font-semibold mt-4">{{ $review->order->client->user->name }}</p>
                         <p class="text-sm text-gray-500">{{ ucfirst($review->order->client->user->role) }}</p>

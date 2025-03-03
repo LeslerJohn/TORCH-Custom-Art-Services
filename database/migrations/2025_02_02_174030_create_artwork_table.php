@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreignUlid('category_id')->constrained('category')->cascadeOnDelete();
             $table->string('title', 255);
             $table->text('description');
-            $table->string('dimension', 50);
+            $table->integer('width');
+            $table->integer('height');
+            $table->string('unit', 255);
             $table->decimal('price', 10, 2);
             $table->integer('stock')->default(1);
             $table->boolean('is_showcase')->default(false);

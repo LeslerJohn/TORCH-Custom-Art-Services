@@ -19,7 +19,6 @@ class ArtistProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'phone_number' => $this->faker->phoneNumber,
             'location' => $this->faker->address,
             'gender' => $this->faker->randomElement(['male', 'female', 'other']),
             'username' => $this->faker->userName,

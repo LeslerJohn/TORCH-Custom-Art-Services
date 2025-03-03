@@ -68,8 +68,8 @@
 
                 <div>
                     <h2 class="text-xl font-semibold">About</h2>
-                    <p class="mt-2"><strong>{{ $artwork->category->name }}</strong> - {{ $artwork->medium }}</p>
-                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->dimension }} Centimeter</p>
+                    <p class="mt-2"><strong>{{ $artwork->category->name }}</strong></p>
+                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->width }} x {{ $artwork->height }} {{$artwork->unit}}</p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($artwork->tags as $tag)
                             <span
@@ -81,25 +81,36 @@
 
                 <div>
                     <h2 class="text-xl font-semibold mt-4">Contact</h2>
-                    <p class="mt-2"><strong>Email:</strong> {{ $artwork->artist->user->email ?? 'test@email.com' }}
+                    <p class="mt-2"><strong>Email:</strong> {{ $artwork->artist->user->email ?? 'user@email.com' }}
                     </p>
-                    <p class="mt-1"><strong>Phone:</strong> {{ $artwork->artist->phone_number }}</p>
+                    <p class="mt-1"><strong>Phone:</strong> {{ $artwork->artist->user->phone_number }}</p>
                 </div>
 
-                @if (auth()->user()->id !== $artwork->artist->user->id)
+                @if (auth()->user()->id !== $artwork->artist->user->id && $artwork->status === 'sale')
                     <div class="mt-4 flex gap-4 justify-end">
                         <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
                             @csrf
-                            <button type="submit"
-                                class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                                Add to cart
-                                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
-                                </svg>
-                            </button>
+                            @if (!auth()->user()->cart->items->contains('artwork_id', $artwork->id))
+                                <button type="submit"
+                                    class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                                    Add to cart
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                                    </svg>
+                                </button>
+                            @else
+                                <a href="{{ route('client.cart.index') }}"
+                                    class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                                    Check cart
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                                    </svg>
+                                </a>
+                            @endif
                         </form>
                         <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
                             class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -193,53 +204,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2" action="{{ route('client.order.store', $artwork) }}"
+                                <form class="space-y-4 w-1/2 flex flex-col justify-between" action="{{ route('client.order.store', $artwork) }}"
                                     method="POST">
                                     @csrf
-                                    <h1 class="text-xl font-bold">Address</h1>
-                                    <div>
-                                        <x-input-label
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                            for="contact_number" :value="__('Contact Number')" />
-                                        <div class="flex">
-                                            <span
-                                                class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
-                                            <x-text-input id="contact_number" class="block w-full rounded-l-none"
-                                                type="text" name="contact_number" placeholder="9123456789"
-                                                :value="old('contact_number')" required autocomplete="username" />
-                                        </div>
-                                        <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                            for="barangay" :value="__('Barangay')" />
-                                        <x-text-input id="barangay" class="block mt-1 w-full" type="text"
-                                            name="barangay" placeholder="Canelar" :value="old('barangay')" required
-                                            autocomplete="barangay" />
-                                        <x-input-error :messages="$errors->get('barangay')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                            for="street" :value="__('Street/Drive')" />
-                                        <x-text-input id="street" class="block mt-1 w-full" type="text"
-                                            name="street" placeholder="Gregorio" :value="old('street')" required
-                                            autocomplete="street" />
-                                        <x-input-error :messages="$errors->get('street')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label
-                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                            for="house_number" :value="__('House Number')" />
-                                        <x-text-input id="house_number" class="block mt-1 w-full" type="text"
-                                            name="house_number" placeholder="C-1276" :value="old('house_number')" required
-                                            autocomplete="house_number" />
-                                        <x-input-error :messages="$errors->get('house_number')" class="mt-2" />
+                                    <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                                    <div class="p-4 border rounded-lg bg-gray-100">
+                                        <h2 class="text-lg font-semibold">Shipping Address</h2>
+                                        <p class="mt-2"><strong>Barangay:</strong> {{ auth()->user()->address->barangay ?? 'N/A' }}</p>
+                                        <p class="mt-1"><strong>Street/Drive:</strong> {{ auth()->user()->address->street ?? 'N/A' }}</p>
+                                        <p class="mt-1"><strong>House Number:</strong> {{ auth()->user()->address->house_number ?? 'N/A' }}</p>
+                                        <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
+                                            <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                            </svg>
+                                            Edit address
+                                        </a>
                                     </div>
                                     <button type="submit"
-                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Place
-                                        Order</button>
+                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go to Payment
+                                    </button>
                                 </form>
                             </div>
                         </div>

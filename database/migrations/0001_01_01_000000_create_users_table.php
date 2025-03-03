@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
             $table->enum('role', ['client', 'artist', 'admin'])->default('client');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -37,7 +38,6 @@ return new class extends Migration
         Schema::create('artist_profile', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->softDeletes();
-            $table->string('phone_number');
             $table->string('location');
             $table->string('gender');
             $table->string('username');

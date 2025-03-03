@@ -45,7 +45,7 @@ class RequestController extends Controller
             'height' => 'required|integer|min:1',
             'unit' => 'required|string|max:255',
             'total_price' => 'required|numeric|min:0',
-            'deadline' => 'required|date',
+            'order_type' => 'required|string',
             'references.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -56,7 +56,7 @@ class RequestController extends Controller
             'width' => $request->width,
             'height' => $request->height,
             'unit' => $request->unit,
-            'deadline' => $request->deadline,
+            'deadline' => $request->order_type === 'normal' ? now()->addDays($service->normal_timeframe + 5) : now()->addDays($service->rush_timeframe + 5),
             'service_id' => $service->id,
             'status' => 'pending',
         ]);
@@ -110,8 +110,10 @@ class RequestController extends Controller
      */
     public function destroy(ModelsRequest $request)
     {
-        $request->delete();
+        $request->update([
+            'status' => 'cancelled',
+        ]);
 
-        return redirect()->route('client.request.index')->with('success', 'Request deleted successfully!');
+        return redirect()->route('client.request.index')->with('success', 'Request cancelled successfully!');
     }
 }
