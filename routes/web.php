@@ -14,6 +14,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Static Pages
+Route::get('/about us', function () {
+    return view('statics/about');
+})->name('about');
+Route::get('/terms & conditions', function () {
+    return view('statics/terms');
+})->name('terms');
+Route::get('/privacy policy', function () {
+    return view('statics/privacy');
+})->name('privacy');
+
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
