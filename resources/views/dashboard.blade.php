@@ -14,7 +14,7 @@
                         </p>
                         <!-- Call-to-Action Button -->
                         <div class="mt-8">
-                            <a href="#" class="inline-block bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 transition">
+                            <a href="{{ route('client.artwork') }}" class="inline-block bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 transition">
                                 Get Started
                             </a>
                         </div>
