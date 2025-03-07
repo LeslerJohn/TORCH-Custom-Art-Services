@@ -22,10 +22,32 @@
                         <textarea id="description" class="block mt-1 w-full" name="description" required placeholder="Provide a detailed description of your artwork."></textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
-                    <div class="mt-6">
-                        <x-input-label for="dimension" class="text-sm" :value="__('Dimension (inch)')" />
-                        <x-text-input id="dimension" class="block mt-1 w-full" type="text" name="dimension" required placeholder="Enter the dimensions (e.g., 24x36 centimeter)." />
-                        <x-input-error :messages="$errors->get('dimension')" class="mt-2" />
+                    <div class="mt-6" x-data="{ width: '', height: '', unit: 'cm' }">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <x-input-label for="width" :value="__('Width')" />
+                                <div class="flex">
+                                    <x-text-input id="width" class="block w-full" type="number" name="width" x-model="width" min="1" required />
+                                    <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit">
+                                        <option value="cm">cm</option>
+                                        <option value="in">inches</option>
+                                    </select>
+                                </div>
+                                <small class="text-gray-500">Enter the width of your artwork.</small>
+                            </div>
+
+                            <div>
+                                <x-input-label for="height" :value="__('Height')" />
+                                <div class="flex">
+                                    <x-text-input id="height" class="block w-full" type="number" name="height" x-model="height" min="1" required />
+                                    <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit" disabled>
+                                        <option value="cm">cm</option>
+                                        <option value="in">inches</option>
+                                    </select>
+                                </div>
+                                <small class="text-gray-500">Enter the height of your artwork.</small>
+                            </div>
+                        </div>
                     </div>
                     <div class="mt-6">
                         <x-input-label for="price" class="text-sm" :value="__('Price')" />

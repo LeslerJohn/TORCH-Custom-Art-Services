@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -12,9 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('service', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('artist_id')->constrained('artist_profile')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('category')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('artist_id')->references('id')->on('artist_profile')->cascadeOnDelete();
+            $table->foreignUlid('category_id')->references('id')->on('category')->cascadeOnDelete();
             $table->decimal('price_rate', 10, 2);
             $table->decimal('rush_price_rate', 10, 2);
             $table->string('normal_timeframe', 255);
@@ -24,16 +25,16 @@ return new class extends Migration
         });
 
         Schema::create('service_image', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('service_id')->constrained('service')->cascadeOnDelete();
-            $table->foreignId('attachment_id')->constrained('attachment')->cascadeOnDelete();
+            $table->foreignUlid('service_id')->references('id')->on('service')->cascadeOnDelete();
+            $table->foreignUlid('attachment_id')->references('id')->on('attachment')->cascadeOnDelete();
+            $table->primary(['service_id', 'attachment_id']);
             $table->timestamps();
         });
 
         Schema::create('service_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('service_id')->constrained('service')->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained('tag')->cascadeOnDelete();
+            $table->foreignUlid('service_id')->references('id')->on('service')->cascadeOnDelete();
+            $table->foreignUlid('tag_id')->references('id')->on('tag')->cascadeOnDelete();
+            $table->primary(['service_id', 'tag_id']);
             $table->timestamps();
         });
     }

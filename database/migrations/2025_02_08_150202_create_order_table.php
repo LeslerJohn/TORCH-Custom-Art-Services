@@ -12,34 +12,33 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_id')->constrained('client_profile')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->decimal('total', 10, 2);
-            $table->foreignId('delivery_id')->constrained('delivery')->cascadeOnDelete();
+            $table->foreignUlid('delivery_id')->constrained('delivery')->cascadeOnDelete();
             $table->enum('status', ['pending', 'accepted', 'in-transit', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
 
         Schema::create('order_item', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained('order')->cascadeOnDelete();
-            $table->foreignId('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('order_id')->constrained('order')->cascadeOnDelete();
+            $table->foreignUlid('artwork_id')->constrained('artwork')->cascadeOnDelete();
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });
 
         Schema::create('delivery', function (Blueprint $table) {
-            $table->id();
-            $table->string('contact_number');
+            $table->ulid('id')->primary();
             $table->date('expected_delivery')->nullable();
-            $table->foreignId('address_id')->constrained('address')->cascadeOnDelete();
+            $table->foreignUlid('address_id')->constrained('address')->cascadeOnDelete();
             $table->enum('status', ['pending', 'in-transit', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
 
         Schema::create('address', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_id')->constrained('client_profile')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->string('street');
             $table->string('barangay');
             $table->string('house_number');

@@ -26,7 +26,6 @@ class CommissionController extends Controller
     public function store(Request $request, ModelsRequest $modelrequest)
     {
         $request->validate([
-            'contact_number' => 'required|string|max:15',
             'barangay' => 'required|string|max:255',
             'street' => 'required|string|max:255',
             'house_number' => 'required|string|max:255',
@@ -40,7 +39,6 @@ class CommissionController extends Controller
         ]);
 
         $delivery = Delivery::create([
-            'contact_number' => $request->contact_number,
             'address_id' => $address->id,
             'expected_delivery' => Carbon::parse($modelrequest->deadline)->addDays(7),
             'status' => 'pending',

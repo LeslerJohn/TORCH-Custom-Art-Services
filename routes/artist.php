@@ -8,9 +8,7 @@ use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Artist\ShowcaseController;
 
-Route::get('/artist', function () {
-    return view('artist.dashboard');
-})->middleware(['auth', 'verified'])->name('artist.dashboard');
+Route::get('/artist', [App\Http\Controllers\Artist\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('artist.dashboard');
 
 use Illuminate\Http\Request;
 use App\Models\Tag;
@@ -23,6 +21,8 @@ Route::get('/get-tags/{categoryId}', function ($categoryId) {
     })->get();
     return response()->json($tags);
 });
+
+Route::post('/artist/availability', [App\Http\Controllers\Artist\DashboardController::class, 'availability'])->middleware(['auth', 'verified'])->name('artist.availability');
 
 // Showcase Routes
 // Route::middleware(['auth', 'verified'])->group(function () {

@@ -52,7 +52,7 @@
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>
-                                <img src="{{ Auth::user()->profileImage->path ?? asset('images/profile.default.jpg') }}"
+                                <img src="{{ Auth::user()->profileImage ? Storage::url(Auth::user()->profileImage->path) : asset('images/profile.default.jpg') }}"
                                     alt="Profile Image" class="h-8 w-8 rounded-full">
                             </div>
 
@@ -105,9 +105,12 @@
                         <x-dropdown-link :href="route('artist.dashboard')">
                             {{ __('Artist Dashboard') }}
                         </x-dropdown-link>
-
-                        <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
+                        @else
+                        <x-dropdown-link :href="route('register.artist')">
+                            {{ __('Become an Artist') }}
+                        </x-dropdown-link>
                         @endif
+                        <p class="w-full h-0.5 border-b border-gray-400 mb-4"></p>
 
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Settings') }}

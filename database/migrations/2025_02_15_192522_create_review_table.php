@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_review', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained('order')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('order_id')->constrained('order')->cascadeOnDelete();
             $table->string('comment', 255);
             $table->integer('rating');
             $table->timestamps();
         });
 
         Schema::create('commission_review', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('commission_id')->constrained('commission')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('commission_id')->constrained('commission')->cascadeOnDelete();
             $table->string('comment', 255);
             $table->integer('rating');
             $table->timestamps();

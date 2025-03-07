@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Artwork extends Model
 {
+    use HasUlids;
     protected $table = 'artwork';
 
     protected $fillable = [
@@ -13,7 +15,9 @@ class Artwork extends Model
         'category_id',
         'title',
         'description',
-        'dimension',
+        'width',
+        'height',
+        'unit',
         'price',
         'stock',
         'is_showcase',

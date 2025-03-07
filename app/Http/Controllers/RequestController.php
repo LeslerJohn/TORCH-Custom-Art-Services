@@ -39,13 +39,15 @@ class RequestController extends Controller
      */
     public function store(Request $request, Service $service)
     {
+        dd($request->all());
         $request->validate([
             'description' => 'required|string|max:255',
             'width' => 'required|integer|min:1',
             'height' => 'required|integer|min:1',
             'unit' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1|max:5',
             'total_price' => 'required|numeric|min:0',
-            'deadline' => 'required|date',
+            'order_type' => 'required|string',
             'references.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -55,8 +57,9 @@ class RequestController extends Controller
             'description' => $request->description,
             'width' => $request->width,
             'height' => $request->height,
+            'quantity' => $request->quantity,
             'unit' => $request->unit,
-            'deadline' => $request->deadline,
+            'deadline' => $request->order_type === 'normal' ? now()->addDays(($service->normal_timeframe * $request->quantity) + 5) : now()->addDays(($service->rush_timeframe * $request->quantity) + 5),
             'service_id' => $service->id,
             'status' => 'pending',
         ]);
@@ -110,8 +113,10 @@ class RequestController extends Controller
      */
     public function destroy(ModelsRequest $request)
     {
-        $request->delete();
+        $request->update([
+            'status' => 'cancelled',
+        ]);
 
-        return redirect()->route('client.request.index')->with('success', 'Request deleted successfully!');
+        return redirect()->route('client.request.index')->with('success', 'Request cancelled successfully!');
     }
 }

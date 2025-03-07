@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Address;
 use App\Models\ArtistProfile;
+use App\Models\Attachment;
 use App\Models\ClientLiked;
 use App\Models\ClientProfile;
 use App\Models\CommissionReview;
@@ -33,13 +35,40 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $path = $file->store('profile_images', 'public');
+            $attachment = Attachment::create([
+                'filename' => $file->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $file->getMimeType(),
+            ]);
+            $user->profile_image_id = $attachment->id;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+            $path = $file->store('cover_images', 'public');
+            $attachment = Attachment::create([
+                'filename' => $file->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $file->getMimeType(),
+            ]);
+            $user->cover_image_id = $attachment->id;
+        }
+
+        if ($request->has('phone_number')) {
+            $user->phone_number = $request->input('phone_number');
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -119,5 +148,23 @@ class ProfileController extends Controller
         $liked = $isOwner ? ClientLiked::where('artist_id', $artist->id)->get() : collect();
 
         return view('artist.profile.show', compact('artist', 'services', 'artworks', 'reviews', 'collections', 'liked', 'isOwner'));
+    }
+
+    public function updateAddress(Request $request)
+    {
+        $request->validate([
+            'barangay' => 'required|string|max:255',
+            'street' => 'required|string|max:255',
+            'house_number' => 'required|string|max:255',
+        ]);
+
+        $address = Address::create([
+            'client_id' => Auth::user()->id,
+            'barangay' => $request->barangay,
+            'street' => $request->street,
+            'house_number' => $request->house_number,
+        ]);
+
+        return Redirect::route('client.profile')->with('success', 'Address updated successfully!');
     }
 }

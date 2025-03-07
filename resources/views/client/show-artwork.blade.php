@@ -57,7 +57,9 @@
             <div class="flex w-1/2 flex-col">
                 <div class="flex items-center justify-between">
                     <h1 class="text-3xl font-bold font-bold-300">{{ $artwork->title }}</h1>
-                    <p class="text-2xl text-red-600">₱ <strong>{{ number_format($artwork->price, 0, '.', ',') }}</strong></p>
+                    <p class="text-2xl text-red-600">₱
+                        <strong>{{ number_format($artwork->price, 0, '.', ',') }}</strong>
+                    </p>
                 </div>
                 <p class="text-md text-black-500">{{ $artwork->artist->user->name ?? 'Unknown' }}</p>
                 <p class="text-md text-black-500">{{ $artwork->created_at->diffForHumans() }}</p>
@@ -66,8 +68,8 @@
 
                 <div>
                     <h2 class="text-xl font-semibold">About</h2>
-                    <p class="mt-2"><strong>{{ $artwork->category->name }}</strong> - {{ $artwork->medium }}</p>
-                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->dimension }} Centimeter</p>
+                    <p class="mt-2"><strong>{{ $artwork->category->name }}</strong></p>
+                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->width }} x {{ $artwork->height }} {{$artwork->unit}}</p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($artwork->tags as $tag)
                             <span
@@ -79,30 +81,44 @@
 
                 <div>
                     <h2 class="text-xl font-semibold mt-4">Contact</h2>
-                    <p class="mt-2"><strong>Email:</strong> {{ $artwork->artist->user->email ?? 'test@email.com' }}
+                    <p class="mt-2"><strong>Email:</strong> {{ $artwork->artist->user->email ?? 'user@email.com' }}
                     </p>
-                    <p class="mt-1"><strong>Phone:</strong> {{ $artwork->artist->phone_number }}</p>
+                    <p class="mt-1"><strong>Phone:</strong> {{ $artwork->artist->user->phone_number }}</p>
                 </div>
 
-                <div class="mt-4 flex gap-4 justify-end">
-                    <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                            Add to cart
-                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
-                            </svg>
+                @if (auth()->user()->id !== $artwork->artist->user->id && $artwork->status === 'sale')
+                    <div class="mt-4 flex gap-4 justify-end">
+                        <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
+                            @csrf
+                            @if (!auth()->user()->cart->items->contains('artwork_id', $artwork->id))
+                                <button type="submit"
+                                    class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                                    Add to cart
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                                    </svg>
+                                </button>
+                            @else
+                                <a href="{{ route('client.cart.index') }}"
+                                    class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                                    Check cart
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                                    </svg>
+                                </a>
+                            @endif
+                        </form>
+                        <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                            class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            type="button">
+                            Buy Now
                         </button>
-                    </form>
-                    <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                    class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    Buy Now
-                </button>
-                </div>
+                    </div>
+                @endif
 
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
@@ -130,79 +146,83 @@
                             <!-- Modal body -->
                             <div class="flex gap-2 justify-center p-4 md:p-5">
                                 <div class="w-1/2">
-                                    <p class="mb-3 text-xl text-red-600 font-bold"><strong>Total: </strong>₱{{number_format($artwork->price, 0, '.', ',')}}</p>
+                                    <p class="mb-3 text-xl text-red-600 font-bold"><strong>Total:
+                                        </strong>₱{{ number_format($artwork->price, 0, '.', ',') }}</p>
                                     <div class="flex gap-4 items-center">
                                         <img src="{{ $artwork->images->first()?->attachment ? asset('storage/' . $artwork->images->first()->attachment->path) : asset('images/default.image.jpg') }}"
-                                        alt="{{ $artwork->title }}"
-                                        class="w-16 h-16 object-cover rounded-lg">
+                                            alt="{{ $artwork->title }}" class="w-16 h-16 object-cover rounded-lg">
                                         <div>
                                             <h1 class="text-lg font-bold">{{ $artwork->title }}</h1>
-                                            <p class="text-sm text-gray-500">{{ $artwork->artist->user->name ?? 'Unknown' }}</p>
+                                            <p class="text-sm text-gray-500">
+                                                {{ $artwork->artist->user->name ?? 'Unknown' }}</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center mt-4 w-full border border-black rounded-md p-2">
                                         <p class="text-sm mr-4">Accepts</p>
-                                        <img src="{{asset('images/paymongo.png')}}" alt="Paymongo" class="h-4">
+                                        <img src="{{ asset('images/paymongo.png') }}" alt="Paymongo" class="h-4">
                                     </div>
                                     <div class="mt-4 flex flex-col gap-2">
                                         <div class="flex items-center gap-2">
-                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1"
+                                                    d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                                             </svg>
-                                            <p class="text-sm">Shipping within Zamboanga is Free.</p>                                            
+                                            <p class="text-sm">Shipping within Zamboanga is Free.</p>
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                            </svg>                                              
-                                            <p class="text-sm">7-day money back guarantee.</p>                                            
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1"
+                                                    d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                            <p class="text-sm">7-day money back guarantee.</p>
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 3v4a1 1 0 0 1-1 1H5m4 10v-2m3 2v-6m3 6v-3m4-11v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
-                                            </svg>                                              
-                                            <p class="text-sm">Quality assured.</p>                                            
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1"
+                                                    d="M10 3v4a1 1 0 0 1-1 1H5m4 10v-2m3 2v-6m3 6v-3m4-11v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
+                                            </svg>
+                                            <p class="text-sm">Quality assured.</p>
                                         </div>
                                         <div class="flex items-center gap-2">
-                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 6l12 12M6 18L18 6"/>
-                                            </svg>                                              
-                                            <p class="text-sm">Not refundable once paid.</p>                                            
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="1"
+                                                    d="M6 6l12 12M6 18L18 6" />
+                                            </svg>
+                                            <p class="text-sm">Not refundable once paid.</p>
                                         </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2" action="{{ route('client.order.store', $artwork) }}" method="POST">
+                                <form class="space-y-4 w-1/2 flex flex-col justify-between" action="{{ route('client.order.store', $artwork) }}"
+                                    method="POST">
                                     @csrf
-                                    <h1 class="text-xl font-bold">Address</h1>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="contact_number" :value="__('Contact Number')" />
-                                        <div class="flex">
-                                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
-                                            <x-text-input id="contact_number" class="block w-full rounded-l-none" type="text" name="contact_number"
-                                                placeholder="9123456789" :value="old('contact_number')" required autocomplete="username" />
-                                        </div>
-                                        <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="barangay" :value="__('Barangay')" />
-                                        <x-text-input id="barangay" class="block mt-1 w-full" type="text" name="barangay"
-                                            placeholder="Canelar" :value="old('barangay')" required autocomplete="barangay" />
-                                        <x-input-error :messages="$errors->get('barangay')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="street" :value="__('Street/Drive')" />
-                                        <x-text-input id="street" class="block mt-1 w-full" type="text" name="street"
-                                            placeholder="Gregorio" :value="old('street')" required autocomplete="street" />
-                                        <x-input-error :messages="$errors->get('street')" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <x-input-label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="house_number" :value="__('House Number')" />
-                                        <x-text-input id="house_number" class="block mt-1 w-full" type="text" name="house_number"
-                                            placeholder="C-1276" :value="old('house_number')" required autocomplete="house_number" />
-                                        <x-input-error :messages="$errors->get('house_number')" class="mt-2" />
+                                    <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                                    <div class="p-4 border rounded-lg bg-gray-100">
+                                        <h2 class="text-lg font-semibold">Shipping Address</h2>
+                                        <p class="mt-2"><strong>Barangay:</strong> {{ auth()->user()->address->barangay ?? 'N/A' }}</p>
+                                        <p class="mt-1"><strong>Street/Drive:</strong> {{ auth()->user()->address->street ?? 'N/A' }}</p>
+                                        <p class="mt-1"><strong>House Number:</strong> {{ auth()->user()->address->house_number ?? 'N/A' }}</p>
+                                        <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
+                                            <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                            </svg>
+                                            Edit address
+                                        </a>
                                     </div>
                                     <button type="submit"
-                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Place Order</button>
+                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go to Payment
+                                    </button>
                                 </form>
                             </div>
                         </div>

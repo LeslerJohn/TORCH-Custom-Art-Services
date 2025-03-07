@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('category', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name', 50);
             $table->timestamps();
         });
 
         Schema::create('category_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained('category')->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained('tag')->cascadeOnDelete();
+            $table->foreignUlid('category_id')->constrained('category')->cascadeOnDelete();
+            $table->foreignUlid('tag_id')->constrained('tag')->cascadeOnDelete();
+            $table->primary(['category_id', 'tag_id']);
             $table->timestamps();
         });
     }
@@ -30,6 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('category_tag');
         Schema::dropIfExists('category');
     }
 };

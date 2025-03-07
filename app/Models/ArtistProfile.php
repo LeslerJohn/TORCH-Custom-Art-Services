@@ -2,23 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ArtistProfile extends Model
 {
     /** @use HasFactory<\Database\Factories\ArtistProfileFactory> */
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $table = 'artist_profile';
     protected $fillable = [
         'id',
-        'phone_number',
         'location',
         'gender',
         'username',
         'birthdate',
         'bio',
+        'max_commissions',
         'status',
         'is_suspended',
         'rating',

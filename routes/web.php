@@ -14,15 +14,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Static Pages
+Route::get('/about us', function () {
+    return view('statics/about');
+})->name('about');
+Route::get('/terms & conditions', function () {
+    return view('statics/terms');
+})->name('terms');
+Route::get('/privacy policy', function () {
+    return view('statics/privacy');
+})->name('privacy');
+
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::put('/profile/address', [ProfileController::class, 'updateAddress'])->name('address.update');
     Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
-    Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
 });
+
+Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');
 
 Route::get('/client/artist', [HomeController::class, 'artist'])->name('client.artist');
 Route::get('/client/artwork', [HomeController::class, 'artwork'])->name('client.artwork');

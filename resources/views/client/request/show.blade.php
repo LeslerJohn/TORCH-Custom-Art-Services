@@ -31,9 +31,9 @@
             <h2 class="text-red-500 text-xl mb-2">₱{{ number_format($request->total_price, 2) }}</h2>
             <p class="mb-2">{{ $request->description }}</p>
             <p class="mb-2"><strong>Dimension:</strong> {{ $request->width }} x {{ $request->height }}
-                {{ $request->unit }}</p>
-            <p class="mb-2"><strong>Deadline:</strong>
-                {{ \Carbon\Carbon::parse($request->deadline)->format('F j, Y') }}</p>
+                {{ $request->unit == 'in' ? 'inches' : 'centimeters' }}</p>
+            <p class="mb-2"><strong>Estimated Arival:</strong>
+                {{ \Carbon\Carbon::parse($request->deadline)->addDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($request->deadline)->addDays(10)->format('j F, Y') }}</p>
         </div>
 
         <!-- Reference Images -->
