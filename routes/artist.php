@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Artist\ArtworkController;
 use App\Http\Controllers\Artist\CommissionController;
+use App\Http\Controllers\Artist\DiscountController;
 use App\Http\Controllers\Artist\OrderController;
 use App\Http\Controllers\Artist\ReviewController;
 use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Artist\ShowcaseController;
 
 Route::get('/artist', [App\Http\Controllers\Artist\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('artist.dashboard');
 
@@ -87,4 +87,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/artist/review', [ReviewController::class, 'index'])->name('artist.review.index');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/discount', [DiscountController::class, 'index'])->name('artist.discount.index');
+    Route::post('/artist/discount', [DiscountController::class, 'store'])->name('artist.discount.store');
+    Route::put('/artist/discount/{discount}', [DiscountController::class, 'update'])->name('artist.discount.update');
+    Route::patch('/artist/discount/{discount}', [DiscountController::class, 'status_update'])->name('artist.discount.status-update');
+    Route::delete('/artist/discount/{discount}', [DiscountController::class, 'destroy'])->name('artist.discount.destroy');
 });

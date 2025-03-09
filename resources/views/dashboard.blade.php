@@ -303,6 +303,14 @@
                             @if ($artwork->status == 'sale')
                                 @php
                                     $thumbnail = $artwork->images->first()?->attachment;
+                                    $discountedPrice = $artwork->price;
+                                    if ($artwork->discount && $artwork->discount->status == 'active') {
+                                        if ($artwork->discount->value_type == 'percentage') {
+                                            $discountedPrice -= ($artwork->price * $artwork->discount->value / 100);
+                                        } elseif ($artwork->discount->value_type == 'fixed') {
+                                            $discountedPrice -= $artwork->discount->value;
+                                        }
+                                    }
                                 @endphp
                                 <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
                                     <a href="{{ route('artwork.show', $artwork) }}">
@@ -336,8 +344,12 @@
 
                                         <!-- Price -->
                                         <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
-                                            <span
-                                                class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                            @if ($artwork->discount && $artwork->discount->status == 'active')
+                                                <span class="line-through text-red-500">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                                <span class="text-xl">₱{{ number_format($discountedPrice, 0, '.', ',') }}</span>
+                                            @else
+                                                <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                            @endif
                                         </div>
                                     </a>
                                 </div>

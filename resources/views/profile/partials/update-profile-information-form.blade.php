@@ -49,7 +49,7 @@
                 <x-input-label for="phone_number" :value="__('Phone Number')" />
                 <div class="flex">
                     <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
-                    <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full rounded-l-none" :value="old('phone_number', $user->phone_number)" required autocomplete="phone_number" />
+                    <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full rounded-l-none" :value="old('phone_number', $user->phone_number)" required autocomplete="phone_number" maxlength="10" />
                 </div>
                 <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
             </div>
@@ -63,7 +63,7 @@
                 <div class="relative flex flex-col items-center justify-center w-32 h-32 rounded-full border-2 border-dashed border-gray-300 hover:border-blue-500 cursor-pointer" onclick="document.getElementById('profile_image').click()">
                     <img id="profile-image-preview" src="{{ Auth::user()->profileImage ? asset('storage/' . Auth::user()->profileImage->path) : '' }}" alt="Profile Image"
                         class="w-full h-full object-cover rounded-full {{ Auth::user()->profileImage ? '' : 'hidden' }}">
-                    <div id="profile-placeholder" class="absolute flex flex-col items-center text-gray-400 {{ Auth::user()->profileImage->path ? 'hidden' : '' }}">
+                    <div id="profile-placeholder" class="absolute flex flex-col items-center text-gray-400 {{ Auth::user()->profileImage && Auth::user()->profileImage->path ? 'hidden' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image-up">
                             <path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
                             <path d="m14 19.5 3-3 3 3" />
@@ -83,7 +83,7 @@
                 <div class="relative w-full h-32 bg-gray-100 border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-lg flex items-center justify-center cursor-pointer" onclick="document.getElementById('cover_image').click()">
                     <img id="cover-image-preview" src="{{ Auth::user()->coverImage ? asset('storage/' . Auth::user()->coverImage->path) : '' }}" alt="Cover Image"
                         class="w-full h-full object-cover rounded-lg {{ Auth::user()->coverImage ? '' : 'hidden' }}">
-                    <div id="cover-placeholder" class="absolute flex flex-col items-center text-gray-400 {{ Auth::user()->coverImage->path ? 'hidden' : '' }}">
+                    <div id="cover-placeholder" class="absolute flex flex-col items-center text-gray-400 {{ Auth::user()->coverImage && Auth::user()->coverImage->path ? 'hidden' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image-up">
                             <path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
                             <path d="m14 19.5 3-3 3 3" />

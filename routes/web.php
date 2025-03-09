@@ -8,11 +8,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ReviewController;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
@@ -20,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/address/{user}', [ProfileController::class, 'storeAddress'])->name('address.store');
     Route::put('/profile/address', [ProfileController::class, 'updateAddress'])->name('address.update');
     Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
 });
@@ -33,12 +32,12 @@ Route::get('/client/service', [HomeController::class, 'service'])->name('client.
 Route::get('/artwork/{artwork}', [HomeController::class, 'show_artwork'])->name('artwork.show');
 Route::get('/service/{service}', [HomeController::class, 'show_service'])->name('service.show');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/cart', [CartController::class, 'index'])->name('client.cart.index');
-    Route::post('/cart/{artwork}', [CartController::class, 'store'])->name('client.cart.store');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('client.cart.destroy');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('client.cart.checkout');
-});
+
+Route::get('/cart', [CartController::class, 'index'])->name('client.cart.index');
+Route::post('/cart/{artwork}', [CartController::class, 'store'])->name('client.cart.store');
+Route::delete('/cart/remove/{artwork}', [CartController::class, 'destroy'])->name('client.cart.destroy');
+Route::post('/cart/checkout/{cart}', [CartController::class, 'checkout'])->name('client.cart.checkout');
+
 
 Route::post('/artwork/{artwork}', [OrderController::class, 'store'])->name('client.order.store');
 Route::get('/order', [OrderController::class, 'index'])->name('client.order.index');
@@ -60,6 +59,11 @@ Route::get('/commission', [CommissionController::class, 'index'])->name('client.
 Route::get('/commission/{commission}', [CommissionController::class, 'show'])->name('client.commission.show');
 Route::post('/commission/{commission}/receive', [CommissionController::class, 'receive'])->name('client.commission.receive');
 
+Route::get('mail/{name}', function ($name) {
+    Mail::to('leslerjohngantalao@gmail.com')->send(new TestMail($name));
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/artist.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/api.php';

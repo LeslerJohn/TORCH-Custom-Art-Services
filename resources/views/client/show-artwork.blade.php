@@ -57,8 +57,24 @@
             <div class="flex w-1/2 flex-col">
                 <div class="flex items-center justify-between">
                     <h1 class="text-3xl font-bold font-bold-300">{{ $artwork->title }}</h1>
-                    <p class="text-2xl text-red-600">₱
-                        <strong>{{ number_format($artwork->price, 0, '.', ',') }}</strong>
+                    @php
+                        $discount = $artwork->discount;
+                        $discountedPrice = $artwork->price;
+                        if ($discount && $discount->status === 'active') {
+                            if ($discount->value_type === 'percentage') {
+                                $discountedPrice -= ($artwork->price * $discount->value / 100);
+                            } else {
+                                $discountedPrice -= $discount->value;
+                            }
+                        }
+                    @endphp
+                    <p class="text-2xl text-red-600">
+                        @if ($discount && $discount->status === 'active')
+                            <span class="line-through">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                            <strong>₱{{ number_format($discountedPrice, 0, '.', ',') }}</strong>
+                        @else
+                            ₱<strong>{{ number_format($artwork->price, 0, '.', ',') }}</strong>
+                        @endif
                     </p>
                 </div>
                 <p class="text-md text-black-500">{{ $artwork->artist->user->name ?? 'Unknown' }}</p>
@@ -90,7 +106,7 @@
                     <div class="mt-4 flex gap-4 justify-end">
                         <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
                             @csrf
-                            @if (!auth()->user()->cart->items->contains('artwork_id', $artwork->id))
+                            @if (!auth()->user()->cart || !auth()->user()->cart->items->contains('artwork_id', $artwork->id))
                                 <button type="submit"
                                     class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
                                     Add to cart
@@ -146,8 +162,21 @@
                             <!-- Modal body -->
                             <div class="flex gap-2 justify-center p-4 md:p-5">
                                 <div class="w-1/2">
+                                    @if ($artwork->discount->status === 'active')
+                                        @php
+                                            $discount = $artwork->discount;
+                                            $discountedPrice = $artwork->price;
+                                            if ($discount) {
+                                                if ($discount->value_type === 'percentage') {
+                                                    $discountedPrice -= ($artwork->price * $discount->value / 100);
+                                                } else {
+                                                    $discountedPrice -= $discount->value;
+                                                }
+                                            }
+                                        @endphp
+                                    @endif
                                     <p class="mb-3 text-xl text-red-600 font-bold"><strong>Total:
-                                        </strong>₱{{ number_format($artwork->price, 0, '.', ',') }}</p>
+                                        </strong>₱{{ number_format($discountedPrice, 0, '.', ',') }}</p>
                                     <div class="flex gap-4 items-center">
                                         <img src="{{ $artwork->images->first()?->attachment ? asset('storage/' . $artwork->images->first()->attachment->path) : asset('images/default.image.jpg') }}"
                                             alt="{{ $artwork->title }}" class="w-16 h-16 object-cover rounded-lg">

@@ -11,6 +11,7 @@ use App\Models\ClientProfile;
 use App\Models\CommissionReview;
 use App\Models\Order;
 use App\Models\OrderReview;
+use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -166,5 +167,23 @@ class ProfileController extends Controller
         ]);
 
         return Redirect::route('client.profile')->with('success', 'Address updated successfully!');
+    }
+
+    public function storeAddress(Request $request, User $user)
+    {
+        $request->validate([
+            'barangay' => 'required|string|max:255',
+            'street' => 'required|string|max:255',
+            'house_number' => 'required|string|max:255',
+        ]);
+
+        $address = Address::create([
+            'client_id' => $user->id,
+            'barangay' => $request->barangay,
+            'street' => $request->street,
+            'house_number' => $request->house_number,
+        ]);
+
+        return Redirect::route('client.profile')->with('success', 'Address added successfully!');
     }
 }

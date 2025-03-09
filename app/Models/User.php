@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->role === 'artist';
     }
 
+    public function hasRole(string $role)
+    {
+        return $this->role === $role;
+    }
+
     public function profileImage()
     {
         return $this->hasOne(Attachment::class, 'id', 'profile_image_id');

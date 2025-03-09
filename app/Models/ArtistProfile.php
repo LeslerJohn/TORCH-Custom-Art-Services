@@ -55,4 +55,9 @@ class ArtistProfile extends Model
     {
         return $this->hasOne(ArtistPortfolio::class, 'artist_id', 'id');
     }
+
+    public function discounts()
+    {
+        return $this->hasManyThrough(Discount::class, Artwork::class, 'artist_id', 'artwork_id', 'id', 'id');
+    }
 }
