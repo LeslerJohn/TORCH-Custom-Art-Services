@@ -39,7 +39,6 @@ class RequestController extends Controller
      */
     public function store(Request $request, Service $service)
     {
-        dd($request->all());
         $request->validate([
             'description' => 'required|string|max:255',
             'width' => 'required|integer|min:1',

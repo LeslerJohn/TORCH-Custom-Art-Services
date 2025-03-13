@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,8 +36,11 @@ return [
     */
 
     'mailers' => [
-        'mailtrap' => [
-            'transport' => 'mailtrap'
+        'mailgun' => [
+            'transport' => 'mailgun',
+            // 'client' => [
+            //     'timeout' => 5,
+            // ],
         ],
         'smtp' => [
             'transport' => 'smtp',

@@ -70,9 +70,20 @@
                                     </div>
 
                                     <!-- Status -->
-                                    <div class="absolute bottom-4 right-4 text-white">
-                                        <p class="text-sm mt-1"><span
-                                                class="font-bold">{{ ucfirst($request->status ?? 'Pending') }}</span></p>
+                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                        <span class="font-semibold text-white text-xs px-2 py-1 rounded-full"
+                                            style="background-color: 
+                                                @if($request->status == 'pending') 
+                                                    #fcd34d 
+                                                @elseif($request->status == 'cancelled') 
+                                                    #f87171 
+                                                @elseif($request->status == 'accepted') 
+                                                    #a3e635 
+                                                @else 
+                                                    #d1d5db 
+                                                @endif;">
+                                            {{ ucfirst($request->status ?? 'Pending') }}
+                                        </span>
                                     </div>
                                 </a>
                             </div>
@@ -104,29 +115,45 @@
                                     <!-- Overlay -->
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                        <p class="text-sm font-medium flex items-center">
-                                            {{ $service->artist->user->name ?? 'Unknown Artist' }}
-                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                            </svg>
-                                        </p>
+                                    <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+                                        <div>
+                                            <h2 class="text-lg text-white font-bold">{{ $service->category->name ?? 'Unknown Title' }}
+                                            </h2>
+                                            <p class="text-sm text-white font-medium flex items-center">
+                                                {{ $service->artist->user->name ?? 'Unknown Artist' }}
+                                                <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                                </svg>
+                                            </p>
+                                        </div>
                                         <span
-                                            class="text-xl font-semibold">₱{{ number_format($commission->request->total_price, 0, '.', ',') }}</span>
-                                    </div>
-
-                                    <!-- Text Content -->
-                                    <div class="absolute bottom-4 left-4 text-white">
-                                        <h2 class="text-lg font-bold">{{ $service->category->name ?? 'Unknown Title' }}
-                                        </h2>
+                                            class="text-xl text-white font-semibold">₱{{ number_format($commission->request->total_price, 0, '.', ',') }}</span>
                                     </div>
 
                                     <!-- Status -->
-                                    <div class="absolute bottom-4 right-4 text-white">
-                                        <p class="text-sm mt-1"><span
-                                                class="font-bold">{{ ucfirst($commission->status ?? 'Pending') }}</span>
-                                        </p>
+                                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                                        <span class="font-semibold text-white text-xs px-2 py-1 rounded-full"
+                                            style="background-color: 
+                                                @if($commission->status == 'pending') 
+                                                    #fcd34d 
+                                                @elseif($commission->status == 'cancelled') 
+                                                    #f87171 
+                                                @elseif($commission->status == 'accepted') 
+                                                    #a3e635 
+                                                @elseif($commission->status == 'ready') 
+                                                    #38bdf8 
+                                                @elseif($commission->status == 'wip') 
+                                                    #fbbf24 
+                                                @elseif($commission->status == 'done') 
+                                                    #10b981 
+                                                @elseif($commission->status == 'completed') 
+                                                    #4ade80 
+                                                @else 
+                                                    #d1d5db 
+                                                @endif;">
+                                            {{ ucfirst($commission->status ?? 'Pending') }}
+                                        </span>
                                     </div>
                                 </a>
                             </div>

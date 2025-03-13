@@ -1,10 +1,13 @@
 <?php
 
 use App\Events\eWalletEvents;
+use App\Http\Controllers\PaymentController;
 use GlennRaya\Xendivel\Invoice;
 use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 if (config('app.env') === 'local' || config('app.env') === 'testing') {
     // Invoice template - The values are hard-coded for demonstration.
@@ -42,6 +45,28 @@ if (config('app.env') === 'local' || config('app.env') === 'testing') {
 
     Route::get('/xendivel/checkout/blade', function () {
         return view('xendivel::checkout');
+    });
+
+    Route::get('/payment', function () {
+        // card charge id example: 659518586a863f003659b718
+        $response = Xendivel::getPayment('card-charge-id', 'card')
+            ->getResponse();
+    
+        return $response;
+    });
+
+    Route::post('/pay-via-ewallet', function (Request $request) {
+        $response = Xendivel::payWithEwallet($request)
+            ->getResponse();
+
+        return $response;
+    });
+
+    Route::get('/get-ewallet-charge', function (Request $request) {
+        $response = Xendivel::getPayment('ewc_65cbfb33-a1ea-4c32-a6f3-6f8202de9d6e', 'ewallet')
+            ->getResponse();
+    
+        return $response;
     });
 
     // Will generate an invoice and store it in storage. But will not download it right away.
@@ -166,3 +191,7 @@ Route::post(config('xendivel.webhook_url'), function (Request $request) {
     event(new eWalletEvents($request->toArray()));
 
 })->middleware('xendit-webhook-verification');
+
+Route::get('/paymongo/payment', [PaymentController::class, 'pay'])->name('paymongo.payment');
+Route::get('/disbursement', [PaymentController::class, 'disbursementForm'])->name('disbursement');
+Route::post('/disburse', [PaymentController::class, 'disburseToLandlords'])->name('payment.disburse');

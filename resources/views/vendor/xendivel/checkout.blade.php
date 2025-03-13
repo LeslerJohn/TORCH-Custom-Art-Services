@@ -525,23 +525,21 @@
 
                         // Billing details is optional. But required if card needs to be verified by
                         // AVS (Address Verification System). Typically for USA/Canadian/UK cards.
-                        // billing_details: {
-                        //     given_names: 'Glenn',
-                        //     surname: 'Raya',
-                        //     card_holder_first_name = "John",
-                        //     card_holder_last_name = "Doe",
-                        //     email: 'glenn@example.com',
-                        //     mobile_number: '+639171234567',
-                        //     phone_number: '+63476221234',
-                        //     address:{
-                        //         street_line1: 'Ivory St. Greenfield Subd.',
-                        //         street_line2: 'Brgy. Coastal Ridge',
-                        //         city: 'Balanga City',
-                        //         province_state: 'Bataan',
-                        //         postal_code: '2100',
-                        //         country: 'PH'
-                        //     }
-                        // },
+                        billing_details: {
+                            given_names: 'Glenn',
+                            surname: 'Raya',
+                            email: 'glenn@example.com',
+                            mobile_number: '+639171234567',
+                            phone_number: '+63476221234',
+                            address:{
+                                street_line1: 'Ivory St. Greenfield Subd.',
+                                street_line2: 'Brgy. Coastal Ridge',
+                                city: 'Balanga City',
+                                province_state: 'Bataan',
+                                postal_code: '2100',
+                                country: 'PH'
+                            }
+                        },
 
                         // metadata: {
                         //     store_owner: 'Glenn Raya',
