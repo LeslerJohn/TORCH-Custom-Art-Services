@@ -34,7 +34,7 @@
         @include('layouts.artist-sidebar')
 
         <!-- Page Content -->
-        <main class="max-w-7xl mx-auto ml-[260px] py-6 px-4 sm:px-6 lg:px-8">
+        <main class="max-w-7xl mx-auto lg:ml-[260px] py-6 px-4 sm:px-6 lg:px-8 transition-all duration-300">
             {{ $slot }}
         </main>
     </div>

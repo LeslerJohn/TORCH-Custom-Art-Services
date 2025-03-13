@@ -57,7 +57,7 @@
                     </li>
                 </ul>
                 <div class="text-sm font-medium text-center">
-                    <a href="#"
+                    <a href="{{ route('client.artwork') }}"
                         class="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                         See All
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -386,19 +386,7 @@
 
     <footer class="bg-gray-50 py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
-                <!-- Logo -->
-                <img src="{{ asset('images/torch-full-high-resolution-logo-transparent.png') }}" alt="Torch Logo" class="w-16 sm:w-24">
-
-                <!-- Links -->
-                <div class="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-gray-600">
-                    <a href="#" class="hover:text-orange-500 transition">About</a>
-                    <a href="#" class="hover:text-orange-500 transition">Contact</a>
-                    <a href="#" class="hover:text-orange-500 transition">Terms of Service</a>
-                    <a href="#" class="hover:text-orange-500 transition">Privacy Policy</a>
-                    <a href="#" class="hover:text-orange-500 transition">Support</a>
-                </div>
-
+            <div>
                 @include('layouts.footer')
             </div>
             <script>

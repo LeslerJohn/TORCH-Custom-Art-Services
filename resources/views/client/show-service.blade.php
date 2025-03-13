@@ -1,28 +1,28 @@
 <x-app-layout>
     <div class="mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-200">
         {{-- <a href="{{ route('dashboard') }}">
-            <x-secondary-button class="justify-center py-1 w-20 text-md hover:border-blue-500">
-                Back
-            </x-secondary-button>
+        <x-secondary-button class="justify-center py-1 w-20 text-md hover:border-blue-500">
+            Back
+        </x-secondary-button>
         </a> --}}
         <div class="flex gap-6 py-4 w-full">
             <div id="default-carousel" class="relative w-1/2 h-full" data-carousel="slide">
                 <!-- Carousel wrapper -->
                 <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
                     @foreach ($service->images as $index => $image)
-                        <div class="{{ $index === 0 ? '' : 'hidden' }} duration-700 ease-in-out" data-carousel-item>
-                            <img src="{{ $image->attachment ? asset('storage/' . $image->attachment->path) : asset('images/default.image.jpg') }}"
-                                class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                                alt="...">
-                        </div>
+                    <div class="{{ $index === 0 ? '' : 'hidden' }} duration-700 ease-in-out" data-carousel-item>
+                        <img src="{{ $image->attachment ? asset('storage/' . $image->attachment->path) : asset('images/default.image.jpg') }}"
+                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                            alt="...">
+                    </div>
                     @endforeach
                 </div>
                 <!-- Slider indicators -->
                 <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
                     @foreach ($service->images as $index => $image)
-                        <button type="button" class="w-3 h-3 rounded-full"
-                            aria-current="{{ $index === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $index + 1 }}"
-                            data-carousel-slide-to="{{ $index }}"></button>
+                    <button type="button" class="w-3 h-3 rounded-full"
+                        aria-current="{{ $index === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $index + 1 }}"
+                        data-carousel-slide-to="{{ $index }}"></button>
                     @endforeach
                 </div>
                 <!-- Slider controls -->
@@ -59,11 +59,12 @@
                 <p class="text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per
                         square inch.</strong></p>
                 <p class="text-lg text-gray-500">Completion time: {{ $service->normal_timeframe }} -
-                    {{ $service->normal_timeframe + 5 }} days</p>
+                    {{ $service->normal_timeframe + 5 }} days
+                </p>
 
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                        class="w-10 h-10 rounded-full border border-white">
+                    <img src="{{ Auth::user()->profileImage ? Storage::url(Auth::user()->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                        class="w-10 h-10 rounded-full object-cover border border-white">
                     <div>
                         <p class="text-sm font-medium flex items-center">
                             {{ $service->artist->user->name ?? 'John Doe' }}
@@ -86,11 +87,12 @@
                     <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per
                         square inch.</p>
                     <p class="text-lg text-gray-500">Completion time: {{ $service->rush_timeframe }} -
-                        {{ $service->normal_timeframe - 1 }} days</p>
+                        {{ $service->normal_timeframe - 1 }} days
+                    </p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($service->tags as $tag)
-                            <span
-                                class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
+                        <span
+                            class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
                         @endforeach
                     </div>
                 </div>
@@ -136,36 +138,36 @@
                 </div>
 
                 @auth
-                    @if (auth()->user()->id !== $service->artist->user->id)
-                        @if ($service->artist->available)
-                            <div class="mt-4 flex flex-col gap-4 justify-center">
-                                <div class="flex items-center">
-                                    <input id="terms" type="checkbox" class="mr-2">
-                                    <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#"
-                                            class="text-blue-600 underline">Terms of Service</a></label>
-                                </div>
-                                <div class="flex justify-center">
-                                    <button id="start-request-btn" data-modal-target="authentication-modal"
-                                        data-modal-toggle="authentication-modal"
-                                        class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
-                                        type="button" disabled>
-                                        Start your request
-                                    </button>
-                                </div>
+                @if (auth()->user()->id !== $service->artist->user->id)
+                @if ($service->artist->available)
+                <div class="mt-4 flex flex-col gap-4 justify-center">
+                    <div class="flex items-center">
+                        <input id="terms" type="checkbox" class="mr-2">
+                        <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#"
+                                class="text-blue-600 underline">Terms of Service</a></label>
+                    </div>
+                    <div class="flex justify-center">
+                        <button id="start-request-btn" data-modal-target="authentication-modal"
+                            data-modal-toggle="authentication-modal"
+                            class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
+                            type="button" disabled>
+                            Start your request
+                        </button>
+                    </div>
 
-                                <script>
-                                    document.getElementById('terms').addEventListener('change', function() {
-                                        document.getElementById('start-request-btn').disabled = !this.checked;
-                                    });
-                                </script>
-                            </div>
-                        @else
-                            <div class="mt-4 flex flex-col gap-4 justify-center">
-                                <p class="text-red-500 text-center">The artist is currently not available for commissions.
-                                </p>
-                            </div>
-                        @endif
-                    @endif
+                    <script>
+                        document.getElementById('terms').addEventListener('change', function() {
+                            document.getElementById('start-request-btn').disabled = !this.checked;
+                        });
+                    </script>
+                </div>
+                @else
+                <div class="mt-4 flex flex-col gap-4 justify-center">
+                    <p class="text-red-500 text-center">The artist is currently not available for commissions.
+                    </p>
+                </div>
+                @endif
+                @endif
                 @endauth
 
                 <!-- Main modal -->
@@ -214,8 +216,8 @@
                                         <div class="flex flex-wrap gap-2 mb-2">
                                             <p>{{ ucfirst($service->category->name) }}:</p>
                                             @foreach ($service->tags as $tag)
-                                                <span
-                                                    class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
+                                            <span
+                                                class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
                                             @endforeach
                                         </div>
                                         <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow mb-4">
@@ -223,14 +225,16 @@
                                                 ₱{{ number_format($service->price_rate, 0, '.', ',') }} per square inch
                                             </p>
                                             <p>Completion time: {{ $service->normal_timeframe }} -
-                                                {{ $service->normal_timeframe + 5 }} days</p>
+                                                {{ $service->normal_timeframe + 5 }} days
+                                            </p>
                                         </div>
                                         <div class="p-4 bg-gray-100 w-full max-w-md rounded-md shadow">
                                             <p><strong>Rush Price Rate:</strong>
                                                 ₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square
                                                 inch</p>
                                             <p>Completion time: {{ $service->rush_timeframe }} -
-                                                {{ $service->rush_timeframe + 5 }} days</p>
+                                                {{ $service->rush_timeframe + 5 }} days
+                                            </p>
                                         </div>
                                     </div>
                                     <div
@@ -446,10 +450,26 @@
                                             unit: 'cm',
                                             orderType: 'normal',
                                             quantity: 1,
-                                            base_price: {{ $service->price_rate }},
-                                            rush_price: {{ $service->rush_price_rate }},
-                                            normal_timeframe: {{ $service->normal_timeframe }},
-                                            rush_timeframe: {{ $service->rush_timeframe }},
+                                            base_price: {
+                                                {
+                                                    $service - > price_rate
+                                                }
+                                            },
+                                            rush_price: {
+                                                {
+                                                    $service - > rush_price_rate
+                                                }
+                                            },
+                                            normal_timeframe: {
+                                                {
+                                                    $service - > normal_timeframe
+                                                }
+                                            },
+                                            rush_timeframe: {
+                                                {
+                                                    $service - > rush_timeframe
+                                                }
+                                            },
                                             get totalPrice() {
                                                 let widthInInches = this.unit === 'cm' ? this.width / 2.54 : this.width;
                                                 let heightInInches = this.unit === 'cm' ? this.height / 2.54 : this.height;

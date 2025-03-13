@@ -1,17 +1,23 @@
-<div class="flex justify-between items-center max-w-6xl mx-auto sm:px-6 lg:px-8 pb-16">
+<div class="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 gap-6 sm:gap-0">
+    <!-- Logo Section -->
     <div class="flex items-center">
-        <img src="{{ asset('images/torch-full-high-resolution-logo-transparent.png') }}" alt="Torch Logo" class="w-32">
+        <img src="{{ asset('images/torch-full-high-resolution-logo-transparent.png') }}" alt="Torch Logo" class="w-24 sm:w-32">
     </div>
-    <div class="flex items-center gap-4">
-        <a href="{{ route('about') }}" class="hover:text-orange-500">About us</a>
-        <a href="{{ route('terms') }}" class="hover:text-orange-500">Terms of Service</a>
-        <a href="{{ route('privacy') }}" class="hover:text-orange-500">Privacy Policy</a>
+
+    <!-- Links Section -->
+    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+        <a href="{{ route('about') }}" class="text-sm sm:text-base hover:text-orange-500">About us</a>
+        <a href="{{ route('terms') }}" class="text-sm sm:text-base hover:text-orange-500">Terms of Service</a>
+        <a href="{{ route('privacy') }}" class="text-sm sm:text-base hover:text-orange-500">Privacy Policy</a>
     </div>
+
+    <!-- Contact Section -->
     <div class="flex flex-col items-center">
         <h1 class="text-lg font-semibold mb-2 text-orange-500 cursor-default">Contact us</h1>
         <div class="flex items-center gap-4">
+            <!-- Facebook -->
             <a href="#" class="hover:text-orange-600 transform hover:scale-110 transition duration-300">
-                <svg class="w-8 h-8 text-orange-500 dark:text-white" aria-hidden="true"
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
@@ -19,16 +25,18 @@
                         clip-rule="evenodd" />
                 </svg>
             </a>
+            <!-- Instagram -->
             <a href="#" class="hover:text-orange-600 transform hover:scale-110 transition duration-300">
-                <svg class="w-8 h-8 text-orange-500 dark:text-white" aria-hidden="true"
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path fill="currentColor" fill-rule="evenodd"
                         d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
                         clip-rule="evenodd" />
                 </svg>
             </a>
+            <!-- Twitter -->
             <a href="#" class="hover:text-orange-600 transform hover:scale-110 transition duration-300">
-                <svg class="w-8 h-8 text-orange-500 dark:text-white" aria-hidden="true"
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
@@ -36,8 +44,9 @@
                         clip-rule="evenodd" />
                 </svg>
             </a>
+            <!-- LinkedIn -->
             <a href="#" class="hover:text-orange-600 transform hover:scale-110 transition duration-300">
-                <svg class="w-8 h-8 text-orange-500 dark:text-white" aria-hidden="true"
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
@@ -46,8 +55,9 @@
                     <path d="M7.2 8.809H4V19.5h3.2V8.809Z" />
                 </svg>
             </a>
+            <!-- Email -->
             <a href="mailto:example@gmail.com" class="hover:text-orange-600 transform hover:scale-110 transition duration-300">
-                <svg class="w-8 h-8 text-orange-500 dark:text-white" aria-hidden="true"
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                     viewBox="0 0 24 24">
                     <path fill-rule="evenodd"

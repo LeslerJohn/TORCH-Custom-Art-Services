@@ -1,6 +1,6 @@
-<section class="bg-white p-6 shadow-md rounded-lg mt-6">
-    <header class="mb-6">
-        <h2 class="text-xl font-semibold text-gray-900">
+<section class="bg-white p-4 sm:p-6 shadow-md rounded-lg mt-6">
+    <header class="mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">
             {{ __('Edit Address') }}
         </h2>
         <p class="mt-1 text-sm text-gray-600">
@@ -8,19 +8,19 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('address.update') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form method="post" action="{{ route('address.update') }}" class="grid grid-cols-2 sm:grid-cols-1 gap-4 sm:gap-6">
         @csrf
         @method('put')
 
         <!-- Barangay -->
-        <div>
+        <div class="col-span-2">
             <x-input-label for="barangay" :value="__('Barangay')" />
             <x-text-input id="barangay" name="barangay" type="text" class="mt-1 block w-full" value="{{ old('barangay', $user->address->barangay ?? '') }}" />
             <x-input-error :messages="$errors->updateAddress->get('barangay')" class="mt-2 text-red-600" />
         </div>
 
         <!-- Street -->
-        <div>
+        <div class="col-span-1">
             <x-input-label for="street" :value="__('Street')" />
             <x-text-input id="street" name="street" type="text" class="mt-1 block w-full" value="{{ old('street', $user->address->street ?? '') }}" />
             <x-input-error :messages="$errors->updateAddress->get('street')" class="mt-2 text-red-600" />

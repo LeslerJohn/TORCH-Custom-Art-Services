@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -30,9 +31,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -42,7 +40,60 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
+        // Handle profile image removal
+        if ($request->has('remove_profile_image') && $request->remove_profile_image == '1') {
+            if ($user->profile_image_id) {
+                // Delete the existing profile image from storage
+                $profileImage = Attachment::find($user->profile_image_id);
+                if ($profileImage) {
+                    Storage::disk('public')->delete($profileImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->profile_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $profileImage->delete();
+                }
+            }
+        }
+
+        // Handle cover image removal
+        if ($request->has('remove_cover_image') && $request->remove_cover_image == '1') {
+            if ($user->cover_image_id) {
+                // Delete the existing cover image from storage
+                $coverImage = Attachment::find($user->cover_image_id);
+                if ($coverImage) {
+                    Storage::disk('public')->delete($coverImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->cover_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $coverImage->delete();
+                }
+            }
+        }
+
+        // Handle new profile image upload
         if ($request->hasFile('profile_image')) {
+            // Delete the existing profile image if it exists
+            if ($user->profile_image_id) {
+                $profileImage = Attachment::find($user->profile_image_id);
+                if ($profileImage) {
+                    Storage::disk('public')->delete($profileImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->profile_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $profileImage->delete();
+                }
+            }
+
+            // Store the new profile image
             $file = $request->file('profile_image');
             $path = $file->store('profile_images', 'public');
             $attachment = Attachment::create([
@@ -53,7 +104,24 @@ class ProfileController extends Controller
             $user->profile_image_id = $attachment->id;
         }
 
+        // Handle new cover image upload
         if ($request->hasFile('cover_image')) {
+            // Delete the existing cover image if it exists
+            if ($user->cover_image_id) {
+                $coverImage = Attachment::find($user->cover_image_id);
+                if ($coverImage) {
+                    Storage::disk('public')->delete($coverImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->cover_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $coverImage->delete();
+                }
+            }
+
+            // Store the new cover image
             $file = $request->file('cover_image');
             $path = $file->store('cover_images', 'public');
             $attachment = Attachment::create([
@@ -64,6 +132,7 @@ class ProfileController extends Controller
             $user->cover_image_id = $attachment->id;
         }
 
+        // Update phone number
         if ($request->has('phone_number')) {
             $user->phone_number = $request->input('phone_number');
         }
