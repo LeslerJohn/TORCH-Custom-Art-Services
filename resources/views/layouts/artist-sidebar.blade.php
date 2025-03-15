@@ -1,7 +1,17 @@
-<nav class="fixed pt-4 pr-1 min-h-screen w-64 bg-white shadow-lg border-r-4 border-orange-400 mt-16 z-5">
+<!-- Mobile Menu Button -->
+<button id="mobile-menu-button" class="lg:hidden fixed top-4 left-4 p-2 bg-orange-400 text-white rounded-lg z-30 transition-transform duration-300">
+    <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right transform transition-transform duration-300">
+        <path d="m9 18 6-6-6-6" />
+    </svg>
+</button>
 
+<!-- Backdrop (Visible when sidebar is open) -->
+<div id="backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+
+<!-- Sidebar -->
+<nav id="sidebar" class="fixed pt-4 pr-1 min-h-screen w-64 bg-white shadow-lg border-r-4 border-orange-400 mt-16 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <!-- Navigation Links -->
-    <div class=" pl-4 space-y-2">
+    <div class="pl-4 space-y-2">
         <x-responsive-nav-link
             :href="route('artist.dashboard')"
             :active="request()->routeIs('artist.dashboard')"
@@ -95,3 +105,33 @@
         </x-responsive-nav-link>
     </div>
 </nav>
+
+<script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('backdrop');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    mobileMenuButton.addEventListener('click', function() {
+        // Toggle sidebar visibility
+        sidebar.classList.toggle('translate-x-0');
+        // Toggle backdrop visibility
+        backdrop.classList.toggle('hidden');
+        // Rotate the toggle icon
+        toggleIcon.classList.toggle('rotate-180');
+    });
+
+    backdrop.addEventListener('click', function() {
+        // Close sidebar and hide backdrop when clicking outside
+        sidebar.classList.remove('translate-x-0');
+        backdrop.classList.add('hidden');
+        toggleIcon.classList.remove('rotate-180');
+    });
+</script>
+
+<style>
+    /* Define the rotation class */
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+</style>

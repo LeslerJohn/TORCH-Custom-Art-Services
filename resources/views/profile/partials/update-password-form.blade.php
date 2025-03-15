@@ -1,6 +1,6 @@
-<section class="bg-white p-6 shadow-md rounded-lg">
-    <header class="mb-6">
-        <h2 class="text-xl font-semibold text-gray-900">
+<section class="bg-white p-4 sm:p-6 shadow-md rounded-lg">
+    <header class="mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">
             {{ __('Update Password') }}
         </h2>
         <p class="mt-1 text-sm text-gray-600">
@@ -8,26 +8,26 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form method="post" action="{{ route('password.update') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         @csrf
         @method('put')
 
         <!-- Current Password -->
-        <div class="md:col-span-2">
+        <div class="col-span-2">
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
             <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2 text-red-600" />
         </div>
 
         <!-- New Password -->
-        <div>
+        <div class="col-span-2">
             <x-input-label for="update_password_password" :value="__('New Password')" />
             <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2 text-red-600" />
         </div>
 
         <!-- Confirm New Password -->
-        <div>
+        <div class="col-span-2">
             <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
             <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2 text-red-600" />

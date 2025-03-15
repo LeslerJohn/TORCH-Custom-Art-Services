@@ -1,27 +1,27 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 min-h-screen">
         <div class="flex items-center justify-between w-full mb-4">
             <h2 class="text-xl font-bold">Artworks</h2>
         </div>
 
         <!-- Selected Tags Section -->
         @if (request()->has('tags'))
-            <div class="flex flex-wrap gap-2 mb-4">
-                @foreach (request()->input('tags', []) as $selectedTagId)
-                    @php
-                        $selectedTag = $tags->firstWhere('id', $selectedTagId);
-                    @endphp
-                    @if ($selectedTag)
-                        <span class="flex items-center px-3 py-1 bg-black text-white text-sm rounded-full">
-                            {{ $selectedTag->name }}
-                            <a href="{{ route('client.artwork', array_merge(request()->except('tags'), ['tags' => array_diff(request()->input('tags', []), [$selectedTagId])])) }}"
-                                class="ml-2 text-white hover:text-gray-300">
-                                ✕
-                            </a>
-                        </span>
-                    @endif
-                @endforeach
-            </div>
+        <div class="flex flex-wrap gap-2 mb-4">
+            @foreach (request()->input('tags', []) as $selectedTagId)
+            @php
+            $selectedTag = $tags->firstWhere('id', $selectedTagId);
+            @endphp
+            @if ($selectedTag)
+            <span class="flex items-center px-3 py-1 bg-black text-white text-sm rounded-full">
+                {{ $selectedTag->name }}
+                <a href="{{ route('client.artwork', array_merge(request()->except('tags'), ['tags' => array_diff(request()->input('tags', []), [$selectedTagId])])) }}"
+                    class="ml-2 text-white hover:text-gray-300">
+                    ✕
+                </a>
+            </span>
+            @endif
+            @endforeach
+        </div>
         @endif
 
         <!-- Filters (Top Row) -->
@@ -47,17 +47,17 @@
                 Showcases
             </button>
 
-            <!-- Category Filter -->
-            <select name="category" onchange="this.form.submit()"
-                class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 appearance-none transition">
-                <option value="">All Categories</option>
-                @foreach ($categories as $category)
-                <option value="{{ $category->id }}"
-                    {{ request('category') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-                @endforeach
-            </select>
+                <!-- Category Filter -->
+                <select name="category" onchange="this.form.submit()"
+                    class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 appearance-none transition">
+                    <option value="">All Categories</option>
+                    @foreach ($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ request('category') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                    @endforeach
+                </select>
 
             <!-- Price Range -->
             <div class="flex items-center gap-2">
@@ -133,20 +133,20 @@
                 </svg>
             </button>
 
-            <!-- Tags Container -->
-            <div x-ref="tagsContainer" @scroll="updateButtons()"
-                class="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth px-12 py-2 border border-gray-300 rounded-lg shadow-sm">
-                @foreach ($tags as $tag)
-                <label
-                    class="px-3 py-1.5 border rounded-full cursor-pointer text-sm h-8 flex items-center whitespace-nowrap transition
-                        {{ in_array($tag->id, request()->input('tags', [])) ? 'bg-black text-white border-black' : 'border-gray-300 text-black hover:border-gray-500' }}">
-                    <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="hidden"
-                    onchange="this.form.submit()"
-                    {{ in_array($tag->id, request()->input('tags', [])) ? 'checked' : '' }}>
-                    {{ $tag->name }}
-                </label>
-                @endforeach
-            </div>
+                <!-- Tags Container -->
+                <div x-ref="tagsContainer" @scroll="updateButtons()"
+                    class="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth px-12 py-2 border border-gray-300 rounded-lg shadow-sm">
+                    @foreach ($tags as $tag)
+                    <label
+                        class="px-3 py-1.5 border rounded-full cursor-pointer text-sm h-8 flex items-center whitespace-nowrap transition
+                                    {{ in_array($tag->id, request()->input('tags', [])) ? 'bg-black text-white border-black' : 'border-gray-300 text-black hover:border-gray-500' }}">
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="hidden"
+                            onchange="this.form.submit()"
+                            {{ in_array($tag->id, request()->input('tags', [])) ? 'checked' : '' }}>
+                        {{ $tag->name }}
+                    </label>
+                    @endforeach
+                </div>
 
             <!-- Right Scroll Button -->
             <button type="button" @click="scroll(1)" x-show="showRight"
@@ -168,63 +168,54 @@
             <div x-show="loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                 @for ($i = 0; $i < 6; $i++)
                     <div
-                        class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg bg-gray-200 animate-pulse">
-                        <div class="w-full h-full bg-gray-300"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4">
-                            <div class="w-32 h-5 bg-gray-400 rounded-md mb-2"></div>
-                            <div class="w-20 h-4 bg-gray-500 rounded-md"></div>
-                        </div>
-                        <div class="absolute bottom-4 right-4">
-                            <div class="w-16 h-6 bg-gray-400 rounded-md"></div>
-                        </div>
+                    class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg bg-gray-200 animate-pulse">
+                    <div class="w-full h-full bg-gray-300"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <div class="w-32 h-5 bg-gray-400 rounded-md mb-2"></div>
+                        <div class="w-20 h-4 bg-gray-500 rounded-md"></div>
                     </div>
-                @endfor
-            </div>
-
-            <!-- Artworks Grid -->
-            <div x-show="!loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($artworks as $artwork)
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                        <a href="{{ route('artwork.show', $artwork) }}">
-                            <img src="{{ $artwork->images->first()?->attachment ? asset('storage/' . $artwork->images->first()->attachment->path) : asset('images/default-image.jpg') }}"
-                                alt="{{ $artwork->title }}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                            <div class="absolute top-4 left-4 text-white">
-                                <span class="text-sm {{ $artwork->status == 'sale' ? 'bg-green-500' : 'bg-red-500' }} px-2 py-1 rounded-full">
-                                    {{ ucfirst($artwork->status) }}
-                                </span>
-                            </div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
-                                <p class="text-sm">| {{ $artwork->category->name }}</p>
-                            </div>
-                            <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
-                                @if ($artwork->status == 'sale' && $artwork->discount && $artwork->discount->value_type && $artwork->discount->value && $artwork->discount->status == 'active')
-                                    @php
-                                        $discountedPrice = $artwork->price;
-                                        if ($artwork->discount->value_type == 'percentage') {
-                                            $discountedPrice -= ($artwork->price * $artwork->discount->value / 100);
-                                        } elseif ($artwork->discount->value_type == 'fixed') {
-                                            $discountedPrice -= $artwork->discount->value;
-                                        }
-                                    @endphp
-                                    <span class="line-through text-red-500">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
-                                    <span class="text-xl">₱{{ number_format($discountedPrice, 0, '.', ',') }}</span>
-                                @else
-                                    <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
-                                @endif
-                            </div>
-                        </a>
+                    <div class="absolute bottom-4 right-4">
+                        <div class="w-16 h-6 bg-gray-400 rounded-md"></div>
                     </div>
-                @endforeach
             </div>
+            @endfor
         </div>
 
-        <!-- Pagination -->
-        <div class="mt-6">
-            {{ $artworks->withQueryString()->links() }}
+        <!-- Artworks Grid -->
+        <div x-show="!loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach ($artworks as $artwork)
+            <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                <a href="{{ route('artwork.show', $artwork) }}">
+                    <img src="{{ $artwork->images->first()?->attachment ? asset('storage/' . $artwork->images->first()->attachment->path) : asset('images/default-image.jpg') }}"
+                        alt="{{ $artwork->title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <div class="absolute top-4 left-4 text-white">
+                        <span class="text-sm {{ $artwork->status == 'sale' ? 'bg-green-500' : 'bg-red-500' }} px-2 py-1 rounded-full">
+                            {{ ucfirst($artwork->status) }}
+                        </span>
+                    </div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <h2 class="text-lg font-bold">{{ $artwork->title }}</h2>
+                        <p class="text-sm">| {{ $artwork->category->name }}</p>
+                    </div>
+                    <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
+                        <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                    </div>
+                </a>
+            </div>
+            @endforeach
         </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-6">
+        {{ $artworks->withQueryString()->links() }}
+    </div>
+
+    <!-- Caught up Message -->
+    <p class="text-center text-gray-500 mt-6">You're all caught up! No more artworks to show.</p>
+
     </div>
 
     <script>
@@ -235,6 +226,11 @@
             });
         }
     </script>
+    <footer>
+        <div>
+            @include('layouts.footer')
+        </div>
+    </footer>
 
 </x-app-layout>
 

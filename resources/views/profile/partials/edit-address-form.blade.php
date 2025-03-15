@@ -15,14 +15,14 @@
         @endif    
 
         <!-- Barangay -->
-        <div>
+        <div class="col-span-2">
             <x-input-label for="barangay" :value="__('Barangay')" />
             <x-text-input id="barangay" name="barangay" type="text" class="mt-1 block w-full" value="{{ old('barangay', $user->address->barangay ?? '') }}" />
             <x-input-error :messages="$errors->updateAddress->get('barangay')" class="mt-2 text-red-600" />
         </div>
 
         <!-- Street -->
-        <div>
+        <div class="col-span-1">
             <x-input-label for="street" :value="__('Street')" />
             <x-text-input id="street" name="street" type="text" class="mt-1 block w-full" value="{{ old('street', $user->address->street ?? '') }}" />
             <x-input-error :messages="$errors->updateAddress->get('street')" class="mt-2 text-red-600" />
