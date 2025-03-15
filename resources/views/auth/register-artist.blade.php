@@ -89,7 +89,7 @@
             @endif
 
             <!-- Personal Section -->
-            <div id="personal-section">
+            <div id="personal-section" class="w-full">
                 <!-- Name -->
                 @guest
                 <div class="flex flex-col md:flex-row justify-between gap-4">
@@ -123,7 +123,7 @@
                     <!-- Birthdate -->
                     <div class="w-full md:w-1/2 relative">
                         <x-input-label for="birthdate" :value="__('Birthdate')" />
-                        <div class="absolute inset-y-0 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
+                        <div class="absolute inset-y-0 top-6 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path
@@ -307,19 +307,72 @@
                     </svg>
                 </button>
 
-                <!-- Tags Selection -->
                 <div class="w-full">
                     <label for="tags" class="block mb-2 text-lg font-medium">Select your tag</label>
                     <div id="tags-container" class="flex justify-start flex-wrap gap-2">
                         @foreach ($tags as $tag)
-                        <div class="tag-card border-2 border-gray-300 text-sm rounded-full py-2 px-4 cursor-pointer"
-                            data-tag-id="{{ $tag->id }}">
-                            {{ $tag->name }}
-                        </div>
+                            <div class="tag-card border-2 border-gray-300 text-sm rounded-full py-2 px-4 cursor-pointer"
+                                data-tag-id="{{ $tag->id }}">
+                                {{ $tag->name }}
+                            </div>
                         @endforeach
                     </div>
                     <input type="hidden" id="selected-tags" name="tags[]" value="">
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const tagsContainer = document.getElementById('tags-container');
+                        const selectedTagsInput = document.getElementById('selected-tags');
+                        let selectedTags = [];
+
+                        tagsContainer.addEventListener('click', function(event) {
+                            const tagCard = event.target.closest('.tag-card');
+                            if (tagCard) {
+                                const tagId = tagCard.getAttribute('data-tag-id');
+                                if (selectedTags.includes(tagId)) {
+                                    selectedTags = selectedTags.filter(id => id !== tagId);
+                                    tagCard.classList.remove('selected-tag');
+                                } else {
+                                    selectedTags.push(tagId);
+                                    tagCard.classList.add('selected-tag');
+                                }
+                                selectedTagsInput.value = selectedTags.join(',');
+                            }
+                        });
+                    });
+                </script>
+
+                <style>
+                    .tag-card.selected-tag {
+                        background-color: #d66f15;
+                        color: white;
+                        border-color: #d66f15;
+                    }
+                </style>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const tagsContainer = document.getElementById('tags-container');
+                        const selectedTagsInput = document.getElementById('selected-tags');
+                        let selectedTags = [];
+
+                        tagsContainer.addEventListener('click', function(event) {
+                            const tagCard = event.target.closest('.tag-card');
+                            if (tagCard) {
+                                const tagId = tagCard.getAttribute('data-tag-id');
+                                if (selectedTags.includes(tagId)) {
+                                    selectedTags = selectedTags.filter(id => id !== tagId);
+                                    tagCard.classList.remove('selected-tag');
+                                } else {
+                                    selectedTags.push(tagId);
+                                    tagCard.classList.add('selected-tag');
+                                }
+                                selectedTagsInput.value = selectedTags.join(',');
+                            }
+                        });
+                    });
+                </script>
 
                 <!-- Continue Button -->
                 <div class="flex items-center justify-end mt-6">
@@ -345,17 +398,32 @@
                     <x-input-label for="payment_method" :value="__('Payment Method')" />
                     <div id="payment-method-container" class="flex gap-4 mt-2">
                         <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
-                            data-method="GCash">
+                            data-method="GCash" onclick="selectPaymentMethod('GCash')">
                             {{ __('GCash') }}
                         </div>
                         <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
-                            data-method="PayMaya">
+                            data-method="PayMaya" onclick="selectPaymentMethod('PayMaya')">
                             {{ __('PayMaya') }}
                         </div>
                     </div>
                     <input type="hidden" id="payment_method" name="payment_method" value="{{ old('payment_method') }}">
                     <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
                 </div>
+
+                <script>
+                    function selectPaymentMethod(method) {
+                        const paymentMethodInput = document.getElementById('payment_method');
+                        paymentMethodInput.value = method;
+
+                        document.querySelectorAll('.payment-method-card').forEach(card => {
+                            card.classList.toggle('bg-orange-500', card.dataset.method === method);
+                            card.classList.toggle('border-orange-500', card.dataset.method === method);
+                            card.classList.toggle('text-white', card.dataset.method === method);
+                            card.classList.toggle('bg-white', card.dataset.method !== method);
+                            card.classList.toggle('border-gray-300', card.dataset.method !== method);
+                        });
+                    }
+                </script>
 
                 <!-- Payment Name and Number -->
                 <div class="mt-4">

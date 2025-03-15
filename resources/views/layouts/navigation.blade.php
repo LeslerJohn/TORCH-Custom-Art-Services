@@ -138,6 +138,18 @@
 
             <!-- Hamburger Menu (Mobile) -->
             <div class="-me-2 flex items-center sm:hidden">
+                <a href="{{ route('client.cart.index') }}" class="relative">
+                    <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
+                    </svg>
+                    @if(Auth::check() && Auth::user()->cart)
+                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ Auth::user()->cart->items->count() }}</span>
+                    @endif
+                </a>
+
                 <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -155,6 +167,11 @@
             <a href="{{ route('client.artist') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:text-orange-500">Hire an Artist</a>
             <a href="{{ route('client.service') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:text-orange-500">Commission</a>
         </div>
+        @guest
+        <div class="pt-2 pb-3 space-y-1">
+            <a href="{{ route('login') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:text-orange-500">Sign In</a>
+        </div>
+        @endguest
 
         <!-- Responsive Settings Options -->
         @auth
