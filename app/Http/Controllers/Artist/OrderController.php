@@ -16,7 +16,7 @@ class OrderController extends Controller
     {
         $orders = Order::whereHas('items.artwork', function ($query) {
             $query->where('artist_id', Auth::user()->id);
-        })->with('items.artwork')->get();
+        })->with('items.artwork')->latest()->get();
 
         return view('artist.order.index', compact('orders'));
     }
@@ -48,6 +48,7 @@ class OrderController extends Controller
     public function deliver(Order $order)
     {
         $order->delivery->update(['status' => 'in-transit']);
+        $order->update(['status' => 'accepted']);
 
         return redirect()->route('artist.order.show', $order);
     }
@@ -56,6 +57,7 @@ class OrderController extends Controller
     public function delivered(Order $order)
     {
         $order->delivery->update(['status' => 'completed']);
+        $order->update(['status' => 'completed']);
 
         return redirect()->route('artist.order.show', $order);
     }

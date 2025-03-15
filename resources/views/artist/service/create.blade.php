@@ -30,19 +30,40 @@
 
                     <div class="mt-6">
                         <x-input-label for="price_rate" class="text-sm" :value="__('Price per square inch')" />
-                        <x-text-input id="price_rate" class="block mt-1 w-full" type="number" name="price_rate" required placeholder="Set base price per cm." />
+                        <div class="flex">
+                            <x-text-input id="price_rate" class="block mt-1 w-full" type="number" name="price_rate" required placeholder="Set base price per cm." />
+                            <button data-tooltip-target="tooltip-price" type="button" class="ml-4"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <x-input-error :messages="$errors->get('price_rate')" class="mt-2" />
                     </div>
+
+                    <div id="tooltip-price" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
+                        <p class="text-sm">Your base price will be used in the system's calculators framework width x height x base price.</p>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
     
+                    <div id="tooltip-rush-price" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
+                        <p class="text-sm">Rush base price is applied when the client makes a rush order.</p>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
                     <div class="mt-6">
                         <x-input-label for="rush_price_rate" class="text-sm" :value="__('Rush price per square inch')" />
-                        <x-text-input id="rush_price_rate" class="block mt-1 w-full" type="number" name="rush_price_rate" required placeholder="Set base price for rush order." />
+                        <div class="flex">
+                            <x-text-input id="rush_price_rate" class="block mt-1 w-full" type="number" name="rush_price_rate" required placeholder="Set base price for rush order." />
+                            <button data-tooltip-target="tooltip-rush-price" type="button" class="ml-4"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <x-input-error :messages="$errors->get('rush_price_rate')" class="mt-2" />
                     </div>
 
                     <div id="tooltip-animation" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
                         <p class="text-sm">A grace period of 5 days will be automatically added.</p>
-                        <p class="text-sm">By going over your normal deadline a 2% charge will be deducted to your earning each day.</p>
+                        <p class="text-sm">By going over your normal deadline a 3% charge will be deducted to your earning each day.</p>
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
                     <div class="mt-6">

@@ -102,7 +102,7 @@
                     <p class="mt-1"><strong>Phone:</strong> {{ $artwork->artist->user->phone_number }}</p>
                 </div>
 
-                @if (auth()->user()->id !== $artwork->artist->user->id && $artwork->status === 'sale')
+                @if (auth()->check() && auth()->user()->id !== $artwork->artist->user->id && $artwork->status === 'sale')
                     <div class="mt-4 flex gap-4 justify-end">
                         <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
                             @csrf
@@ -162,16 +162,14 @@
                             <!-- Modal body -->
                             <div class="flex gap-2 justify-center p-4 md:p-5">
                                 <div class="w-1/2">
-                                    @if ($artwork->discount->status === 'active')
+                                    @if ($artwork->discount && $artwork->discount->status === 'active')
                                         @php
                                             $discount = $artwork->discount;
                                             $discountedPrice = $artwork->price;
-                                            if ($discount) {
-                                                if ($discount->value_type === 'percentage') {
-                                                    $discountedPrice -= ($artwork->price * $discount->value / 100);
-                                                } else {
-                                                    $discountedPrice -= $discount->value;
-                                                }
+                                            if ($discount->value_type === 'percentage') {
+                                                $discountedPrice -= ($artwork->price * $discount->value / 100);
+                                            } else {
+                                                $discountedPrice -= $discount->value;
                                             }
                                         @endphp
                                     @endif
@@ -233,26 +231,46 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2 flex flex-col justify-between" action="{{ route('client.order.store', $artwork) }}"
-                                    method="POST">
-                                    @csrf
-                                    <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
-                                    <div class="p-4 border rounded-lg bg-gray-100">
-                                        <h2 class="text-lg font-semibold">Shipping Address</h2>
-                                        <p class="mt-2"><strong>Barangay:</strong> {{ auth()->user()->address->barangay ?? 'N/A' }}</p>
-                                        <p class="mt-1"><strong>Street/Drive:</strong> {{ auth()->user()->address->street ?? 'N/A' }}</p>
-                                        <p class="mt-1"><strong>House Number:</strong> {{ auth()->user()->address->house_number ?? 'N/A' }}</p>
-                                        <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
-                                            <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
-                                            </svg>
-                                            Edit address
-                                        </a>
+                                @if (auth()->check() && auth()->user()->address && auth()->user()->phone_number)
+                                    <form class="space-y-4 w-1/2 flex flex-col justify-between" action="{{ route('client.order.store', $artwork) }}"
+                                        method="POST">
+                                        @csrf
+                                        @if (auth()->user())
+                                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                                        @endif
+                                        <div class="p-4 border rounded-lg bg-gray-100">
+                                            <h2 class="text-lg font-semibold">Shipping Address</h2>
+                                            <p class="mt-2"><strong>Barangay:</strong> {{ auth()->user()->address->barangay ?? 'N/A' }}</p>
+                                            <p class="mt-1"><strong>Street/Drive:</strong> {{ auth()->user()->address->street ?? 'N/A' }}</p>
+                                            <p class="mt-1"><strong>House Number:</strong> {{ auth()->user()->address->house_number ?? 'N/A' }}</p>
+                                            <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
+                                                <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                                </svg>
+                                                Edit Address
+                                            </a>
+                                        </div>
+                                        <button type="submit"
+                                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go to Payment
+                                        </button>
+                                    </form>
+                                @else
+                                    <div class="space-y-4 w-1/2 flex flex-col justify-start">
+                                        @if (auth()->user())
+                                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                                        @endif
+                                        <div class="p-4 border rounded-lg bg-gray-100">
+                                            <h2 class="text-lg font-semibold">Shipping Address</h2>
+                                            <p class="mt-2 text-red-600">Please add a shipping address before proceeding to payment.</p>
+                                            <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
+                                                <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                                </svg>
+                                                Add Address
+                                            </a>
+                                        </div>
                                     </div>
-                                    <button type="submit"
-                                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go to Payment
-                                    </button>
-                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
