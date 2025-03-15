@@ -38,4 +38,10 @@ class Service extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
+    public function commissions()
+    {
+        return $this->hasManyThrough(Commission::class, Request::class, 'service_id', 'request_id', 'id', 'id')
+                    ->selectRaw('commission.*, request.quantity as request_quantity');
+    }
 }

@@ -345,11 +345,11 @@
                     <x-input-label for="payment_method" :value="__('Payment Method')" />
                     <div id="payment-method-container" class="flex gap-4 mt-2">
                         <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
-                            data-method="gcash">
+                            data-method="GCash">
                             {{ __('GCash') }}
                         </div>
                         <div class="payment-method-card border-2 border-gray-300 text-sm rounded-md py-2 px-4 cursor-pointer"
-                            data-method="paymaya">
+                            data-method="PayMaya">
                             {{ __('PayMaya') }}
                         </div>
                     </div>

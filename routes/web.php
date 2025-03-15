@@ -52,9 +52,11 @@ Route::get('/cart', [CartController::class, 'index'])->name('client.cart.index')
 Route::post('/cart/{artwork}', [CartController::class, 'store'])->name('client.cart.store');
 Route::delete('/cart/remove/{artwork}', [CartController::class, 'destroy'])->name('client.cart.destroy');
 Route::post('/cart/checkout/{cart}', [CartController::class, 'checkout'])->name('client.cart.checkout');
+Route::get('/cart/checkout/success/{selected_items}', [CartController::class, 'success'])->name('client.cart.success');
 
 
 Route::post('/artwork/{artwork}', [OrderController::class, 'store'])->name('client.order.store');
+Route::get('/order/success/{artwork}', [OrderController::class, 'success'])->name('client.order.success');
 Route::get('/order', [OrderController::class, 'index'])->name('client.order.index');
 Route::get('/order/{order}', [OrderController::class, 'show'])->name('client.order.show');
 Route::patch('/order/{order}', [OrderController::class, 'update'])->name('client.order.update');
@@ -65,6 +67,7 @@ Route::post('/commission/{commission}/review', [ReviewController::class, 'commis
 
 Route::get('/request', [RequestController::class, 'index'])->name('client.request.index');
 Route::post('/request/{service}', [RequestController::class, 'store'])->name('client.request.store');
+Route::get('/request/success/{requestData}/{service}', [RequestController::class, 'success'])->name('client.request.success');
 Route::get('/request/{request}', [RequestController::class, 'show'])->name('client.request.show');
 Route::patch('/request/{request}', [RequestController::class, 'update'])->name('client.request.update');
 Route::delete('/request/{request}', [RequestController::class, 'destroy'])->name('client.request.destroy');

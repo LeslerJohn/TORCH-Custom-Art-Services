@@ -66,7 +66,7 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Medium
+                                Category
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -74,15 +74,15 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Deadline
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Status
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Progress
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Rating
+                                Delivery Status
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -92,47 +92,73 @@
                     </thead>
                     <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
                         <!-- Example row -->
+                        @foreach ($commissions as $commission)
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" src="" alt="img">
+                                        @if($commission->request->client->user->profileImage)
+                                            <img class="h-10 w-10 rounded-full" src="{{ asset('storage/' . $commission->request->client->user->profileImage->path) }}" alt="img">
+                                        @else
+                                            <img class="h-10 w-10 rounded-full" src="{{asset('images/profile.default.png')}}" alt="img">
+                                        @endif
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                            John Doe
+                                            {{$commission->request->client->user->name}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Jane Smith</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$commission->request->service->artist->user->name}}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Oil Painting</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$commission->request->service->category->name}}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">2023-01-01</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{ \Carbon\Carbon::parse($commission->created_at)->format('Y-m-d')}}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900 dark:text-gray-200">
+                                    @if($commission->is_extended)
+                                        {{ \Carbon\Carbon::parse($commission->extended_deadline)->format('Y-m-d') }}
+                                    @else
+                                        {{ \Carbon\Carbon::parse($commission->deadline)->format('Y-m-d') }}
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    In Progress
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if($commission->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($commission->status === 'ready') bg-blue-100 text-blue-800
+                                    @elseif($commission->status === 'wip') bg-orange-100 text-orange-800
+                                    @elseif($commission->status === 'done') bg-green-100 text-green-800
+                                    @elseif($commission->status === 'completed') bg-purple-100 text-purple-800
+                                    @endif">
+                                    {{ ucfirst($commission->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">50%</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">4.5</div>
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if($commission->delivery->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($commission->delivery->status === 'in-transit') bg-blue-100 text-blue-800
+                                    @elseif($commission->delivery->status === 'completed') bg-green-100 text-green-800
+                                    @elseif($commission->delivery->status === 'cancelled') bg-red-100 text-red-800
+                                    @endif">
+                                    {{ ucfirst($commission->delivery->status) }}
+                                </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.commission.show', 1) }}"
+                                <a href="{{ route('admin.commission.show', $commission) }}"
                                     class="text-indigo-600 hover:text-indigo-900">
                                     View
                                 </a>
                             </td>
                         </tr>
+                        @endforeach
                         <!-- Add more rows as needed -->
                     </tbody>
                 </table>

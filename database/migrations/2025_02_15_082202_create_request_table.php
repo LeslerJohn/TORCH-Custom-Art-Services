@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->date('deadline')->nullable();
             $table->decimal('total_price', 10, 2);
+            $table->enum('order_type', ['normal', 'rush'])->default('normal');
             $table->string('status', 50)->default('pending');
             $table->timestamps();
         });

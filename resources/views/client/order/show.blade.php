@@ -33,6 +33,16 @@
             </p>
         </div>
 
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Order Details</h2>
+            <p><strong>Order ID:</strong> #{{ $order->id }}</p>
+            @php
+                $totalPrice = $order->items->sum('price');
+            @endphp
+            <p><strong>Total Price:</strong> ₱{{ number_format($totalPrice, 2) }}</p>
+        </div>
+
+
         <!-- Shipping Progress -->
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Shipping Progress</h2>
@@ -79,14 +89,8 @@
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Support Center</h2>
             <p class="text-gray-600">Having issues with your order?
-                <a href="#" class="text-blue-500 underline">Contact Support</a>
+                <a href="mailto:torchtech2024@gmail.com" class="text-blue-500 underline">Contact Support</a>
             </p>
-        </div>
-
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Order Details</h2>
-            <p><strong>Order ID:</strong> #{{ $order->id }}</p>
-            <p><strong>Total Price:</strong> ₱{{ number_format($order->total, 2) }}</p>
         </div>
 
         <!-- Buttons -->

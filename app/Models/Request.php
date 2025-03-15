@@ -18,6 +18,7 @@ class Request extends Model
         'width',
         'unit',
         'quantity',
+        'order_type',
         'deadline',
         'service_id',
         'status',

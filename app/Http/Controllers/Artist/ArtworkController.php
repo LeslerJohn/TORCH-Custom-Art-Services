@@ -19,7 +19,7 @@ class ArtworkController extends Controller
      */
     public function index()
     {
-        $artworks = Artwork::where('artist_id', Auth::user()->id)->get();
+        $artworks = Artwork::where('artist_id', Auth::user()->id)->latest()->get();
         return view('artist.artwork.index', compact('artworks'));
     }
 

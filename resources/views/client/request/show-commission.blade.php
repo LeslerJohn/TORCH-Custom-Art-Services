@@ -5,8 +5,8 @@
             class="mb-4 absolute top-0 left-0 right-0 rounded-lg 
             {{ $commission->status == 'done' ? 'bg-green-100' : ($commission->status == 'wip' ? 'bg-yellow-100' : ($commission->status == 'ready' ? 'bg-blue-100' : ($commission->status == 'in_progress' ? 'bg-gray-100' : 'bg-red-100'))) }}">
             <h1 class="text-2xl font-bold p-4">
-                @if ($commission->status == ' ')
-                    Your artwork is ready to be delivered!
+                @if ($commission->status == 'done')
+                    The artist is preparing to ship your order.
                 @elseif ($commission->status == 'wip')
                     Your commission is in progress.
                 @elseif ($commission->status == 'ready')
@@ -28,15 +28,32 @@
             </span>
         </div>
 
-        <div class="mb-6 mt-12">
+        <div class="mb-6 mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Commission Details -->
+            <div class="bg-white p-4 rounded-lg shadow-lg">
             <h1 class="text-2xl font-bold mb-2">{{ $commission->request->service->category->name }}</h1>
             <h2 class="text-red-500 text-xl mb-2">₱{{ number_format($commission->request->total_price, 2) }}</h2>
             <p class="mb-2">{{ $commission->request->description }}</p>
             <p class="mb-2"><strong>Dimension:</strong> {{ $commission->request->width }} x
                 {{ $commission->request->height }}
                 {{ $commission->request->unit }}</p>
+            <p class="mb-2"><strong>Quantity:</strong> {{ $commission->request->quantity }}</p>
+            <p class="mb-2"><strong>Order Type:</strong> {{ ucfirst($commission->request->order_type) }}</p>
             <p class="mb-2"><strong>Deadline:</strong>
                 {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
+            </div>
+
+            <!-- Delivery Information -->
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-2">Delivery Details</h2>
+            <p><strong>Status:</strong> {{ ucfirst($commission->delivery->status) }}</p>
+            <p><strong>Contact Number:</strong> +63 {{ Auth::user()->phone_number }}</p>
+            <p><strong>Address:</strong> {{ $commission->delivery->address->barangay }},
+                {{ $commission->delivery->address->street }}, House No.
+                {{ $commission->delivery->address->house_number }}</p>
+            <p><strong>Expected Delivery:</strong>
+                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
+            </div>
         </div>
 
         <!-- Drafts -->
@@ -53,23 +70,11 @@
             </div>
         </div>
 
-        <!-- Delivery Information -->
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Delivery Details</h2>
-            <p><strong>Status:</strong> {{ ucfirst($commission->delivery->status) }}</p>
-            <p><strong>Contact Number:</strong> +63{{ $commission->delivery->contact_number }}</p>
-            <p><strong>Address:</strong> {{ $commission->delivery->address->barangay }},
-                {{ $commission->delivery->address->street }}, House No.
-                {{ $commission->delivery->address->house_number }}</p>
-            <p><strong>Expected Delivery:</strong>
-                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('F j, Y') }}</p>
-        </div>
-
         <!-- Support Center & Commission Details -->
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Support Center</h2>
             <p class="text-gray-600">Having issues with your commission?
-                <a href="#" class="text-blue-500 underline">Contact Support</a>
+                <a href="mailto:torchtech2024@gmail.com" class="text-blue-500 underline">Contact Support</a>
             </p>
         </div>
 

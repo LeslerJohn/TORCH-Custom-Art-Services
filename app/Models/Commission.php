@@ -15,6 +15,8 @@ class Commission extends Model
         'delivery_id',
         'deadline',
         'status',
+        'is_extended',
+        'extended_deadline',
     ];
 
     public function request()
@@ -35,5 +37,10 @@ class Commission extends Model
     public function reviews()
     {
         return $this->hasMany(CommissionReview::class, 'commission_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'commission_id');
     }
 }

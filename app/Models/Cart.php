@@ -22,4 +22,12 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class, 'cart_id');
     }
+
+    public function itemCount()
+    {
+        return $this->items()
+            ->whereHas('artwork', function ($query) {
+                $query->where('status', 'sale');
+            });
+    }
 }

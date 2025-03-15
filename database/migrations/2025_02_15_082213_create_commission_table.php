@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignUlid('request_id')->constrained('request')->cascadeOnDelete();
             $table->foreignUlid('delivery_id')->constrained('delivery')->cascadeOnDelete();
             $table->date('deadline')->nullable();
+            $table->boolean('is_extended')->default(false);
+            $table->date('extended_deadline')->nullable()->default(null);
             $table->enum('status', ['pending', 'ready', 'wip', 'done', 'completed'])->default('pending');
             $table->timestamps();
         });
