@@ -289,7 +289,7 @@
                                     <!-- Description -->
                                     <div>
                                         <x-input-label for="description" :value="__('Artwork Description')" />
-                                        <textarea id="description" name="description" class="block w-full border-gray-300 rounded-md shadow-sm"
+                                        <textarea id="description" name="description" x-model="description" class="block w-full border-gray-300 rounded-md shadow-sm"
                                             placeholder="Describe the details of your artwork..." required></textarea>
                                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                                     </div>
@@ -431,16 +431,62 @@
                                         <input type="hidden" name="total_price" x-model="totalPrice">
                                     </div>
 
-                                    <!-- Submit Button -->
-                                    <button type="submit"
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md">
-                                        Submit Request
+                                    <!-- Continue Button -->
+                                    <button data-modal-target="payment-modal" data-modal-toggle="payment-modal"
+                                        class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        type="button">
+                                        Continue
                                     </button>
+
+                                    <!-- Main modal -->
+                                    <div id="payment-modal" tabindex="-1" aria-hidden="true"
+                                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full">
+                                        <div class="relative p-4 w-full max-w-3xl max-h-full">
+                                            <!-- Modal content -->
+                                            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                                <!-- Modal header -->
+                                                <div
+                                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                        Request Summary
+                                                    </h3>
+                                                    <button type="button"
+                                                        class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        data-modal-hide="payment-modal">
+                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <div class="flex flex-col gap-4 justify-center p-4 md:p-5">
+                                                    <div class="w-full">
+                                                        <div class="bg-white p-4 rounded-md shadow-lg mb-4">
+                                                            <p class="mb-2"><strong>Description:</strong> <span x-text="description"></span></p>
+                                                            <p class="mb-2"><strong>Dimensions:</strong> <span x-text="width"></span> x <span x-text="height"></span> <span x-text="unit"></span></p>
+                                                            <p class="mb-2"><strong>Order Type:</strong> <span x-text="orderType === 'rush' ? 'Rush Order' : 'Normal Order'"></span></p>
+                                                            <p class="mb-2"><strong>Quantity:</strong> <span x-text="quantity"></span></p>
+                                                            <p class="mb-2"><strong>Total Price:</strong> ₱<span x-text="totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span></p>
+                                                            <p class="mb-2"><strong>Estimated Receive Date:</strong> <span x-text="estimatedReceiveDate"></span></p>
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            Proceed to Payment
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </form>
                                 <!-- Alpine.js for Live Calculation -->
                                 <script>
                                     function orderForm() {
                                         return {
+                                            description: '',
                                             width: 0,
                                             height: 0,
                                             unit: 'cm',

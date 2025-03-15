@@ -12,7 +12,9 @@ class DiscountController extends Controller
 {
     public function index()
     {
-        $discounts = Auth::user()->artist->discounts;
+        $discounts = Auth::user()->artist->discounts()->whereHas('artwork', function ($query) {
+            $query->where('status', 'sale');
+        })->get();
         $artworks = Auth::user()->artist->artworks()->whereDoesntHave('discount')->get();
         return view('artist.discount.index', compact('discounts', 'artworks'));
     }

@@ -35,4 +35,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderReview::class, 'order_id');
     }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'order_id');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'order_id');
+    }
 }

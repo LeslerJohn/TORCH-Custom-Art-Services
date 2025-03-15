@@ -1,6 +1,6 @@
 <x-artist-layout>
     <div class="flex justify-between pt-16">
-        <h1 class="text-2lg text-bold text-black-500">Add Artwork</h1>
+        <h1 class="text-2lg text-bold text-black-500">Add Artwork (Premade)</h1>
         <a href="{{ route('artist.artwork.index') }}">
             <x-secondary-button class="justify-center py-1 w-20 text-md hover:border-blue-500">
                 Back
@@ -49,9 +49,20 @@
                             </div>
                         </div>
                     </div>
+                    <div id="tooltip-price" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
+                        <p class="text-sm">This is a fixed price for your artwork.</p>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
                     <div class="mt-6">
                         <x-input-label for="price" class="text-sm" :value="__('Price')" />
-                        <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" required placeholder="Set the price for your artwork." />
+                        <div class="flex">
+                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" required placeholder="Set the price for your artwork." />
+                            <button data-tooltip-target="tooltip-price" type="button" class="ml-4">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
                     <label class="inline-flex items-center cursor-pointer mt-4">

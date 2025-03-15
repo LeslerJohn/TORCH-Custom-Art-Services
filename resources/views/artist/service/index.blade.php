@@ -11,23 +11,18 @@
     <div class="flex mt-8 flex-wrap gap-6">
         @foreach ($services as $artwork)
             <a href="{{ route('artist.service.show', $artwork) }}" class="w-1/4">
-                <div>
-                    <div class="relative">
-                        @php
-                            $thumbnail = $artwork->images->first()?->attachment;
-                        @endphp
-                        <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default.image.jpg') }}"
-                            alt="{{ $artwork->category->name }}" class="w-full h-64 object-cover rounded-lg">
-                        <div class="absolute top-0 left-0 right-0 p-4 rounded-t-lg">
-                            <div class="text-sm text-gray-500 flex flex-wrap gap-2">
-                                @foreach ($artwork->tags as $tag)
-                                    <span
-                                        class="bg-gray-200 text-gray-700 px-2 py-1 rounded-md">{{ $tag->name }}</span>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-white bg-opacity-80 rounded-b-lg">
-                            <h3 class="text-lg font-semibold">{{ $artwork->category->name }}</h3>
+                <div class="shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    @php
+                        $thumbnail = $artwork->images->first()?->attachment;
+                    @endphp
+                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default.image.jpg') }}"
+                        alt="{{ $artwork->category->name }}" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-white border-t-2 border-orange-200">
+                        <h3 class="text-lg font-semibold mb-2">{{ $artwork->category->name }}</h3>
+                        <div class="text-sm text-gray-500 flex flex-wrap gap-2 mb-2">
+                            @foreach ($artwork->tags as $tag)
+                                <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full shadow-sm">{{ $tag->name }}</span>
+                            @endforeach
                         </div>
                     </div>
                 </div>

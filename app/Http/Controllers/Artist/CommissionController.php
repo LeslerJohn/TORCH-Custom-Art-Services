@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Artist;
 use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Commission;
+use App\Models\Delivery;
 use App\Models\Draft;
 use App\Models\Request as ModelsRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +18,11 @@ class CommissionController extends Controller
     {
         $commissions = Commission::whereHas('request.service', function ($query) {
             $query->where('artist_id', Auth::user()->artist->id);
-        })->get();
+        })->latest()->get();
 
         $requests = ModelsRequest::whereHas('service', function ($query) {
             $query->where('artist_id', Auth::user()->artist->id);
-        })->get();
+        })->latest()->get();
 
         return view('artist.commission.index', compact('commissions', 'requests'));
     }
@@ -41,7 +43,20 @@ class CommissionController extends Controller
             'status' => 'accepted',
         ]);
 
-        return redirect()->route('artist.request.show', $request);
+        $delivery = Delivery::create([
+            'address_id' => $request->client->user->address->id,
+            'expected_delivery' => Carbon::parse($request->deadline)->addDays(7),
+            'status' => 'pending',
+        ]);
+
+        $commission = Commission::create([
+            'deadline' => $request->deadline,
+            'status' => 'ready',
+            'delivery_id' => $delivery->id,
+            'request_id' => $request->id,
+        ]);
+
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function reject(ModelsRequest $request)

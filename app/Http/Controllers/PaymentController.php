@@ -9,28 +9,93 @@ use Illuminate\Support\Facades\Session;
 
 class PaymentController extends Controller
 {
+    // public function pay()
+    // {
+    //     $name = 'Ruderick';
+
+    //     $data = [
+    //         'data' => [
+    //             'attributes' => [
+    //                 'line_items' => [
+    //                     [
+    //                         'amount' => 10000,
+    //                         'description' => 'Test Payment',
+    //                         'currency' => 'PHP',
+    //                         'name' => $name,
+    //                         'quantity' => 1,
+    //                     ]
+    //                 ],
+    //                 'payment_method_types' => [
+    //                     'gcash',
+    //                     'paymaya',
+    //                 ],
+    //                 'success_url' => 'http://localhost:8000/success',
+    //                 'cancel_url' => 'http://localhost:8000/',
+    //                 'description' => 'Test Payment',
+    //             ]
+    //         ]
+    //     ];
+
+    //     $response = Http::withOptions(['verify' => false])->withHeaders([
+    //         'Content-Type' => 'application/json',
+    //         'accept' => 'application/json',
+    //         'Authorization' => 'Basic ' . env('AUTH_PAY')
+    //         ])->post('https://api.paymongo.com/v1/checkout_sessions', $data)->object();
+
+
+    //     Session::put(['payment_id' => $response->data->id]);
+
+    //     return redirect($response->data->attributes->checkout_url);
+
+    // }
     public function pay()
     {
         $name = 'Ruderick';
+        $amount = 1000000;
+        $description = 'Test Payment';
+        $quantity = 1;
 
         $data = [
             'data' => [
                 'attributes' => [
+                    'billing' => [
+                        'address' => [
+                            'city' => 'Taguig',
+                            'country' => 'PH',
+                            'line1' => 'address line 1',
+                            'line2' => 'address line 2',
+                            'postal_code' => '1234',
+                            'state' => 'PH-MNL'
+                        ],
+                        'email' => 'leslerjohngantalao@gmail.com',
+                        'name' => 'John doe',
+                        'phone' => '09123456789'
+                    ],
                     'line_items' => [
                         [
-                            'amount' => 10000,
-                            'description' => 'Test Payment',
+                            'amount' => $amount,
+                            'description' => $description,
                             'currency' => 'PHP',
                             'name' => $name,
-                            'quantity' => 1,
+                            'quantity' => $quantity,
+                            'images' => [
+                                'https://images.unsplash.com/photo-1612346903007-b5ac8bb135bb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80'
+                            ],
                         ]
                     ],
                     'payment_method_types' => [
                         'gcash',
+                        'paymaya',
                     ],
+                    'default_payment_method_type' => 'gcash',
+                    "merchant" => "Paymongo Test Account",
                     'success_url' => 'http://localhost:8000/success',
                     'cancel_url' => 'http://localhost:8000/',
-                    'description' => 'Test Payment',
+                    'description' => 'Order Payment',
+                    'statement_descriptor' => 'Torch Payment',
+                    "send_email_receipt" => true,
+                    "show_description" => true,
+                    "show_line_items" => true,
                 ]
             ]
         ];
@@ -41,10 +106,14 @@ class PaymentController extends Controller
             'Authorization' => 'Basic ' . env('AUTH_PAY')
             ])->post('https://api.paymongo.com/v1/checkout_sessions', $data)->object();
 
+        if (isset($response->data)) {
+            Session::put(['payment_id' => $response->data->id]);
+            return redirect($response->data->attributes->checkout_url);
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Payment creation failed.']);
+        }
 
-        Session::put(['payment_id' => $response->data->id]);
-
-        return redirect($response->data->attributes->checkout_url);
+        // return redirect($response->data->attributes->checkout_url);
     }
 
     public function disbursementForm()
