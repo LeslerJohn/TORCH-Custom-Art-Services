@@ -16,7 +16,7 @@
 
             <p><strong>Name:</strong> {{ $order->client->user->name }}</p>
 
-            <p><strong>Contact:</strong> +63 {{ $order->delivery->contact_number }}</p>
+            <p><strong>Contact:</strong> +63 {{ $order->client->user->phone_number }}</p>
 
             <p><strong>Address:</strong>
 

@@ -38,6 +38,16 @@ class OrderController extends Controller
     public function store(Request $request, Artwork $artwork)
     {
         $user = $request->user();
+        $price = $artwork->price;
+
+        // Check if the artwork has an active discount
+        if ($artwork->discount && $artwork->discount->status === 'active') {
+            if ($artwork->discount->value_type === 'percentage') {
+            $price -= ($price * ($artwork->discount->value / 100));
+            } else {
+            $price -= $artwork->discount->value;
+            }
+        }
 
         $delivery = Delivery::create([
             'address_id' => $user->address->id,
@@ -47,17 +57,18 @@ class OrderController extends Controller
 
         $order = Order::create([
             'client_id' => $user->id,
-            'total' => $artwork->price,
+            'total' => $price,
             'status' => 'pending',
             'delivery_id' => $delivery->id,
         ]);
 
         $order->items()->create([
             'artwork_id' => $artwork->id,
-            'price' => $artwork->price,
+            'price' => $price,
         ]);
 
         $artwork->update(['status' => 'sold']);
+        $artwork->discount->update(['status' => 'inactive']);
 
         return redirect()->route('client.order.index')->with('success', 'Order placed successfully!');
     }

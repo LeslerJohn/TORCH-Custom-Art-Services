@@ -148,6 +148,11 @@ class HomeController extends Controller
         if ($request->filled('min_price') && $request->filled('max_price')) {
             $query->whereBetween('price', [$request->min_price, $request->max_price]);
         }
+        if ($request->filled('discounted')) {
+            $query->whereHas('discount', function ($q) {
+            $q->where('status', 'active');
+            });
+        }
         if ($request->filled('sort')) {
             $query->orderBy($request->sort == 'latest' ? 'created_at' : 'id', $request->sort == 'latest' ? 'desc' : 'asc');
         }

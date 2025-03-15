@@ -307,15 +307,23 @@
                     aria-labelledby="contacts-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artworks as $artwork)
-                        @if ($artwork->status == 'sale')
-                        @php
-                        $thumbnail = $artwork->images->first()?->attachment;
-                        @endphp
-                        <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
-                            <a href="{{ route('artwork.show', $artwork) }}">
-                                <!-- Background Image -->
-                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                    alt="Di Naluluma" class="w-full h-full object-cover">
+                            @if ($artwork->status == 'sale')
+                                @php
+                                    $thumbnail = $artwork->images->first()?->attachment;
+                                    $discountedPrice = $artwork->price;
+                                    if ($artwork->discount && $artwork->discount->status == 'active') {
+                                        if ($artwork->discount->value_type == 'percentage') {
+                                            $discountedPrice -= ($artwork->price * $artwork->discount->value / 100);
+                                        } elseif ($artwork->discount->value_type == 'fixed') {
+                                            $discountedPrice -= $artwork->discount->value;
+                                        }
+                                    }
+                                @endphp
+                                <div class="relative w-full h-[250px] rounded-lg overflow-hidden shadow-lg">
+                                    <a href="{{ route('artwork.show', $artwork) }}">
+                                        <!-- Background Image -->
+                                        <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                            alt="Di Naluluma" class="w-full h-full object-cover">
 
                                 <!-- Overlay -->
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent">
@@ -341,23 +349,46 @@
                                     </div>
                                 </div>
 
-                                <!-- Price -->
-                                <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
-                                    <span
-                                        class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                        <!-- Price -->
+                                        <div class="absolute bottom-4 right-4 text-white text-lg font-semibold">
+                                            @if ($artwork->discount && $artwork->discount->status == 'active')
+                                                <span class="line-through text-red-500">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                                <span class="text-xl">₱{{ number_format($discountedPrice, 0, '.', ',') }}</span>
+                                            @else
+                                                <span class="text-xl">₱{{ number_format($artwork->price, 0, '.', ',') }}</span>
+                                            @endif
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
-                        @endif
+                            @endif
                         @endforeach
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 mt-12 overflow-hidden">
+            <h1 class="text-4xl font-bold text-center sm:text-left">Your Trusted Custom Art Platform</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-12">
+            <div>
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Explore Unique Art Creations</h3>
+                <p>Our mission is to provide a seamless experience for art lovers, 
+                ensuring that every piece reflects your vision and passion for creativity, 
+                while supporting local artists in our vibrant community.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-2 text-gray-600">Commission Your Dream Artwork</h3>
+                <p>At Torch, we connect you with talented artists in Zamboanga for custom art 
+                commissions and offer a selection of beautiful premade artworks to enhance your space.</p>
+            </div>
+            </div>
+            <img src="{{asset('images/default.image.jpg')}}" alt="" class="w-full h-64 sm:h-96 object-cover rounded-lg mt-12">
+        </div>
+
         <div
-            class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
-            <h1 class="text-6xl text-orange-500 font-bold">Hear from our users</h1>
+            class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden">
+            <h1 class="text-4xl text-orange-500 font-bold">Hear from our users</h1>
+            <p class="mt-2 font-medium text-gray-400">Artwork Reviews</p>
             <div class="flex gap-6 mt-8 items-center justify-center">
                 @foreach ($reviews as $review)
                 <div class="flex flex-col items-center justify-center bg-white w-80 h-96 rounded-lg p-8 shadow-lg">

@@ -51,8 +51,29 @@
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                                 <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                    <span
-                                        class="font-bold text-white">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                    <span class="font-semibold text-xs px-2 py-1 rounded-full"
+                                            style="background-color: 
+                                                @if($order->delivery->status == 'pending') 
+                                                    #fcd34d 
+                                                @elseif($order->delivery->status == 'in-transit') 
+                                                    #93c5fd 
+                                                @elseif($order->delivery->status == 'completed') 
+                                                    #6ee7b7 
+                                                @else 
+                                                    #d1d5db 
+                                                @endif;
+                                                color: 
+                                                @if($order->delivery->status == 'pending') 
+                                                    #d97706 
+                                                @elseif($order->delivery->status == 'in-transit') 
+                                                    #2563eb 
+                                                @elseif($order->delivery->status == 'completed') 
+                                                    #059669 
+                                                @else 
+                                                    #4b5563 
+                                                @endif;">
+                                            {{ ucfirst($order->delivery->status ?? 'Pending') }}
+                                        </span>
                                 </div>
                                 <!-- Text Content -->
                                 <div class="absolute bottom-4 left-4 text-white">
@@ -104,8 +125,29 @@
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                                     <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                        <span
-                                            class="font-bold text-white">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        <span class="font-semibold text-xs px-2 py-1 rounded-full"
+                                                style="background-color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #fcd34d 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #93c5fd 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #6ee7b7 
+                                                    @else 
+                                                        #d1d5db 
+                                                    @endif;
+                                                    color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #d97706 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #2563eb 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #059669 
+                                                    @else 
+                                                        #4b5563 
+                                                    @endif;">
+                                                {{ ucfirst($order->delivery->status ?? 'Pending') }}
+                                            </span>
                                     </div>
                                     <!-- Text Content -->
                                     <div class="absolute bottom-4 left-4 text-white">
@@ -158,8 +200,29 @@
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                                     <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                        <span
-                                            class="font-bold text-white">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        <span class="font-semibold text-xs px-2 py-1 rounded-full"
+                                                style="background-color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #fcd34d 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #93c5fd 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #6ee7b7 
+                                                    @else 
+                                                        #d1d5db 
+                                                    @endif;
+                                                    color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #d97706 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #2563eb 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #059669 
+                                                    @else 
+                                                        #4b5563 
+                                                    @endif;">
+                                                {{ ucfirst($order->delivery->status ?? 'Pending') }}
+                                            </span>
                                     </div>
                                     <!-- Text Content -->
                                     <div class="absolute bottom-4 left-4 text-white">
@@ -213,8 +276,29 @@
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                                     <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
-                                        <span
-                                            class="font-bold text-white">{{ ucfirst($order->delivery->status ?? 'Pending') }}</span>
+                                        <span class="font-semibold text-xs px-2 py-1 rounded-full"
+                                                style="background-color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #fcd34d 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #93c5fd 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #6ee7b7 
+                                                    @else 
+                                                        #d1d5db 
+                                                    @endif;
+                                                    color: 
+                                                    @if($order->delivery->status == 'pending') 
+                                                        #d97706 
+                                                    @elseif($order->delivery->status == 'in-transit') 
+                                                        #2563eb 
+                                                    @elseif($order->delivery->status == 'completed') 
+                                                        #059669 
+                                                    @else 
+                                                        #4b5563 
+                                                    @endif;">
+                                                {{ ucfirst($order->delivery->status ?? 'Pending') }}
+                                            </span>
                                     </div>
                                     <!-- Text Content -->
                                     <div class="absolute bottom-4 left-4 text-white">
