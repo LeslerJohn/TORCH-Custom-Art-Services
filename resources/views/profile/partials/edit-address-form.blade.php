@@ -1,25 +1,14 @@
-<<<<<<< HEAD
-<section class="bg-white p-4 sm:p-6 shadow-md rounded-lg mt-6">
-    <header class="mb-4 sm:mb-6">
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">
-            {{ __('Edit Address') }}
-=======
 <section class="bg-white p-6 shadow-md rounded-lg mt-6">
     <header class="mb-6">
         <h2 class="text-xl font-semibold text-gray-900">
             {{ $user->address ? __('Edit Address') : __('Add Address') }}
->>>>>>> origin/dev-merge
         </h2>
         <p class="mt-1 text-sm text-gray-600">
             {{ $user->address ? __('Update your address information.') : __('Enter your address information.') }}
         </p>
     </header>
 
-<<<<<<< HEAD
-    <form method="post" action="{{ route('address.update') }}" class="grid grid-cols-2 sm:grid-cols-1 gap-4 sm:gap-6">
-=======
     <form method="post" action="{{ $user->address ? route('address.update', $user) : route('address.store', $user) }}" class="grid grid-cols-1 md:grid-cols-2 gap-6">
->>>>>>> origin/dev-merge
         @csrf
         @if ($user->address)
             @method('PUT')
