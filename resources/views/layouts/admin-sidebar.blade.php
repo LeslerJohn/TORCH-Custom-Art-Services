@@ -20,26 +20,41 @@
             <ul class="space-y-2">
                 <li>
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                        <i class="material-icons">dashboard</i>
                         {{ __('Overview') }}
+                    </x-responsive-nav-link>
+                </li>
+                                <li>
+                    <x-responsive-nav-link :href="route('admin.application.index')" :active="request()->routeIs('admin.application.index')">
+                        <i class="material-icons">assignment</i>
+                        {{ __('Artist Applications') }}
+                    </x-responsive-nav-link>
+                </li>
+                <li>
+                    <x-responsive-nav-link :href="route('admin.commission.index')" :active="request()->routeIs('admin.commission.index')">
+                        <i class="material-icons">monetization_on</i>
+                        {{ __('Commissions') }}
                     </x-responsive-nav-link>
                 </li>
                 <li>
                     <x-responsive-nav-link :href="route('admin.user.index')" :active="request()->routeIs('admin.user.index')">
+                        <i class="material-icons">people</i>
                         {{ __('User Management') }}
                     </x-responsive-nav-link>
                 </li>
                 <li>
-                    <x-responsive-nav-link :href="route('admin.application.index')" :active="request()->routeIs('admin.application.index')">
-                        {{ __('Artist Aplications') }}
+                    <x-responsive-nav-link :href="route('admin.category.index')" :active="request()->routeIs('admin.category.index')">
+                        <i class="material-icons">category</i>
+                        {{ __('Categories') }}
                     </x-responsive-nav-link>
                 </li>
                 <li>
-                    <x-responsive-nav-link :href="route('admin.category.index')" :active="request()->routeIs('admin.category.index')">
-                        {{ __('Categories') }}
+                    <x-responsive-nav-link :href="route('admin.report.index')" :active="request()->routeIs('admin.report.index')">
+                        <i class="material-icons">report</i>
+                        {{ __('Reports') }}
                     </x-responsive-nav-link>
                 </li>
             </ul>
         </div>
     </aside>
-
 </main>

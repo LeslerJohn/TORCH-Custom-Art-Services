@@ -33,6 +33,16 @@
             </p>
         </div>
 
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Order Details</h2>
+            <p><strong>Order ID:</strong> #{{ $order->id }}</p>
+            @php
+                $totalPrice = $order->items->sum('price');
+            @endphp
+            <p><strong>Total Price:</strong> ₱{{ number_format($totalPrice, 2) }}</p>
+        </div>
+
+
         <!-- Shipping Progress -->
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Shipping Progress</h2>
@@ -55,19 +65,20 @@
                 {{ $order->items->first()->artwork->artist->user->name }}</h2>
             <div class="space-y-4">
                 @foreach ($order->items as $item)
-                    <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-lg shadow">
+                    <div class="flex gap-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 w-full max-w-md">
                         <!-- Artwork Image -->
                         @php
                             $thumbnail = $item->artwork->images->first()?->attachment;
                         @endphp
                         <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                            alt="{{ $item->artwork->title }}" class="w-24 h-24 object-cover rounded-md">
+                            alt="{{ $item->artwork->title }}" class="w-48 h-32 object-cover rounded-md">
 
                         <!-- Artwork Details -->
-                        <div>
-                            <h3 class="text-lg font-semibold">{{ $item->artwork->title }}</h3>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold"><strong>Title:</strong> {{ $item->artwork->title }}</h3>
                             <p><strong>Category:</strong> {{ $item->artwork->category->name }}</p>
                             <p><strong>Price:</strong> ₱{{ number_format($item->price, 2) }}</p>
+                            <p><strong>Size:</strong> {{$item->artwork->width}} x {{$item->artwork->height}} {{$item->artwork->unit}}</p>
                         </div>
                     </div>
                 @endforeach
@@ -78,14 +89,8 @@
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Support Center</h2>
             <p class="text-gray-600">Having issues with your order?
-                <a href="#" class="text-blue-500 underline">Contact Support</a>
+                <a href="mailto:torchtech2024@gmail.com" class="text-blue-500 underline">Contact Support</a>
             </p>
-        </div>
-
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Order Details</h2>
-            <p><strong>Order ID:</strong> #{{ $order->id }}</p>
-            <p><strong>Total Price:</strong> ₱{{ number_format($order->total, 2) }}</p>
         </div>
 
         <!-- Buttons -->
@@ -98,13 +103,8 @@
                         Order</button>
                 </form>
             @elseif ($order->delivery->status == 'completed')
-                {{-- <form action="{{ route('client.review.store', $order) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow">Leave a
-                        Review</button>
-                </form> --}}
                 <!-- Modal toggle -->
-                @if (!$order->reviews)
+                @if (!$order->reviews->where('order_id', $order->id)->count())
                     <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                         class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         type="button">
@@ -140,7 +140,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form action="{{route('client.review.store', $order)}}" method="POST" class="p-4 md:p-5">
+                    <form action="{{route('client.review.order', $order)}}" method="POST" class="p-4 md:p-5">
                         @csrf
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="mb-4" x-data="{ rating: 0 }">

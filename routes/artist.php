@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\Artist\ArtworkController;
 use App\Http\Controllers\Artist\CommissionController;
+use App\Http\Controllers\Artist\DiscountController;
 use App\Http\Controllers\Artist\OrderController;
+use App\Http\Controllers\Artist\ReviewController;
 use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Artist\ShowcaseController;
 
-Route::get('/artist', function () {
-    return view('artist.dashboard');
-})->middleware(['auth', 'verified'])->name('artist.dashboard');
+Route::get('/artist', [App\Http\Controllers\Artist\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('artist.dashboard');
 
 use Illuminate\Http\Request;
 use App\Models\Tag;
@@ -22,6 +21,8 @@ Route::get('/get-tags/{categoryId}', function ($categoryId) {
     })->get();
     return response()->json($tags);
 });
+
+Route::post('/artist/availability', [App\Http\Controllers\Artist\DashboardController::class, 'availability'])->middleware(['auth', 'verified'])->name('artist.availability');
 
 // Showcase Routes
 // Route::middleware(['auth', 'verified'])->group(function () {
@@ -82,4 +83,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/artist/commission/{commission}/deliver', [CommissionController::class, 'deliver'])->name('artist.commission.deliver');
     Route::post('/artist/commission/{commission}/delivered', [CommissionController::class, 'delivered'])->name('artist.commission.delivered');
     Route::post('/artist/commission/{commission}/draft', [CommissionController::class, 'draft'])->name('artist.commission.draft');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/review', [ReviewController::class, 'index'])->name('artist.review.index');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/artist/discount', [DiscountController::class, 'index'])->name('artist.discount.index');
+    Route::post('/artist/discount', [DiscountController::class, 'store'])->name('artist.discount.store');
+    Route::put('/artist/discount/{discount}', [DiscountController::class, 'update'])->name('artist.discount.update');
+    Route::patch('/artist/discount/{discount}', [DiscountController::class, 'status_update'])->name('artist.discount.status-update');
+    Route::delete('/artist/discount/{discount}', [DiscountController::class, 'destroy'])->name('artist.discount.destroy');
 });

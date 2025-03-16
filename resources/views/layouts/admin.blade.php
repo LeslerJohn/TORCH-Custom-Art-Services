@@ -10,28 +10,34 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="icon" href="{{ asset('images/icon.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/icon.png') }}">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen grid grid-rows-[auto_1fr] grid-cols-[20%_1fr] overflow-hidden">
-        <header class="bg-white dark:bg-gray-800 shadow col-span-2">
-            @include('layouts.admin-navigation')
-            @isset($header)
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            @endisset
-        </header>
-        <aside class="bg-gray-100 dark:bg-gray-900 overflow-y-auto mt-16">
+    <div class="min-h-screen flex">
+        <aside class="bg-gray-100 dark:bg-gray-900 w-1/5 fixed h-full overflow-y-auto">
             @include('layouts.admin-sidebar')
         </aside>
-        <main class="bg-gray-100 dark:bg-gray-800 p-6 overflow-y-auto mt-16">
-            {{ $slot }}
-        </main>
+        <div class="flex-1 ml-[20%]">
+            <header class="bg-white dark:bg-gray-800 shadow w-full fixed top-0 left-0 z-10">
+                @include('layouts.admin-navigation')
+                @isset($header)
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                @endisset
+            </header>
+            <main class="bg-gray-100 dark:bg-gray-800 p-6 mt-16 overflow-y-auto h-screen">
+                {{ $slot }}
+            </main>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>

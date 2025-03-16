@@ -19,13 +19,12 @@ class ArtistProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'phone_number' => $this->faker->phoneNumber,
             'location' => $this->faker->address,
             'gender' => $this->faker->randomElement(['male', 'female', 'other']),
             'username' => $this->faker->userName,
             'birthdate' => $this->faker->date,
             'bio' => $this->faker->paragraph,
-            'verified' => $this->faker->boolean,
+            'status' => $this->faker->randomElement(['pending', 'semi-verified', 'fully-verified', 'unverified']),
             'is_suspended' => $this->faker->boolean,
             'rating' => $this->faker->numberBetween(1, 5),
             'available' => $this->faker->boolean,

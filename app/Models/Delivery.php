@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Delivery extends Model
 {
+    use HasUlids;
     protected $table = 'delivery';
     protected $fillable = [
-        'contact_number',
         'address_id',
         'expected_delivery',
         'status',

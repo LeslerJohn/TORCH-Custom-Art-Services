@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Request extends Model
 {
+    use HasUlids;
     protected $table = 'request';
 
     protected $fillable = [
@@ -14,6 +16,9 @@ class Request extends Model
         'description',
         'height',
         'width',
+        'unit',
+        'quantity',
+        'order_type',
         'deadline',
         'service_id',
         'status',

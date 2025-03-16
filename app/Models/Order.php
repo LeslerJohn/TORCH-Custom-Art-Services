@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use HasUlids;
     protected $table = 'order';
     protected $fillable = [
         'client_id',
@@ -32,5 +34,15 @@ class Order extends Model
     public function reviews()
     {
         return $this->hasMany(OrderReview::class, 'order_id');
+    }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'order_id');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'order_id');
     }
 }

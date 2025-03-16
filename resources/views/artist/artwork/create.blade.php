@@ -1,6 +1,6 @@
 <x-artist-layout>
     <div class="flex justify-between pt-16">
-        <h1 class="text-2lg text-bold text-black-500">Add Artwork</h1>
+        <h1 class="text-2lg text-bold text-black-500">Add Artwork (Premade)</h1>
         <a href="{{ route('artist.artwork.index') }}">
             <x-secondary-button class="justify-center py-1 w-20 text-md hover:border-blue-500">
                 Back
@@ -22,14 +22,47 @@
                         <textarea id="description" class="block mt-1 w-full" name="description" required placeholder="Provide a detailed description of your artwork."></textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
-                    <div class="mt-6">
-                        <x-input-label for="dimension" class="text-sm" :value="__('Dimension (inch)')" />
-                        <x-text-input id="dimension" class="block mt-1 w-full" type="text" name="dimension" required placeholder="Enter the dimensions (e.g., 24x36 centimeter)." />
-                        <x-input-error :messages="$errors->get('dimension')" class="mt-2" />
+                    <div class="mt-6" x-data="{ width: '', height: '', unit: 'cm' }">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <x-input-label for="width" :value="__('Width')" />
+                                <div class="flex">
+                                    <x-text-input id="width" class="block w-full" type="number" name="width" x-model="width" min="1" required />
+                                    <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit">
+                                        <option value="cm">cm</option>
+                                        <option value="in">inches</option>
+                                    </select>
+                                </div>
+                                <small class="text-gray-500">Enter the width of your artwork.</small>
+                            </div>
+
+                            <div>
+                                <x-input-label for="height" :value="__('Height')" />
+                                <div class="flex">
+                                    <x-text-input id="height" class="block w-full" type="number" name="height" x-model="height" min="1" required />
+                                    <select class="ml-2 border-gray-300 rounded-md" x-model="unit" name="unit" disabled>
+                                        <option value="cm">cm</option>
+                                        <option value="in">inches</option>
+                                    </select>
+                                </div>
+                                <small class="text-gray-500">Enter the height of your artwork.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tooltip-price" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
+                        <p class="text-sm">This is a fixed price for your artwork.</p>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
                     <div class="mt-6">
                         <x-input-label for="price" class="text-sm" :value="__('Price')" />
-                        <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" required placeholder="Set the price for your artwork." />
+                        <div class="flex">
+                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" required placeholder="Set the price for your artwork." />
+                            <button data-tooltip-target="tooltip-price" type="button" class="ml-4">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </div>
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
                     <label class="inline-flex items-center cursor-pointer mt-4">

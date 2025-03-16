@@ -19,7 +19,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::where('artist_id', Auth::user()->id)->get();
+        $services = Service::where('artist_id', Auth::user()->id)->latest()->get();
         return view('artist.service.index', compact('services'));
     }
 

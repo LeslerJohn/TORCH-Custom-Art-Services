@@ -19,7 +19,7 @@ class ArtworkController extends Controller
      */
     public function index()
     {
-        $artworks = Artwork::where('artist_id', Auth::user()->id)->get();
+        $artworks = Artwork::where('artist_id', Auth::user()->id)->latest()->get();
         return view('artist.artwork.index', compact('artworks'));
     }
 
@@ -41,7 +41,9 @@ class ArtworkController extends Controller
             'category_id' => 'required|exists:category,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'dimension' => 'required|string|max:255',
+            'width' => 'required|numeric',
+            'height' => 'required|numeric',
+            'unit' => 'required|string',
             'price' => 'required|numeric',
             'is_showcase' => 'nullable|boolean',
             'tags' => 'nullable',
@@ -54,7 +56,9 @@ class ArtworkController extends Controller
             'is_showcase' => $request->is_showcase ?? false,
             'title' => $request->title,
             'description' => $request->description,
-            'dimension' => $request->dimension,
+            'width' => $request->width,
+            'height' => $request->height,
+            'unit' => $request->unit,
             'price' => $request->price,
         ]);
 
@@ -110,7 +114,9 @@ class ArtworkController extends Controller
             'is_showcase' => 'nullable|boolean',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'dimension' => 'required|string|max:255',
+            'width' => 'required|numeric',
+            'height' => 'required|numeric',
+            'unit' => 'required|string',
             'price' => 'required|numeric',
             'tags' => 'nullable',
             'thumbnails.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -121,7 +127,9 @@ class ArtworkController extends Controller
             'is_showcase' => $request->is_showcase ?? false,
             'title' => $request->title,
             'description' => $request->description,
-            'dimension' => $request->dimension,
+            'width' => $request->width,
+            'height' => $request->height,
+            'unit' => $request->unit,
             'price' => $request->price,
         ]);
 

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUlids;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'role',
         'password',
         'is_admin',
@@ -65,6 +68,11 @@ class User extends Authenticatable
         return $this->role === 'artist';
     }
 
+    public function hasRole(string $role)
+    {
+        return $this->role === $role;
+    }
+
     public function profileImage()
     {
         return $this->hasOne(Attachment::class, 'id', 'profile_image_id');
@@ -78,6 +86,11 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class, 'client_id', 'id');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'client_id', 'id');
     }
 
     public function address()

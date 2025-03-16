@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    use HasUlids;
     protected $table = 'service';
     protected $fillable = [
         'artist_id',
@@ -35,5 +37,11 @@ class Service extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function commissions()
+    {
+        return $this->hasManyThrough(Commission::class, Request::class, 'service_id', 'request_id', 'id', 'id')
+                    ->selectRaw('commission.*, request.quantity as request_quantity');
     }
 }

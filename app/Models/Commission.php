@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
 class Commission extends Model
 {
+    use HasUlids;
     protected $table = 'commission';
 
     protected $fillable = [
@@ -13,6 +15,8 @@ class Commission extends Model
         'delivery_id',
         'deadline',
         'status',
+        'is_extended',
+        'extended_deadline',
     ];
 
     public function request()
@@ -28,5 +32,15 @@ class Commission extends Model
     public function drafts()
     {
         return $this->hasMany(Draft::class, 'commission_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(CommissionReview::class, 'commission_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'commission_id');
     }
 }

@@ -27,19 +27,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $categories = [
-            'Painting' => ['Oil Paint', 'Acrylic', 'Watercolor'],
-            'Drawing' => ['Charcoal', 'Ink', 'Pencil'],
-            'Sculpture' => ['Clay', 'Stone', 'Metal'],
-            'Photography' => ['Digital', 'Film', 'Drone'],
-            'Digital Art' => ['Photoshop', 'Illustrator', 'Procreate'],
+            'Painting' => ['Oil Paint', 'Acrylic', 'Watercolor', 'Tempera', 'Enamel'],
+            'Drawing' => ['Charcoal', 'Ink', 'Pencil', 'Pastels', 'Colored Pencils', 'Graphite', 'Markers'],
+            'Landscape' => ['Acrylic', 'Oil', 'Watercolor', 'Pastels'],
+            'Mural' => ['Acrylic', 'Spray Paint', 'Oil', 'Latex Paint'],
+            'Portrait' => ['Oil', 'Acrylic', 'Charcoal', 'Graphite', 'Colored Pencils', 'Pastels'],
         ];
 
         foreach ($categories as $categoryName => $tags) {
+            // Create Category
             $category = Category::factory()->create(['name' => $categoryName]);
-            $tagModels = collect($tags)->map(function ($tagName) {
-            return Tag::factory()->create(['name' => $tagName]);
-            });
-            $category->tags()->attach($tagModels);
+        
+            // Create Tags & Extract IDs
+            $tagIds = collect($tags)->map(function ($tagName) {
+                return Tag::factory()->create(['name' => $tagName])->id; // Get ULID ID
+            })->toArray(); // Convert collection to array
+        
+            // Attach only the IDs (ULIDs)
+            $category->tags()->attach($tagIds);
         }
         
         $this->call([

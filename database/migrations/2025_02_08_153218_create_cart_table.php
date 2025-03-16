@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cart', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_id')->constrained('client_profile')->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->timestamps();
         });
 
         Schema::create('cart_item', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('cart_id')->constrained('cart')->cascadeOnDelete();
-            $table->foreignId('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->foreignUlid('cart_id')->constrained('cart')->cascadeOnDelete();
+            $table->foreignUlid('artwork_id')->constrained('artwork')->cascadeOnDelete();
+            $table->primary(['cart_id', 'artwork_id']);
             $table->timestamps();
         });
     }

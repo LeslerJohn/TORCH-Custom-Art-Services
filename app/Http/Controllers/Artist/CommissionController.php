@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Artist;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
 use App\Models\Commission;
+use App\Models\Delivery;
+use App\Models\Draft;
 use App\Models\Request as ModelsRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,11 +18,11 @@ class CommissionController extends Controller
     {
         $commissions = Commission::whereHas('request.service', function ($query) {
             $query->where('artist_id', Auth::user()->artist->id);
-        })->get();
+        })->latest()->get();
 
         $requests = ModelsRequest::whereHas('service', function ($query) {
             $query->where('artist_id', Auth::user()->artist->id);
-        })->get();
+        })->latest()->get();
 
         return view('artist.commission.index', compact('commissions', 'requests'));
     }
@@ -39,7 +43,20 @@ class CommissionController extends Controller
             'status' => 'accepted',
         ]);
 
-        return redirect()->route('artist.request.show', $request);
+        $delivery = Delivery::create([
+            'address_id' => $request->client->user->address->id,
+            'expected_delivery' => Carbon::parse($request->deadline)->addDays(7),
+            'status' => 'pending',
+        ]);
+
+        $commission = Commission::create([
+            'deadline' => $request->deadline,
+            'status' => 'ready',
+            'delivery_id' => $delivery->id,
+            'request_id' => $request->id,
+        ]);
+
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function reject(ModelsRequest $request)
@@ -56,7 +73,7 @@ class CommissionController extends Controller
             'status' => 'wip',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function done(Commission $commission) {
@@ -64,7 +81,7 @@ class CommissionController extends Controller
             'status' => 'done',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function deliver(Commission $commission) {
@@ -72,7 +89,7 @@ class CommissionController extends Controller
             'status' => 'in-transit',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function delivered(Commission $commission) {
@@ -80,7 +97,7 @@ class CommissionController extends Controller
             'status' => 'delivered',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        return redirect()->route('artist.commission.show', $commission);
     }
 
     public function draft(Request $request, Commission $commission) {
@@ -89,6 +106,23 @@ class CommissionController extends Controller
             'image' => 'required|image',
         ]);
 
-        return redirect()->route('artist.commission.index');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = $image->store('drafts', 'public');
+
+            $attachment = Attachment::create([
+                'filename' => $image->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $image->getMimeType(),
+            ]);
+
+            Draft::create([
+                'description' => $request->description,
+                'commission_id' => $commission->id,
+                'attachment_id' => $attachment->id,
+            ]);
+        }
+
+        return redirect()->route('artist.commission.show', $commission);
     }
 }
