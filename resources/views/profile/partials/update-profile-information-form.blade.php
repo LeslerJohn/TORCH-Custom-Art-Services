@@ -53,6 +53,56 @@
                 </div>
                 <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
             </div>
+
+            @if ($user->isArtist())
+            <div>
+                <x-input-label for="location" :value="__('Location')" />
+                <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location', $user->artist->location)" required autocomplete="location" />
+                <x-input-error class="mt-2" :messages="$errors->get('location')" />
+            </div>
+
+            <!-- Birthdate -->
+            <div class="w-full md:w-1/2 relative">
+                <x-input-label for="birthdate" :value="__('Birthdate')" />
+                <div class="absolute inset-y-0 top-6 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </div>
+                <input id="datepicker-format" datepicker datepicker-min-date="06/04/2024" datepicker-max-date="{{ now()->format('m/d/Y') }}" name="birthdate" type="text" class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" value="{{ old('birthdate', $user->artist->birthdate) }}">
+            </div>
+
+            <!-- Gender -->
+            <div class="w-full md:w-1/2">
+                <x-input-label for="gender" :value="__('Gender')" />
+                <select id="gender" name="gender"
+                    class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <option value="">{{ __('Select Gender') }}</option>
+                    <option value="male" {{ old('gender', $user->artist->gender) == 'male' ? 'selected' : '' }}>{{ __('Male') }}</option>
+                    <option value="female" {{ old('gender', $user->artist->gender) == 'female' ? 'selected' : '' }}>{{ __('Female') }}</option>
+                    <option value="other" {{ old('gender', $user->artist->gender) == 'other' ? 'selected' : '' }}>{{ __('Other') }}</option>
+                </select>
+                <x-input-error :messages="$errors->get('gender')" class="mt-2" />
+            </div>
+
+            <div>
+                <x-input-label for="username" :value="__('Username')" />
+                <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->artist->username)" required autocomplete="username" />
+                <x-input-error class="mt-2" :messages="$errors->get('username')" />
+            </div>
+
+            <div>
+                <x-input-label for="max_commissions" :value="__('Max Commissions')" />
+                <x-text-input id="max_commissions" name="max_commissions" type="number" class="mt-1 block w-full" :value="old('max_commissions', $user->artist->max_commissions)" required autocomplete="max_commissions" />
+                <x-input-error class="mt-2" :messages="$errors->get('max_commissions')" />
+            </div>
+
+            <div>
+                <x-input-label for="bio" :value="__('Bio')" />
+                <textarea id="bio" name="bio" class="mt-1 block w-full" required>{{ old('bio', $user->artist->bio) }}</textarea>
+                <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+            </div>
+            @endif
         </div>
 
         <!-- Right Column: Profile Image -->

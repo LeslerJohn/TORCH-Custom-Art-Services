@@ -57,22 +57,29 @@
                                 <!-- Action Button -->
                                 <div class="mt-4">
                                     @if (!$isOwner)
-                                    <button class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center">
-                                        <!-- Handshake SVG Icon -->
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                        Request Service
-                                    </button>
+                                        <button
+                                            class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center">
+                                            <!-- Handshake SVG Icon -->
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                                </path>
+                                            </svg>
+                                            Request Service
+                                        </button>
                                     @else
-                                    <a href="{{ route('profile.edit', $artist) }}"
-                                        class="block w-full bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition flex items-center justify-center">
-                                        <!-- Edit SVG Icon -->
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                                        </svg>
-                                        Edit Profile
-                                    </a>
+                                        <a href="{{ route('profile.edit', $artist) }}"
+                                            class="block w-full bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition flex items-center justify-center">
+                                            <!-- Edit SVG Icon -->
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                </path>
+                                            </svg>
+                                            Edit Profile
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -143,20 +150,29 @@
                 <!-- Action Button -->
                 <div class="mt-4">
                     @if (!$isOwner)
-                    <button class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center" :class="open ? 'hidden' : 'mb-1'">
-                        <!-- Handshake SVG Icon -->
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </button>
+                        <button
+                            class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center">
+                            <!-- Handshake SVG Icon -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                            <span :class="open ? 'hidden' : 'ml-2'">Request Service</span>
+                        </button>
                     @else
-                    <a href="{{ route('profile.edit', $artist) }}"
-                        class="block w-full bg-blue-500 text-white px-3 py-3 rounded-lg hover:bg-blue-600 transition flex items-center justify-center" :class="open ? 'hidden' : 'mb-1'">
-                        <!-- Edit SVG Icon -->
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                        </svg>
-                    </a>
+                        <a href="{{ route('profile.edit', $artist) }}"
+                            class="block w-full bg-blue-500 text-white px-3 py-3 rounded-lg hover:bg-blue-600 transition flex items-center justify-center"
+                            :class="open ? 'hidden' : 'mb-1'">
+                            <!-- Edit SVG Icon -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                </path>
+                            </svg>
+                        </a>
                     @endif
                 </div>
 
@@ -192,22 +208,29 @@
                 :class="open ? 'opacity-100 w-full' : 'opacity-0 pointer-events-none'">
                 <div class="mt-4">
                     @if (!$isOwner)
-                    <button class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center">
-                        <!-- Handshake SVG Icon -->
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                        Request Service
-                    </button>
+                        <button
+                            class="w-full bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition flex items-center justify-center">
+                            <!-- Handshake SVG Icon -->
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                            Request Service
+                        </button>
                     @else
-                    <a href="{{ route('profile.edit', $artist) }}"
-                        class="block w-full bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition flex items-center justify-center">
-                        <!-- Edit SVG Icon -->
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                        </svg>
-                        Edit Profile
-                    </a>
+                        <a href="{{ route('profile.edit', $artist) }}"
+                            class="block w-full bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition flex items-center justify-center">
+                            <!-- Edit SVG Icon -->
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                </path>
+                            </svg>
+                            Edit Profile
+                        </a>
                     @endif
                 </div>
                 <div class="text-gray-700 text-sm space-y-2">
@@ -318,22 +341,28 @@
                 </button>
 
                 @if ($isOwner)
-                <button @click="tab = 'collections'"
-                    class="py-2 px-2 sm:px-4 border-b-2 text-gray-600 transition hover:text-blue-500 hover:border-blue-500 focus:outline-none text-sm sm:text-base flex items-center space-x-2"
-                    :class="{ 'border-blue-500 text-blue-600': tab === 'collections' }">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                    </svg>
-                    <span :class="tab === 'collections' ? 'block' : 'hidden sm:block'">Collections</span>
-                </button>
-                <button @click="tab = 'liked'"
-                    class="py-2 px-2 sm:px-4 border-b-2 text-gray-600 transition hover:text-blue-500 hover:border-blue-500 focus:outline-none text-sm sm:text-base flex items-center space-x-2"
-                    :class="{ 'border-blue-500 text-blue-600': tab === 'liked' }">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                    </svg>
-                    <span :class="tab === 'liked' ? 'block' : 'hidden sm:block'">Liked</span>
-                </button>
+                    <button @click="tab = 'collections'"
+                        class="py-2 px-2 sm:px-4 border-b-2 text-gray-600 transition hover:text-blue-500 hover:border-blue-500 focus:outline-none text-sm sm:text-base flex items-center space-x-2"
+                        :class="{ 'border-blue-500 text-blue-600': tab === 'collections' }">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            </path>
+                        </svg>
+                        <span :class="tab === 'collections' ? 'block' : 'hidden sm:block'">Collections</span>
+                    </button>
+                    <button @click="tab = 'liked'"
+                        class="py-2 px-2 sm:px-4 border-b-2 text-gray-600 transition hover:text-blue-500 hover:border-blue-500 focus:outline-none text-sm sm:text-base flex items-center space-x-2"
+                        :class="{ 'border-blue-500 text-blue-600': tab === 'liked' }">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span :class="tab === 'liked' ? 'block' : 'hidden sm:block'">Liked</span>
+                    </button>
                 @endif
             </div>
 
@@ -341,63 +370,185 @@
             <div x-show="tab === 'artworks'" class="mt-4">
                 <div class="flex overflow-x-auto py-2 px-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                     @forelse($artworks as $artwork)
-                    <div class="flex-shrink-0 w-full bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:hover:scale-100">
-                        <!-- Artwork Image -->
-                        <div class="relative h-60">
-                            @if ($artwork->images->isNotEmpty() && $artwork->images->first()->attachment)
-                            <img src="{{ asset('storage/' . $artwork->images->first()->attachment->path) }}" class="w-full h-full object-cover" alt="{{ $artwork->title }}">
-                            @else
-                            <img src="{{ asset('images/default-artwork.jpg') }}" class="w-full h-full object-cover" alt="Default Artwork">
-                            @endif
+                        <div
+                            class="flex-shrink-0 w-full bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:hover:scale-100">
+                            <!-- Artwork Image -->
+                            <div class="relative h-60">
+                                @if ($artwork->images->isNotEmpty() && $artwork->images->first()->attachment)
+                                    <img src="{{ asset('storage/' . $artwork->images->first()->attachment->path) }}"
+                                        class="w-full h-full object-cover" alt="{{ $artwork->title }}">
+                                @else
+                                    <img src="{{ asset('images/default-artwork.jpg') }}"
+                                        class="w-full h-full object-cover" alt="Default Artwork">
+                                @endif
 
-                            <!-- Overlay Details -->
-                            <div class="absolute inset-0 p-3 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent">
-                                <h4 class="font-semibold text-base text-white">{{ $artwork->title }}</h4>
-                                <div class="mt-2 flex justify-between items-center">
-                                    <span class="text-sm text-gray-200">{{ $artwork->created_at->diffForHumans() }}</span>
-                                    <a href="{{ route('artwork.show', $artwork) }}" class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-300">
-                                        Preview
-                                    </a>
+                                <!-- Overlay Details -->
+                                <div
+                                    class="absolute inset-0 p-3 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent">
+                                    <h4 class="font-semibold text-base text-white">{{ $artwork->title }}</h4>
+                                    <div class="mt-2 flex justify-between items-center">
+                                        <span
+                                            class="text-sm text-gray-200">{{ $artwork->created_at->diffForHumans() }}</span>
+                                        <a href="{{ route('artwork.show', $artwork) }}"
+                                            class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-300">
+                                            Preview
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @empty
-                    <p class="text-gray-500 text-center col-span-full">No artworks available.</p>
+                        <p class="text-gray-500 text-center col-span-full">No artworks available.</p>
                     @endforelse
                 </div>
             </div>
 
             <!-- Services Tab -->
             <div x-show="tab === 'services'" class="mt-4">
-                <div class="flex overflow-x-auto py-2 pl-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse($services as $service)
-                    <div class="flex-shrink-0 w-64 sm:w-full bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:hover:scale-100">
-                        <!-- Service Image -->
-                        <div class="relative h-40">
-                            @if ($service->images->isNotEmpty() && $service->images->first()->attachment)
-                            <img src="{{ asset('storage/' . $service->images->first()->attachment->path) }}" class="w-full h-full object-cover" alt="{{ $service->category->name }}">
-                            @else
-                            <img src="{{ asset('images/default-service.jpg') }}" class="w-full h-full object-cover" alt="Default Service">
-                            @endif
+                        <div
+                            class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                            <!-- Service Image -->
+                            <div class="relative h-40">
+                                @if ($service->images->isNotEmpty() && $service->images->first()->attachment)
+                                    <img src="{{ asset('storage/' . $service->images->first()->attachment->path) }}"
+                                        class="w-full h-full object-cover" alt="{{ $service->category->name }}">
+                                @else
+                                    <img src="{{ asset('images/default-service.jpg') }}"
+                                        class="w-full h-full object-cover" alt="Default Service">
+                                @endif
 
-                            <!-- Overlay Details -->
-                            <div class="absolute inset-0 bg-black bg-opacity-40 p-3 flex flex-col justify-end">
-                                <h4 class="font-semibold text-base text-white">{{ $service->category->name }}</h4>
-                                <div class="mt-2 flex justify-between items-center">
-                                    <span class="text-sm text-gray-200">₱{{ number_format($service->price, 2) }}</span>
-                                    <a href="{{ route('service.show', $service) }}" class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-300">
-                                        Request
-                                    </a>
+                                <!-- Overlay Details -->
+                                <div class="absolute inset-0 bg-black bg-opacity-40 p-3 flex flex-col justify-end">
+                                    <h4 class="font-semibold text-base text-white">{{ $service->category->name }}</h4>
+                                    <div class="mt-2 flex justify-between items-center">
+                                        <span class="text-sm text-gray-200">₱{{ number_format($service->price, 2) }}</span>
+                                        <a href="{{ route('service.show', $service) }}"
+                                            class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-300">
+                                            Request
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @empty
-                    <p class="text-gray-500 text-center col-span-full">No services available.</p>
+                        <p class="text-gray-500 text-center col-span-full">No services available.</p>
                     @endforelse
                 </div>
             </div>
+            <!-- Reviews Tab -->
+            <div x-show="tab === 'reviews'" class="mt-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @forelse($reviews as $review)
+                        <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                            <div class="flex items-center space-x-3">
+                                @php
+                                    // Get client and user safely
+                                    $client = $review->order->client ?? ($review->commission->request->client ?? null);
+                                    $user = $client ? $client->user : null;
+                                    $profileImage =
+                                        $user && $user->profileImage
+                                            ? asset('storage/' . $user->profileImage->path)
+                                            : asset('images/profile.default.jpg');
+                                    $rating = $review->rating ?? null;
+                                @endphp
+
+                                <img src="{{ $profileImage }}" class="w-10 h-10 rounded-full object-cover">
+
+                                <div>
+                                    <h4 class="font-semibold">{{ $user ? $user->name : 'Unknown Client' }}</h4>
+                                    <p class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</p>
+
+                                    {{-- Display Rating --}}
+                                    @if ($rating)
+                                        <div class="flex items-center space-x-1 mt-1">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <svg class="w-5 h-5 {{ $i <= $rating ? 'text-yellow-500' : 'text-gray-300' }}"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1L12 2z" />
+                                                </svg>
+                                            @endfor
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-gray-500">No rating given</p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Display Review --}}
+                            <div class="mt-3">
+                                <p class="text-gray-700">{{ $review->comment ?? 'No review available' }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 text-center col-span-full">No reviews available.</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div x-show="tab === 'about'" class="mt-4">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2">About the Artist</h3>
+                    <p class="text-gray-700">{{ $artist->bio }}</p>
+                </div>
+            </div>
+
+            @if ($isOwner)
+                <!-- Collections Tab -->
+                <div x-show="tab === 'collections'" class="mt-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($collections as $collection)
+                            @foreach ($collection->items as $item)
+                                <a href="{{ route('artwork.show', $item->artwork) }}"
+                                    class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                                    <div class="mb-4">
+                                        <h4 class="font-semibold text-lg">{{ $item->artwork->title }}</h4>
+                                        <p class="text-gray-500 text-sm">{{ $item->artwork->description }}</p>
+                                        @if ($item->artwork->images->isNotEmpty() && $item->artwork->images->first()->attachment)
+                                            <img src="{{ asset('storage/' . $item->artwork->images->first()->attachment->path) }}"
+                                                class="w-full h-40 object-cover rounded-lg mt-2"
+                                                alt="{{ $item->artwork->title }}">
+                                        @else
+                                            <img src="{{ asset('images/default-artwork.jpg') }}"
+                                                class="w-full h-40 object-cover rounded-lg mt-2"
+                                                alt="Default Artwork">
+                                        @endif
+                                    </div>
+                                </a>
+                            @endforeach
+                        @empty
+                            <p class="text-gray-500 text-center col-span-full">No collections available.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Liked Tab -->
+                <div x-show="tab === 'liked'" class="mt-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($liked as $like)
+                            <a href="{{ route('artwork.show', $like->artwork) }}"
+                                class="bg-white p-4 rounded-lg shadow-md flex flex-col transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                                <div class="flex items-center space-x-3 mb-4">
+                                    <img src="{{ $like->artwork->images && $like->artwork->images->first() && $like->artwork->images->first()->attachment ? asset('storage/' . $like->artwork->images->first()->attachment->path) : asset('images/default-artwork.jpg') }}"
+                                        class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold">{{ $like->artwork->title }}</h4>
+                                        <p class="text-sm text-gray-500">
+                                            {{ $like->artwork->created_at->diffForHumans() }}</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700">{{ $like->artwork->description }}</p>
+                            </a>
+                        @empty
+                            <p class="text-gray-500 text-center col-span-full">No liked artworks available.</p>
+                        @endforelse
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     <footer class="mt-6">

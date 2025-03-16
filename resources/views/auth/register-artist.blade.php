@@ -40,7 +40,8 @@
                     <!-- Step 1: Personal -->
                     <div class="flex items-center">
                         <div class="flex flex-col items-center">
-                            <span id="step-1" class="py-3 px-6 rounded-full bg-orange-500 text-2xl text-white">1</span>
+                            <span id="step-1"
+                                class="py-3 px-6 rounded-full bg-orange-500 text-2xl text-white">1</span>
                             <div id="personal-line" class="h-8 w-0.5 bg-gray-500"></div>
                         </div>
                         <p class="ml-4 text-md">Personal</p>
@@ -49,7 +50,8 @@
                     <!-- Step 2: Credentials -->
                     <div class="flex items-center">
                         <div class="flex flex-col items-center">
-                            <span id="step-2" class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">2</span>
+                            <span id="step-2"
+                                class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">2</span>
                             <div id="credential-line" class="h-8 w-0.5 bg-gray-500"></div>
                         </div>
                         <p class="ml-4 text-md">Credentials</p>
@@ -58,7 +60,8 @@
                     <!-- Step 3: Tags -->
                     <div class="flex items-center">
                         <div class="flex flex-col items-center">
-                            <span id="step-3" class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">3</span>
+                            <span id="step-3"
+                                class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">3</span>
                             <div id="tags-line" class="h-8 w-0.5 bg-gray-500"></div>
                         </div>
                         <p class="ml-4 text-md">Tags</p>
@@ -67,7 +70,8 @@
                     <!-- Step 4: Payment -->
                     <div class="flex items-center">
                         <div class="flex flex-col items-center">
-                            <span id="step-4" class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">4</span>
+                            <span id="step-4"
+                                class="py-3.5 px-6 rounded-full bg-gray-500 text-2xl text-white">4</span>
                         </div>
                         <p class="ml-4 text-md">Payment</p>
                     </div>
@@ -78,44 +82,44 @@
         <!-- Right Section: Form Content -->
         <div class="w-full mx-6">
             @if ($errors->any())
-            <div class="text-red-600">
-                <strong>{{ __('Please fix the following errors:') }}</strong>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+                <div class="text-red-600">
+                    <strong>{{ __('Please fix the following errors:') }}</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
             <!-- Personal Section -->
             <div id="personal-section" class="w-full">
                 <!-- Name -->
                 @guest
-                <div class="flex flex-col md:flex-row justify-between gap-4">
-                    <div class="w-full md:w-1/3">
-                        <x-input-label for="first_name" :value="__('First Name')" />
-                        <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name"
-                            placeholder="John" :value="old('first_name')" required autofocus autocomplete="first_name" />
-                        <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                    <div class="flex flex-col md:flex-row justify-between gap-4">
+                        <div class="w-full md:w-1/3">
+                            <x-input-label for="first_name" :value="__('First Name')" />
+                            <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name"
+                                placeholder="John" :value="old('first_name')" required autofocus autocomplete="first_name" />
+                            <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <x-input-label for="middle_name" :value="__('Middle Name')" />
+                            <x-text-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name"
+                                placeholder="" :value="old('middle_name')" autofocus autocomplete="middle_name" />
+                            <x-input-error :messages="$errors->get('middle_name')" class="mt-2" />
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <x-input-label for="last_name" :value="__('Last Name')" />
+                            <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name"
+                                placeholder="Doe" :value="old('last_name')" required autofocus autocomplete="last_name" />
+                            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+                        </div>
                     </div>
-                    <div class="w-full md:w-1/3">
-                        <x-input-label for="middle_name" :value="__('Middle Name')" />
-                        <x-text-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name"
-                            placeholder="" :value="old('middle_name')" autofocus autocomplete="middle_name" />
-                        <x-input-error :messages="$errors->get('middle_name')" class="mt-2" />
-                    </div>
-                    <div class="w-full md:w-1/3">
-                        <x-input-label for="last_name" :value="__('Last Name')" />
-                        <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name"
-                            placeholder="Doe" :value="old('last_name')" required autofocus autocomplete="last_name" />
-                        <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
-                    </div>
-                </div>
                 @else
-                <input type="hidden" name="first_name" value="{{ old('first_name', $user->name ?? '') }}">
-                <input type="hidden" name="middle_name" value="{{ old('middle_name', $user->middle_name ?? '') }}">
-                <input type="hidden" name="last_name" value="{{ old('last_name', $user->name ?? '') }}">
+                    <input type="hidden" name="first_name" value="{{ old('first_name', $user->name ?? '') }}">
+                    <input type="hidden" name="middle_name" value="{{ old('middle_name', $user->middle_name ?? '') }}">
+                    <input type="hidden" name="last_name" value="{{ old('last_name', $user->name ?? '') }}">
                 @endguest
 
                 <!-- Birthdate and Gender -->
@@ -124,15 +128,11 @@
                     <div class="w-full md:w-1/2 relative">
                         <x-input-label for="birthdate" :value="__('Birthdate')" />
                         <div class="absolute inset-y-0 top-6 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                             </svg>
                         </div>
-                        <input datepicker id="default-datepicker" name="birthdate" type="text"
-                            class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Select date" max="{{ now()->format('Y-m-d') }}">
+                        <input id="datepicker-format" datepicker datepicker-min-date="06/04/2024" datepicker-max-date="{{ now()->format('m/d/Y') }}" name="birthdate" type="text" class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
                     </div>
 
                     <!-- Gender -->
@@ -151,32 +151,33 @@
 
                 <!-- Email -->
                 @guest
-                <div class="mt-4">
-                    <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                        placeholder="john@example.com" :value="old('email')" required autocomplete="username" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
+                    <div class="mt-4">
+                        <x-input-label for="email" :value="__('Email')" />
+                        <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                            placeholder="john@example.com" :value="old('email')" required autocomplete="username" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    </div>
                 @else
-                <input type="hidden" name="email" value="{{ old('email', $user->email ?? '') }}">
+                    <input type="hidden" name="email" value="{{ old('email', $user->email ?? '') }}">
                 @endguest
 
                 <!-- Contact Number and Username -->
                 <div class="flex flex-col md:flex-row gap-4">
                     @guest
-                    <div class="mt-4 w-full">
-                        <x-input-label for="contact_number" :value="__('Contact Number')" />
-                        <div class="flex">
-                            <span
-                                class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
-                            <x-text-input id="contact_number" class="block mt-1 w-full rounded-l-none" type="text"
-                                name="contact_number" placeholder="9123456789" :value="old('contact_number')" required
-                                autocomplete="username" />
+                        <div class="mt-4 w-full">
+                            <x-input-label for="contact_number" :value="__('Contact Number')" />
+                            <div class="flex">
+                                <span
+                                    class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
+                                <x-text-input id="contact_number" class="block mt-1 w-full rounded-l-none" type="text"
+                                    name="contact_number" placeholder="9123456789" :value="old('contact_number')" required
+                                    autocomplete="phone_number" maxlength="10" />
+                            </div>
+                            <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
                         </div>
-                        <x-input-error :messages="$errors->get('contact_number')" class="mt-2" />
-                    </div>
                     @else
-                    <input type="hidden" name="contact_number" value="{{ old('contact_number', $user->phone_number ?? '') }}">
+                        <input type="hidden" name="contact_number"
+                            value="{{ old('contact_number', $user->phone_number ?? '') }}">
                     @endguest
 
                     <div class="mt-4 w-full">
@@ -229,47 +230,121 @@
 
                 <!-- Password and Confirm Password -->
                 @guest
-                <div class="mt-4">
-                    <x-input-label for="password" :value="__('Password')" />
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                        placeholder="password" :value="old('password', $user->password ?? '')" required autocomplete="new-password" />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
+                    <!-- Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password" :value="__('Password')" />
 
-                <div class="mt-4">
-                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                        placeholder="password" name="password_confirmation" :value="($user->password ?? '')" required autocomplete="new-password" />
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div>
+                        <div class="relative">
+                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                                placeholder="password" required autocomplete="new-password" />
+                            <button type="button"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                                onclick="togglePasswordVisibility('password')">
+                                <svg id="password-eye" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-width="2"
+                                        d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+                                    <path stroke="currentColor" stroke-width="2"
+                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mt-4">
+                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+                        <div class="relative">
+                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                                placeholder="password" name="password_confirmation" required
+                                autocomplete="new-password" />
+                            <button type="button"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                                onclick="togglePasswordVisibility('password_confirmation')">
+                                <svg id="password_confirmation-eye" class="w-6 h-6 text-gray-800 dark:text-white"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-width="2"
+                                        d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+                                    <path stroke="currentColor" stroke-width="2"
+                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    </div>
+
+                    <script>
+                        function togglePasswordVisibility(id) {
+                            const input = document.getElementById(id);
+                            const eyeIcon = document.getElementById(id + '-eye');
+                            if (input.type === 'password') {
+                                input.type = 'text';
+                                eyeIcon.innerHTML = `<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.933 13.909A4.357 4.357 0 0 1 3 12c0-1 4-6 9-6m7.6 3.8A5.068 5.068 0 0 1 21 12c0 1-3 6-9 6-.314 0-.62-.014-.918-.04M5 19 19 5m-4 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                        `;
+                            } else {
+                                input.type = 'password';
+                                eyeIcon.innerHTML = `<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                            <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>`;
+                            }
+                        }
+                    </script>
                 @else
-                <input type="hidden" name="password" value="{{ old('password', $user->password ?? '') }}">
-                <input type="hidden" name="password_confirmation" value="{{ old('password_confirmation', $user->password ?? '') }}">
+                    <input type="hidden" name="password" value="{{ old('password', $user->password ?? '') }}">
+                    <input type="hidden" name="password_confirmation"
+                        value="{{ old('password_confirmation', $user->password ?? '') }}">
                 @endguest
 
                 <!-- Max Commissions -->
                 <div class="mt-4">
-                    <label for="max-commissions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max Commissions:</label>
+                    <label for="max-commissions"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max Commissions:</label>
                     <div class="relative flex items-center max-w-[11rem]">
-                        <button type="button" id="decrement-commissions" data-input-counter-decrement="max-commissions" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                        <button type="button" id="decrement-commissions"
+                            data-input-counter-decrement="max-commissions"
+                            class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M1 1h16" />
                             </svg>
                         </button>
-                        <input type="text" id="max-commissions" name="max_commissions" data-input-counter data-input-counter-min="1" data-input-counter-max="50" aria-describedby="commissions-helper-text" class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ old('max-commissions', 10) }}" required />
-                        <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
-                            <svg class="w-2.5 h-2.5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9" />
+                        <input type="text" id="max-commissions" name="max_commissions" data-input-counter
+                            data-input-counter-min="1" data-input-counter-max="50"
+                            aria-describedby="commissions-helper-text"
+                            class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" value="{{ old('max-commissions', 10) }}" required />
+                        <div
+                            class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
+                            <svg class="w-2.5 h-2.5 text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9" />
                             </svg>
                             <span>Commissions</span>
                         </div>
-                        <button type="button" id="increment-commissions" data-input-counter-increment="max-commissions" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                        <button type="button" id="increment-commissions"
+                            data-input-counter-increment="max-commissions"
+                            class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M9 1v16M1 9h16" />
                             </svg>
                         </button>
                     </div>
-                    <p id="commissions-helper-text" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Please select the max number of commissions.</p>
+                    <p id="commissions-helper-text" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Please
+                        select the max number of commissions.</p>
                 </div>
 
                 <!-- Portfolio -->
@@ -290,7 +365,8 @@
 
                 <!-- Continue Button -->
                 <div class="flex items-center justify-end mt-6">
-                    <x-primary-button id="continue-to-tags" class="justify-center py-4 w-full text-md" onclick="showTagSection(event)">
+                    <x-primary-button id="continue-to-tags" class="justify-center py-4 w-full text-md"
+                        onclick="showTagSection(event)">
                         {{ __('Continue') }}
                     </x-primary-button>
                 </div>
@@ -376,7 +452,8 @@
 
                 <!-- Continue Button -->
                 <div class="flex items-center justify-end mt-6">
-                    <x-primary-button id="continue-to-payment" class="justify-center py-4 w-full text-md" onclick="showPaymentSection(event)">
+                    <x-primary-button id="continue-to-payment" class="justify-center py-4 w-full text-md"
+                        onclick="showPaymentSection(event)">
                         {{ __('Continue') }}
                     </x-primary-button>
                 </div>
@@ -406,7 +483,8 @@
                             {{ __('PayMaya') }}
                         </div>
                     </div>
-                    <input type="hidden" id="payment_method" name="payment_method" value="{{ old('payment_method') }}">
+                    <input type="hidden" id="payment_method" name="payment_method"
+                        value="{{ old('payment_method') }}">
                     <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
                 </div>
 
@@ -433,10 +511,15 @@
                     <x-input-error :messages="$errors->get('payment_name')" class="mt-2" />
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 w-full">
                     <x-input-label for="payment_number" :value="__('Number')" />
-                    <x-text-input id="payment_number" class="block mt-1 w-full" type="text" name="payment_number"
-                        placeholder="09123456789" :value="old('payment_number')" required />
+                    <div class="flex">
+                        <span
+                            class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
+                        <x-text-input id="payment_number" class="block mt-1 w-full rounded-l-none" type="text"
+                            name="payment_number" placeholder="9123456789" :value="old('payment_number')" required
+                            maxlength="10" />
+                    </div>
                     <x-input-error :messages="$errors->get('payment_number')" class="mt-2" />
                 </div>
 
@@ -446,8 +529,8 @@
                         <input id="policy" type="checkbox"
                             class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                             name="policy" required>
-                        <span
-                            class="ms-2 text-sm text-gray-600">{{ __('I agree to the Terms and Privacy Policy') }}</span>
+                        <span class="ms-2 text-sm text-gray-600">I agree to the <a href="{{ route('privacy') }}"
+                                class="text-blue-400 underline">Terms and Privacy Policy</a></span>
                     </label>
                 </div>
 

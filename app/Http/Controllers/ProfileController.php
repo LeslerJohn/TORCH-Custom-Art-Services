@@ -138,6 +138,18 @@ class ProfileController extends Controller
             $user->phone_number = $request->input('phone_number');
         }
 
+        // Update artist-specific fields
+        if ($user->isArtist()) {
+            $artistProfile = $user->artist;
+            $artistProfile->location = $request->input('location');
+            $artistProfile->birthdate = $request->input('birthdate');
+            $artistProfile->gender = $request->input('gender');
+            $artistProfile->username = $request->input('username');
+            $artistProfile->max_commissions = $request->input('max_commissions');
+            $artistProfile->bio = $request->input('bio');
+            $artistProfile->save();
+        }
+
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
@@ -265,5 +277,22 @@ class ProfileController extends Controller
         ]);
 
         return Redirect::route('client.profile')->with('success', 'Address added successfully!');
+    }
+
+    public function updatePaymentMethod(Request $request)
+    {
+        $request->validate([
+            'payment_method' => 'required|string|max:255',
+            'payment_name' => 'required|string|max:255',
+            'payment_number' => 'required|string|max:10',
+        ]);
+
+        $user = Auth::user()->artist->payment;
+        $user->payment_method = $request->input('payment_method');
+        $user->account_name = $request->input('payment_name');
+        $user->account_number = $request->input('payment_number');
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'payment-method-updated');
     }
 }
