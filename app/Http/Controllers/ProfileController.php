@@ -167,8 +167,18 @@ class ProfileController extends Controller
     public function showClientProfile()
     {
         $client = ClientProfile::where('id', Auth::id())->first();
-        $collections = Order::where('client_id', Auth::id())->get();
-        $liked = ClientLiked::where('client_id', Auth::id())->get();
+        $collections = Order::where('client_id', Auth::id())
+            ->where('status', 'completed')
+            ->whereHas('items.artwork')
+            ->with('items.artwork')
+            ->latest()
+            ->get();
+
+        $liked = ClientLiked::where('client_id', Auth::id())
+        ->with('artwork')
+        ->latest()
+        ->get();
+
         return view('client.profile.show', compact('client', 'collections', 'liked'));
     }
 
@@ -178,44 +188,45 @@ class ProfileController extends Controller
         $artworks = $artist->artworks()->get();
         $isOwner = Auth::check() && Auth::id() === $artist->id;
 
-        $order_reviews = OrderReview::whereHas('order.items.artwork', function ($query) use ($artist) {
-            $query->whereHas('artist', function ($q) use ($artist) {
-                $q->where('id', $artist->id);
-            });
+        $order_reviews = OrderReview::whereHas('order.items.artwork.artist', function ($query) use ($artist) {
+            $query->where('id', $artist->id);
         })
             ->whereNotNull('review')
             ->with([
-                'order.client',
-                'order.items.artwork.images.attachment',
-                'order.items.artwork.category',
-                'order.items.artwork.artist'
+            'order.client',
+            'order.items.artwork.images.attachment',
+            'order.items.artwork.category',
+            'order.items.artwork.artist'
             ])
             ->latest()
             ->get();
 
-        $commission_reviews = CommissionReview::whereHas('commission.request', function ($query) use ($artist) {
-            $query->whereHas('service', function ($q) use ($artist) {
-                $q->whereHas('artist', function ($subQ) use ($artist) {
-                    $subQ->where('id', $artist->id);
-                });
-            });
+        $commission_reviews = CommissionReview::whereHas('commission.request.service.artist', function ($query) use ($artist) {
+            $query->where('id', $artist->id);
         })
             ->whereNotNull('review')
             ->with([
-                'commission.request.client',
-                'commission.request.images.attachment',
-                'commission.request.service.category',
-                'commission.request.service.artist'
+            'commission.request.client',
+            'commission.request.images.attachment',
+            'commission.request.service.category',
+            'commission.request.service.artist'
             ])
             ->latest()
             ->get();
 
         $reviews = $commission_reviews->merge($order_reviews);
 
-        $collections = $isOwner ? Order::whereHas('items.artwork', function ($query) use ($artist) {
-            $query->where('artist_id', $artist->id);
-        })->get() : collect();
-        $liked = $isOwner ? ClientLiked::where('artist_id', $artist->id)->get() : collect();
+        $collections = Order::where('client_id', Auth::id())
+        ->where('status', 'completed')
+        ->whereHas('items.artwork')
+        ->with('items.artwork')
+        ->latest()
+        ->get();
+
+        $liked = ClientLiked::where('client_id', $artist->id)
+            ->with('artwork')
+            ->latest()
+            ->get();
 
         return view('artist.profile.show', compact('artist', 'services', 'artworks', 'reviews', 'collections', 'liked', 'isOwner'));
     }

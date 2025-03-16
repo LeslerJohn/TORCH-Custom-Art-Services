@@ -67,7 +67,7 @@
                     $discountedPrice = $artwork->price;
                     if ($discount && $discount->status === 'active') {
                     if ($discount->value_type === 'percentage') {
-                    $discountedPrice -= ($artwork->price * $discount->value / 100);
+                    $discountedPrice -= ($artwork->price * $discount->value) / 100;
                     } else {
                     $discountedPrice -= $discount->value;
                     }
@@ -82,16 +82,54 @@
                         @endif
                     </p>
                 </div>
-                <p class="text-md text-black-500">{{ $artwork->artist->user->name ?? 'Unknown' }}</p>
-                <p class="text-md text-black-500">{{ $artwork->created_at->diffForHumans() }}</p>
+                <div class="flex justify-between">
+                    <div>
+                        <p class="text-md text-black-500">{{ $artwork->artist->user->name ?? 'Unknown' }}</p>
+                        <p class="text-md text-black-500">{{ $artwork->created_at->diffForHumans() }}</p>
+                    </div>
+                    @if ($hasLiked ?? false)
+                    <!-- Unlike Form -->
+                    <form action="{{ route('artwork.unlike', $artwork) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="flex items-center gap-2 mt-4">
+                            <!-- Filled Heart (Unliked) -->
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
+                            </svg>
+                            <p class="text-md text-gray-700">Unlike</p>
+                        </button>
+                    </form>
+                    @else
+                    <!-- Like Form -->
+                    <form action="{{ route('artwork.like', $artwork) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="flex items-center gap-2 mt-4">
+                            <!-- Outlined Heart (Liked) -->
+                            <svg class="w-8 h-8 text-black-500" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
+                            </svg>
+                            <p class="text-md text-gray-700">Like</p>
+                        </button>
+                    </form>
+                    @endif
+                </div>
 
-                <hr class="w-full my-4 h-0.5 border-gray-500">
+                <hr class="w-full my-4 h-2 border-gray-500">
 
-                <!-- About Section -->
                 <div>
                     <h2 class="text-xl font-semibold">About</h2>
                     <p class="mt-2"><strong>{{ $artwork->category->name }}</strong></p>
-                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->width }} x {{ $artwork->height }} {{$artwork->unit}}</p>
+                    <p class="mt-1"><strong>Size:</strong> {{ $artwork->width }} x {{ $artwork->height }}
+                        {{ $artwork->unit }}
+                    </p>
                     <div class="flex flex-wrap gap-2 mt-2">
                         @foreach ($artwork->tags as $tag)
                         <span
@@ -110,33 +148,35 @@
 
                 <!-- Buttons Section -->
                 @if (auth()->check() && auth()->user()->id !== $artwork->artist->user->id && $artwork->status === 'sale')
-                <div class="mt-4 flex flex-col md:flex-row gap-4 justify-end">
-                    <form action="{{ route('client.cart.store', $artwork) }}" method="POST" class="w-full md:w-auto">
+                <div class="mt-4 flex gap-4 justify-end">
+                    <form action="{{ route('client.cart.store', $artwork) }}" method="POST">
                         @csrf
                         @if (!auth()->user()->cart || !auth()->user()->cart->items->contains('artwork_id', $artwork->id))
                         <button type="submit"
-                            class="w-full md:w-auto flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                            class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
                             Add to cart
-                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
                                     d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
                             </svg>
                         </button>
                         @else
                         <a href="{{ route('client.cart.index') }}"
-                            class="w-full md:w-auto flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                            class="flex items-center gap-2 justify-center bg-gray-200 border border-black text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
                             Check cart
-                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
                                     d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
                             </svg>
                         </a>
                         @endif
                     </form>
                     <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                        class="w-full md:w-auto block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         type="button">
                         Buy Now
                     </button>
@@ -169,14 +209,14 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="flex flex-col md:flex-row gap-4 justify-center p-4 md:p-5">
-                        <div class="w-full md:w-1/2">
+                    <div class="flex gap-2 justify-center p-4 md:p-5">
+                        <div class="w-1/2">
                             @if ($artwork->discount && $artwork->discount->status === 'active')
                             @php
                             $discount = $artwork->discount;
                             $discountedPrice = $artwork->price;
                             if ($discount->value_type === 'percentage') {
-                            $discountedPrice -= ($artwork->price * $discount->value / 100);
+                            $discountedPrice -= ($artwork->price * $discount->value) / 100;
                             } else {
                             $discountedPrice -= $discount->value;
                             }
@@ -205,7 +245,7 @@
                                         fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="1"
-                                            d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                                            d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                                     </svg>
                                     <p class="text-sm">Shipping within Zamboanga is Free.</p>
                                 </div>
@@ -242,39 +282,61 @@
                             </div>
                         </div>
                         @if (auth()->check() && auth()->user()->address && auth()->user()->phone_number)
-                        <form class="space-y-4 w-full md:w-1/2 flex flex-col justify-between" action="{{ route('client.order.store', $artwork) }}"
-                            method="POST">
+                        <form class="space-y-4 w-1/2 flex flex-col justify-between"
+                            action="{{ route('client.order.store', $artwork) }}" method="POST">
                             @csrf
                             @if (auth()->user())
-                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}
+                            </h2>
                             @endif
                             <div class="p-4 border rounded-lg bg-gray-100">
                                 <h2 class="text-lg font-semibold">Shipping Address</h2>
-                                <p class="mt-2"><strong>Barangay:</strong> {{ auth()->user()->address->barangay ?? 'N/A' }}</p>
-                                <p class="mt-1"><strong>Street/Drive:</strong> {{ auth()->user()->address->street ?? 'N/A' }}</p>
-                                <p class="mt-1"><strong>House Number:</strong> {{ auth()->user()->address->house_number ?? 'N/A' }}</p>
-                                <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
-                                    <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                <p class="mt-2"><strong>Barangay:</strong>
+                                    {{ auth()->user()->address->barangay ?? 'N/A' }}
+                                </p>
+                                <p class="mt-1"><strong>Street/Drive:</strong>
+                                    {{ auth()->user()->address->street ?? 'N/A' }}
+                                </p>
+                                <p class="mt-1"><strong>House Number:</strong>
+                                    {{ auth()->user()->address->house_number ?? 'N/A' }}
+                                </p>
+                                <a href="{{ route('profile.edit') }}"
+                                    class="mt-4 flex text-orange-500 hover:underline">
+                                    <svg class="w-6 h-6 text-orange-500 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2"
+                                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                     </svg>
                                     Edit Address
                                 </a>
                             </div>
                             <button type="submit"
-                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go to Payment
+                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go
+                                to Payment
                             </button>
                         </form>
                         @else
-                        <div class="space-y-4 w-full md:w-1/2 flex flex-col justify-start">
+                        <div class="space-y-4 w-1/2 flex flex-col justify-start">
                             @if (auth()->user())
-                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}</h2>
+                            <h2>{{ auth()->user()->name }} | (+63) {{ auth()->user()->phone_number }}
+                            </h2>
                             @endif
                             <div class="p-4 border rounded-lg bg-gray-100">
                                 <h2 class="text-lg font-semibold">Shipping Address</h2>
-                                <p class="mt-2 text-red-600">Please add a shipping address before proceeding to payment.</p>
-                                <a href="{{ route('profile.edit') }}" class="mt-4 flex text-orange-500 hover:underline">
-                                    <svg class="w-6 h-6 text-orange-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                <p class="mt-2 text-red-600">Please add a shipping address before
+                                    proceeding to payment.</p>
+                                <a href="{{ route('profile.edit') }}"
+                                    class="mt-4 flex text-orange-500 hover:underline">
+                                    <svg class="w-6 h-6 text-orange-500 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2"
+                                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                     </svg>
                                     Add Address
                                 </a>
@@ -285,5 +347,8 @@
                 </div>
             </div>
         </div>
+
+    </div>
+    </div>
     </div>
 </x-app-layout>

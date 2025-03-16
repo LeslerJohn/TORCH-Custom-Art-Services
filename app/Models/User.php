@@ -97,4 +97,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Address::class, 'client_id', 'id');
     }
+
+    public function likedArtworks()
+    {
+        return $this->hasMany(ClientLiked::class, 'client_id', 'id');
+    }
+    
+    public function hasLiked(Artwork $artwork): bool
+    {
+        return $this->likedArtworks()->where('artwork_id', $artwork->id)->exists();
+    }
+    
 }
