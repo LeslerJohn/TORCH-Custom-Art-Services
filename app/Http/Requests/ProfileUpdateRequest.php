@@ -15,7 +15,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
@@ -26,5 +26,18 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
         ];
+
+        if ($this->user()->isArtist()) {
+            $rules = array_merge($rules, [
+                'location' => ['required', 'string', 'max:255'],
+                'birthdate' => ['required', 'date'],
+                'gender' => ['required', 'string', Rule::in(['male', 'female', 'other'])],
+                'username' => ['required', 'string', 'max:255'],
+                'max_commissions' => ['required', 'integer', 'min:0'],
+                'bio' => ['required', 'string'],
+            ]);
+        }
+
+        return $rules;
     }
 }

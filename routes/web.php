@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/address/{user}', [ProfileController::class, 'storeAddress'])->name('address.store');
     Route::put('/profile/address', [ProfileController::class, 'updateAddress'])->name('address.update');
     Route::get('/client/profile', [ProfileController::class, 'showClientProfile'])->name('client.profile');
+    Route::put('/profile/payment-method', [ProfileController::class, 'updatePaymentMethod'])->name('profile.update-payment-method');
 });
 
 Route::get('/artist/profile/{artist}', [ProfileController::class, 'showArtistProfile'])->name('artist.profile');

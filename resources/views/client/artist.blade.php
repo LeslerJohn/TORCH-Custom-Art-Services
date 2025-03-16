@@ -135,11 +135,9 @@
             </div>
 
         </form>
-
-
         <!-- Skeleton Loader (Initially Visible) -->
         <div id="skeleton-loader" class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-            @for ($i = 0; $i < 6; $i++)
+            @for ($i = 0; $i < 8; $i++)
                 <div class="relative w-full h-[220px] sm:h-[250px] rounded-lg overflow-hidden shadow-lg bg-gray-200 animate-pulse">
                 <!-- Simulated Image -->
                 <div class="w-full h-full bg-gray-300"></div>
@@ -165,7 +163,7 @@
         @endfor
     </div>
 
-    </div>
+
 
     <!-- Artist List -->
     <div id="artist-list" class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 hidden">
@@ -189,7 +187,7 @@
                 <div class="absolute bottom-3 left-3 flex items-center gap-2 text-white">
                     <!-- Profile Image -->
                     <img src="{{$artist->user->profileImage ? asset('storage/' . $artist->user->profileImage->path) : asset('images/default.image.jpg') }}"
-                        class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow">
+                        class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white shadow">
 
                     <!-- Name & Username -->
                     <div class="leading-tight">
@@ -203,6 +201,8 @@
         <p class="text-gray-500 text-center col-span-full">No artists found.</p>
         @endforelse
     </div>
+
+
 
 
     <!-- Pagination -->

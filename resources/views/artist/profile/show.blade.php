@@ -405,10 +405,10 @@
 
             <!-- Services Tab -->
             <div x-show="tab === 'services'" class="mt-4">
-                <div class="flex overflow-x-auto py-2 pl-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse($services as $service)
                         <div
-                            class="flex-shrink-0 w-64 sm:w-full bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg sm:hover:scale-100">
+                            class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
                             <!-- Service Image -->
                             <div class="relative h-40">
                                 @if ($service->images->isNotEmpty() && $service->images->first()->attachment)
@@ -423,8 +423,7 @@
                                 <div class="absolute inset-0 bg-black bg-opacity-40 p-3 flex flex-col justify-end">
                                     <h4 class="font-semibold text-base text-white">{{ $service->category->name }}</h4>
                                     <div class="mt-2 flex justify-between items-center">
-                                        <span
-                                            class="text-sm text-gray-200">₱{{ number_format($service->price, 2) }}</span>
+                                        <span class="text-sm text-gray-200">₱{{ number_format($service->price, 2) }}</span>
                                         <a href="{{ route('service.show', $service) }}"
                                             class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-300">
                                             Request

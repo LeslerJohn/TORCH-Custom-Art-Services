@@ -1,20 +1,23 @@
 <x-app-layout>
     <div class="bg-gradient-to-r from-white to-orange-100">
         <div class="w-full bg-gradient-to-r from-white to-orange-100 min-h-screen flex items-center">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="container mx-auto py-12 lg:py-5 px-4 sm:px-6 lg:px-8 ">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                    <!-- Text Section -->
-                    <div class="w-full md:w-1/2 text-center md:text-left ml-0 md:ml-8 lg:ml-12">
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                    <!-- Text Section with AOS Animations -->
+                    <div class="w-full md:w-1/2 text-center md:text-left ml-0 md:ml-8 lg:ml-12" data-aos="fade-up"
+                        data-aos-duration="1000">
+                        <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight" data-aos="fade-right"
+                            data-aos-delay="200">
                             Discover the Timeless World of
                             <span class="text-orange-500">Traditional Art.</span>
                         </h1>
-                        <p class="text-lg sm:text-xl text-gray-700 font-bold mt-6">
+                        <p class="text-lg sm:text-xl text-gray-700 font-bold mt-6" data-aos="fade-left"
+                            data-aos-delay="400">
                             Explore traditional masterpieces by passionate artists, ready to transform your ideas into
                             reality.
                         </p>
                         <!-- Call-to-Action Button -->
-                        <div class="mt-8">
+                        <div class="mt-8" data-aos="fade-up" data-aos-once="false" data-aos-delay="600">
                             <a href="{{ route('client.artwork') }}"
                                 class="inline-block bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 transition">
                                 Get Started
@@ -22,17 +25,39 @@
                         </div>
                     </div>
 
-                    <!-- Image Section -->
-                    <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                    <!-- Image Section with Floating Animation -->
+                    <div class="w-full md:w-1/2 flex justify-center md:justify-end mt-4 md:mt-0" data-aos="fade-up"
+                        data-aos-delay="800">
                         <img src="{{ asset('images/Hero.png') }}" alt="Hero Picture"
-                            class="w-full max-w-[500px] lg:max-w-[800px] xl:max-w-[1000px] h-auto object-cover rounded-lg">
+                            class="w-full max-w-[500px] lg:max-w-[800px] xl:max-w-[1500px] h-auto object-cover rounded-lg animate-float">
                     </div>
+                    <style>
+                        /* Floating Animation */
+                        @keyframes float {
+
+                            0%,
+                            100% {
+                                transform: translateY(0);
+                            }
+
+                            50% {
+                                transform: translateY(-20px);
+                                /* Adjust the floating height */
+                            }
+                        }
+
+                        .animate-float {
+                            animation: float 3s ease-in-out infinite;
+                            /* Adjust the duration and timing function */
+                        }
+                    </style>
                 </div>
             </div>
         </div>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="mb-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+            <div class="mb-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700"
+                data-aos="fade-right" data-aos-delay="200">
                 <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
                     data-tabs-toggle="#default-tab-content" role="tablist">
                     <li class="me-2" role="presentation">
@@ -72,7 +97,7 @@
                     </a>
                 </div>
             </div>
-            <div id="default-tab-content">
+            <div id="default-tab-content" data-aos="fade-left" data-aos-delay="700" class="px-4 sm:px-6 lg:px-8">
                 <!-- Artwork Grid -->
                 <div class="hidden rounded-lg dark:bg-gray-800" id="profile" role="tabpanel"
                     aria-labelledby="showcase-tab">
@@ -84,7 +109,9 @@
                                         'title' => $artwork->title,
                                         'category' => $artwork->category->name,
                                         'artist' => $artwork->artist->user->name,
-                                        'artist_image' => asset('images/profile.default.jpg'),
+                                        'artist_image' => $artwork->artist->user->profileImage
+                                            ? asset('storage/' . $artwork->artist->user->profileImage->path)
+                                            : asset('images/profile.default.jpg'),
                                         'description' => $artwork->description,
                                         'created_at' => $artwork->created_at->format('F j, Y'),
                                         'tags' => $artwork->tags->pluck('name'),
@@ -111,7 +138,8 @@
                                             <!-- Artist Info -->
                                             <div class="flex items-center gap-2 mt-2">
                                                 <img src="{{ $artwork->artist->user->profileImage ? asset('storage/' . $artwork->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}"
-                                                    alt="Artist" class="w-6 h-6 rounded-full border border-white">
+                                                    alt="Artist"
+                                                    class="w-6 h-6 rounded-full object-cover border border-white">
                                                 <p class="text-sm font-medium flex items-center">
                                                     {{ $artwork->artist->user->name }}
                                                     <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
@@ -127,9 +155,11 @@
 
                                 <div id="popup-modal"
                                     class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
-                                    <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl max-h-5xl relative">
+                                    <div
+                                        class="bg-white rounded-lg shadow-lg p-4 md:p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative mx-4">
                                         <!-- Close Button -->
-                                        <button class="absolute top-5 right-5 text-gray-600 hover:text-gray-900"
+                                        <button
+                                            class="absolute top-2 right-2 md:top-10 md:right-5 text-gray-600 hover:text-gray-900"
                                             onclick="closeArtworkModal()">
                                             <svg class="w-4 h-4" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -140,11 +170,16 @@
                                             </svg>
                                         </button>
 
-                                        <div class="flex gap-4">
+                                        <div class="flex flex-col md:flex-row gap-4">
                                             <!-- Carousel Section -->
-                                            <div class="w-1/2 relative">
+                                            <div class="w-full md:w-1/2 relative">
+                                                <!-- Carousel Container with Fixed Height -->
                                                 <div id="carousel-items"
-                                                    class="relative h-full overflow-hidden rounded-lg"></div>
+                                                    class="relative h-64 md:h-96 overflow-hidden rounded-lg">
+                                                    <!-- Add your carousel images here -->
+                                                    <img src="your-image.jpg" alt="Carousel Image"
+                                                        class="w-full h-full object-cover">
+                                                </div>
 
                                                 <!-- Carousel Controls -->
                                                 <button type="button"
@@ -173,18 +208,19 @@
                                                 <!-- Carousel Indicators -->
                                                 <div id="carousel-indicators"
                                                     class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+                                                    <!-- Indicators will be dynamically added here -->
                                                 </div>
                                             </div>
 
                                             <!-- Artwork Details -->
-                                            <div class="w-1/2">
+                                            <div class="w-full md:w-1/2">
                                                 <div class="flex items-center gap-2 mt-2">
                                                     <img id="modal-artist-image" src="" alt="Artist"
-                                                        class="w-10 h-10 rounded-full border border-white">
+                                                        class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border border-white">
                                                     <div>
                                                         <div class="flex items-center gap-1">
                                                             <p id="modal-artist"
-                                                                class="text-lg font-medium flex items-center">
+                                                                class="text-base md:text-lg font-medium flex items-center">
                                                             </p>
                                                             <svg class="w-4 h-4 text-blue-400 ml-1"
                                                                 fill="currentColor" viewBox="0 0 24 24">
@@ -192,15 +228,20 @@
                                                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
                                                             </svg>
                                                         </div>
-                                                        <p id="modal-date" class="text-sm text-gray-400"></p>
+                                                        <p id="modal-date" class="text-xs md:text-sm text-gray-400">
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <h2 id="modal-title" class="text-2xl font-bold mt-4"></h2>
-                                                <p id="modal-description" class="text-gray-700 mb-2"></p>
-                                                <p id="modal-category" class="text-lg text-black-500"></p>
+                                                <h2 id="modal-title" class="text-xl md:text-2xl font-bold mt-4"></h2>
+                                                <p id="modal-description"
+                                                    class="text-sm md:text-base text-gray-700 mb-2"></p>
+                                                <p id="modal-category" class="text-base md:text-lg text-black-500">
+                                                </p>
                                                 <div class="mt-4">
-                                                    <h3 class="text-md font-semibold">Tags:</h3>
-                                                    <div id="modal-tags" class="flex flex-wrap text-sm gap-2 mt-4">
+                                                    <h3 class="text-sm md:text-md font-semibold">Tags:</h3>
+                                                    <div id="modal-tags"
+                                                        class="flex flex-wrap text-xs md:text-sm gap-2 mt-2">
+                                                        <!-- Tags will be dynamically added here -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -242,7 +283,8 @@
                                         <!-- Artist Info -->
                                         <div class="flex items-center gap-2 mt-2">
                                             <img src="{{ $artist->user->profileImage ? asset('storage/' . $artist->user->profileImage->path) : asset('images/profile.default.jpg') }}"
-                                                alt="Artist" class="w-6 h-6 rounded-full border border-white">
+                                                alt="Artist"
+                                                class="w-6 h-6 rounded-full object-cover border border-white">
                                             <div>
                                                 <p class="text-sm font-medium flex items-center">
                                                     {{ $artist->user->name ?? 'John Doe' }}
@@ -374,58 +416,65 @@
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 mt-12 overflow-hidden">
-            <h1 class="text-4xl font-bold text-center sm:text-left">Your Trusted Custom Art Platform</h1>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 mt-12 overflow-hidden px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold text-center sm:text-left" data-aos="fade-right" data-aos-delay="700">Your
+                Trusted Custom Art Platform</h1>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-12">
                 <div>
-                    <h3 class="text-xl font-bold mb-2 text-gray-600">Explore Unique Art Creations</h3>
-                    <p>Our mission is to provide a seamless experience for art lovers,
+                    <h3 class="text-xl font-bold mb-2 text-gray-600" data-aos="fade-right" data-aos-delay="800">
+                        Explore Unique Art Creations</h3>
+                    <p data-aos="fade-up-right" data-aos-delay="900">Our mission is to provide a seamless experience
+                        for art lovers,
                         ensuring that every piece reflects your vision and passion for creativity,
                         while supporting local artists in our vibrant community.</p>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold mb-2 text-gray-600">Commission Your Dream Artwork</h3>
-                    <p>At Torch, we connect you with talented artists in Zamboanga for custom art
+                    <h3 class="text-xl font-bold mb-2 text-gray-600" data-aos="fade-left" data-aos-delay="800">
+                        Commission Your Dream Artwork</h3>
+                    <p data-aos="fade-up-left" data-aos-delay="900">At Torch, we connect you with talented artists in
+                        Zamboanga for custom art
                         commissions and offer a selection of beautiful premade artworks to enhance your space.</p>
                 </div>
             </div>
             <img src="{{ asset('images/default.image.jpg') }}" alt=""
-                class="w-full h-64 sm:h-96 object-cover rounded-lg mt-12">
+                class="w-full h-64 sm:h-96 object-cover rounded-lg mt-12" data-aos="fade-up" data-aos-delay="900">
         </div>
 
         <div
             class="flex flex-col items-center justify-center max-w-7xl mt-4 mx-auto bg-arange-200 sm:px-6 lg:px-8 pb-16 overflow-hidden">
-            <h1 class="text-4xl text-orange-500 font-bold text-center">Hear from our users</h1>
-            <p class="mt-2 font-medium text-gray-400 text-center">Artwork Reviews</p>
+            <h1 class="text-4xl text-orange-500 font-bold" data-aos="fade-right" data-aos-delay="300">Hear from our
+                users</h1>
+            <p class="mt-2 font-medium text-gray-400" data-aos="fade-left" data-aos-delay="400">Artwork Reviews</p>
             <div class="flex flex-wrap gap-6 mt-8 items-center justify-center">
-            @foreach ($reviews->take(3) as $review)
-                <div class="flex flex-col items-center justify-center bg-white w-full sm:w-80 h-96 rounded-lg p-8 shadow-lg">
-                @php
-                    $client = $review->order->client ?? $review->commission->request->client;
-                @endphp
-                <img src="{{ $client->user->profileImage ? asset('storage/' . $client->user->profileImage->path) : asset('images/profile.default.jpg') }}"
-                    alt="User" class="w-16 h-16 rounded-full border-2 border-orange-500">
-                <p class="text-lg font-semibold mt-4">{{ $client->user->name }}</p>
-                <p class="text-sm text-gray-500">{{ ucfirst($client->user->role) }}</p>
-                <p class="text-md text-orange-500 text-center mt-4">"{{ $review->comment }}"</p>
-                <div class="flex gap-1 justify-center items-center mt-4">
-                    @for ($i = 0; $i < $review->rating; $i++)
-                    <svg class="w-4 h-4 text-yellow-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
-                    </svg>
-                    @endfor
-                    @for ($i = $review->rating; $i < 5; $i++)
-                    <svg class="w-4 h-4 text-gray-300" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
-                    </svg>
-                    @endfor
-                </div>
-                </div>
-            @endforeach
+                @foreach ($reviews->take(3) as $review)
+                    <div class="flex flex-col items-center justify-center bg-white w-full sm:w-80 h-96 sm:h-46 rounded-lg p-8 shadow-lg max-w-xs"
+                        data-aos="fade-up" data-aos-delay="800">
+                        @php
+                            $client = $review->order->client ?? $review->commission->request->client;
+                        @endphp
+                        <img src="{{ $client->user->profileImage ? asset('storage/' . $client->user->profileImage->path) : asset('images/profile.default.jpg') }}"
+                            alt="User" class="w-16 h-16 rounded-full border-2 border-orange-500">
+                        <p class="text-lg font-semibold mt-4">{{ $client->user->name }}</p>
+                        <p class="text-sm text-gray-500">{{ ucfirst($client->user->role) }}</p>
+                        <p class="text-md text-orange-500 text-center mt-4">"{{ $review->comment }}"</p>
+                        <div class="flex gap-1 justify-center items-center mt-4">
+                            @for ($i = 0; $i < $review->rating; $i++)
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                </svg>
+                            @endfor
+                            @for ($i = $review->rating; $i < 5; $i++)
+                                <svg class="w-4 h-4 text-gray-300" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                </svg>
+                            @endfor
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

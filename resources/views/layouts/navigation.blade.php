@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b-2 border-gray-300 fixed top-0 left-0 right-0 z-30">
+<nav x-data="{ open: false }" class="bg-white border-b-2 border-gray-300 fixed top-0 left-0 right-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -41,7 +41,7 @@
                             d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                     </svg>
                     @if(Auth::user()->cart)
-                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ Auth::user()->cart->items->count() }}</span>
+                    <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ Auth::user()->cart->items->count() }}</span>
                     @endif
                 </a>
 
@@ -146,7 +146,7 @@
                             d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                     </svg>
                     @if(Auth::check() && Auth::user()->cart)
-                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ Auth::user()->cart->items->count() }}</span>
+                    <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{{ Auth::user()->cart->items->count() }}</span>
                     @endif
                 </a>
 

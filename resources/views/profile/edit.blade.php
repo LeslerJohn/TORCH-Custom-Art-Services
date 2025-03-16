@@ -21,6 +21,13 @@
                                 Address
                             </button>
                         </li>
+                        @if (Auth::user()->isArtist())
+                            <li>
+                                <button onclick="switchTab('payment')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                                    Payment Method
+                                </button>
+                            </li>
+                        @endif
                         <li>
                             <button onclick="switchTab('password')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 transition">
                                 Update Password
@@ -45,6 +52,12 @@
                     <div id="address" class="tab-content p-6 shadow rounded-lg hidden max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-hide">
                         @include('profile.partials.edit-address-form')
                     </div>
+
+                    @if (Auth::user()->isArtist())
+                        <div id="payment" class="tab-content p-6 shadow rounded-lg hidden max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-hide">
+                            @include('profile.partials.update-payment-method')
+                        </div>
+                    @endif
 
                     <!-- Update Password Tab -->
                     <div id="password" class="tab-content p-6 shadow rounded-lg hidden max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-hide">
