@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\ArtistProfile;
 use App\Models\Artwork;
 use App\Models\Category;
+use App\Models\ClientLiked;
+use App\Models\CommissionReview;
 use App\Models\OrderReview;
 use App\Models\Service;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -21,8 +24,21 @@ class HomeController extends Controller
         $artworks = Artwork::latest()->take(9)->get();
         $artists = ArtistProfile::latest()->take(9)->get();
         $services = Service::latest()->take(9)->get();
-        $reviews = OrderReview::latest()->take(3)->get();
+        $orderReviews = OrderReview::where('rating', 5)
+            ->whereNotNull('review')
+            ->with('order.client')
+            ->latest()
+            ->take(3)
+            ->get();
 
+        $commissionReviews = CommissionReview::where('rating', 5)
+            ->whereNotNull('review')
+            ->with('commission.request.client')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $reviews = $commissionReviews->merge($orderReviews)->shuffle();
         // dd(compact('artworks', 'artists', 'services', 'reviews'));
 
         return view('dashboard', compact('artworks', 'artists', 'services', 'reviews'));
@@ -231,7 +247,16 @@ class HomeController extends Controller
      */
     public function show_artwork(Artwork $artwork)
     {
-        return view('client.show-artwork', compact('artwork'));
+        $user = Auth::user();
+        $hasLiked = false;
+        if ($user) {
+            $hasLiked = ClientLiked::query()
+                ->where('client_id', $user->id)
+                ->where('artwork_id', $artwork->id)
+                ->exists();
+        }
+
+        return view('client.show-artwork', compact('artwork', 'hasLiked'));
     }
 
     public function show_service(Service $service)

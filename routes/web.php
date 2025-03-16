@@ -46,7 +46,8 @@ Route::get('/client/service', [HomeController::class, 'service'])->name('client.
 
 Route::get('/artwork/{artwork}', [HomeController::class, 'show_artwork'])->name('artwork.show');
 Route::get('/service/{service}', [HomeController::class, 'show_service'])->name('service.show');
-
+Route::put('/artwork/{artwork}/like', [ArtworkController::class, 'like'])->name('artwork.like');
+Route::delete('/artwork/{artwork}/unlike', [ArtworkController::class, 'unlike'])->name('artwork.unlike');
 
 Route::get('/cart', [CartController::class, 'index'])->name('client.cart.index');
 Route::post('/cart/{artwork}', [CartController::class, 'store'])->name('client.cart.store');

@@ -4,63 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Artwork;
+use App\Models\ClientLiked;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArtworkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Artwork $artwork)
     {
-        return view('client.show-artwork', compact('artwork'));
+        $user = Auth::user();
+        $hasLiked = false;
+        if ($user) {
+            $hasLiked = ClientLiked::query()
+                ->where('client_id', $user->id)
+                ->where('artwork_id', $artwork->id)
+                ->exists();
+        }
+
+        return view('client.show-artwork', compact('artwork', 'hasLiked'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function like(Artwork $artwork)
     {
-        //
+        ClientLiked::create([
+            'client_id' => Auth::user()->id,
+            'artwork_id' => $artwork->id,
+        ]);
+
+        return back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function unlike(Artwork $artwork)
     {
-        //
-    }
+        ClientLiked::where('client_id', Auth::user()->id)
+            ->where('artwork_id', $artwork->id)
+            ->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back();
     }
 }

@@ -48,31 +48,54 @@
             </div>
 
             <!-- Collections Tab -->
-            <div x-show="tab === 'collections'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-                @forelse($collections as $collection)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition hover:scale-105">
-                    <img src="{{ asset($collection->image) }}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg">{{ $collection->title }}</h4>
-                    </div>
+            <div x-show="tab === 'collections'" class="mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @forelse($collections as $collection)
+                        @foreach ($collection->items as $item)
+                            <a href="{{ route('artwork.show', $item->artwork) }}"
+                                class="bg-white p-4 rounded-lg shadow-md flex flex-col">
+                                <div class="mb-4">
+                                    <h4 class="font-semibold text-lg">{{ $item->artwork->title }}</h4>
+                                    <p class="text-gray-500 text-sm">{{ $item->artwork->description }}</p>
+                                    @if ($item->artwork->images->isNotEmpty() && $item->artwork->images->first()->attachment)
+                                        <img src="{{ asset('storage/' . $item->artwork->images->first()->attachment->path) }}"
+                                            class="w-full h-40 object-cover rounded-lg mt-2"
+                                            alt="{{ $item->artwork->title }}">
+                                    @else
+                                        <img src="{{ asset('images/default-artwork.jpg') }}"
+                                            class="w-full h-40 object-cover rounded-lg mt-2"
+                                            alt="Default Artwork">
+                                    @endif
+                                </div>
+                            </a>
+                        @endforeach
+                    @empty
+                        <p class="text-gray-500 text-center col-span-full">No collections available.</p>
+                    @endforelse
                 </div>
-                @empty
-                <p class="text-gray-500 text-center col-span-full">No collections available.</p>
-                @endforelse
             </div>
 
             <!-- Liked Tab -->
-            <div x-show="tab === 'liked'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-                @forelse($liked as $likedItem)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition hover:scale-105">
-                    <img src="{{ asset($likedItem->image) }}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg">{{ $likedItem->title }}</h4>
-                    </div>
+            <div x-show="tab === 'liked'" class="mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @forelse($liked as $like)
+                        <a href="{{ route('artwork.show', $like->artwork) }}"
+                            class="bg-white p-4 rounded-lg shadow-md flex flex-col transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <img src="{{ $like->artwork->images && $like->artwork->images->first() && $like->artwork->images->first()->attachment ? asset('storage/' . $like->artwork->images->first()->attachment->path) : asset('images/default-artwork.jpg') }}"
+                                    class="w-10 h-10 rounded-full object-cover">
+                                <div>
+                                    <h4 class="font-semibold">{{ $like->artwork->title }}</h4>
+                                    <p class="text-sm text-gray-500">
+                                        {{ $like->artwork->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">{{ $like->artwork->description }}</p>
+                        </a>
+                    @empty
+                        <p class="text-gray-500 text-center col-span-full">No liked artworks available.</p>
+                    @endforelse
                 </div>
-                @empty
-                <p class="text-gray-500 text-center col-span-full">No liked items available.</p>
-                @endforelse
             </div>
         </div>
     </div>
