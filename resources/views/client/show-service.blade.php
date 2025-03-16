@@ -1,19 +1,23 @@
 <x-app-layout>
-    <div class="mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-200">
-        {{-- <a href="{{ route('dashboard') }}">
-        <x-secondary-button class="justify-center py-1 w-20 text-md hover:border-blue-500">
-            Back
-        </x-secondary-button>
-        </a> --}}
-        <div class="flex gap-6 py-4 w-full">
-            <div id="default-carousel" class="relative w-1/2 h-full" data-carousel="slide">
+    <div class="mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-200 rounded-md">
+        <!-- Back Button -->
+        <div class="mb-4 pt-4">
+            <button onclick="window.history.back()" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6 py-4 w-full">
+            <!-- Carousel Section / Left Column-->
+            <div id="default-carousel" class="relative w-full md:w-1/2 h-full" data-carousel="slide">
                 <!-- Carousel wrapper -->
-                <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+                <div class="relative h-48 md:h-56 lg:h-96 overflow-hidden rounded-lg">
                     @foreach ($service->images as $index => $image)
                     <div class="{{ $index === 0 ? '' : 'hidden' }} duration-700 ease-in-out" data-carousel-item>
                         <img src="{{ $image->attachment ? asset('storage/' . $image->attachment->path) : asset('images/default.image.jpg') }}"
-                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                            alt="...">
+                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-md"
+                            alt="Service Image">
                     </div>
                     @endforeach
                 </div>
@@ -54,121 +58,131 @@
                 </button>
             </div>
 
-            <div class="flex w-1/2 flex-col">
-                <h1 class="text-3xl font-bold font-bold-300">{{ $service->category->name }}</h1>
-                <p class="text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per
+            <!-- Service Details / Right Column -->
+            <div class="flex flex-col w-full md:w-1/2">
+                <h1 class="text-2xl md:text-3xl font-bold">{{ $service->category->name }}</h1>
+                <p class="text-xl md:text-2xl text-red-600">₱<strong>{{ number_format($service->price_rate, 0, '.', ',') }} per
                         square inch.</strong></p>
-                <p class="text-lg text-gray-500">Completion time: {{ $service->normal_timeframe }} -
+                <p class="text-base md:text-lg text-gray-500">Completion time: {{ $service->normal_timeframe }} -
                     {{ $service->normal_timeframe + 5 }} days
                 </p>
 
                 <div class="flex items-center gap-2 mt-2">
-                    <img src="{{ Auth::user()->profileImage ? Storage::url(Auth::user()->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
-                        class="w-10 h-10 rounded-full object-cover border border-white">
+                    <img src="{{ $service->artist->user->profileImage ? asset('storage/' . $service->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border border-white">
                     <div>
-                        <p class="text-sm font-medium flex items-center">
+                        <p class="text-sm md:text-base font-medium flex items-center">
                             {{ $service->artist->user->name ?? 'John Doe' }}
                             <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
                             </svg>
                         </p>
-                        <p class="text-sm text-gray-400">{{ '@' . $service->artist->username }}</p>
+                        <p class="text-xs md:text-sm text-gray-400">{{ '@' . $service->artist->username }}</p>
                     </div>
                 </div>
-                <div class="mt-0.5 p-2 bg-white rounded-md">
-                    <p>Thanks for considering me for your commission! Please only start a request if you find the
+
+                <div class="mt-2 p-2 bg-white rounded-md">
+                    <p class="text-sm md:text-base">Thanks for considering me for your commission! Please only start a request if you find the
                         service details and TORCH's Terms of Service acceptable.</p>
                 </div>
-                <hr class="w-full my-4 h-2 border-gray-500">
+                <hr class="w-full my-4 h-1 border-gray-300">
 
-                <div>
-                    <h2 class="text-xl font-semibold">Rush Order</h2>
-                    <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per
-                        square inch.</p>
-                    <p class="text-lg text-gray-500">Completion time: {{ $service->rush_timeframe }} -
-                        {{ $service->normal_timeframe - 1 }} days
-                    </p>
-                    <div class="flex flex-wrap gap-2 mt-2">
-                        @foreach ($service->tags as $tag)
-                        <span
-                            class="bg-green-200 text-sm text-gray-700 px-4 py-1 rounded-full">{{ $tag->name }}</span>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-xl font-semibold mt-4">Contact</h2>
-                    <p class="mt-2"><strong>Email:</strong> {{ $service->artist->user->email ?? 'test@email.com' }}
-                    </p>
-                    <p class="mt-1"><strong>Phone:</strong> {{ $service->artist->user->phone_number }}</p>
-                </div>
-
-                <div class="flex flex-col gap-4 p-4 bg-white rounded-md mt-4 border border-gray-300 shadow-sm">
+                <div class="overflow-y-auto scrollbar-hide" style="max-height: 60vh;">
                     <div>
-                        <h2 class="text-lg font-semibold mb-2">Includes</h2>
-                        <ul class="list-disc pl-5 text-gray-700">
-                            <li>Handcrafted illustrations using traditional mediums.</li>
-                            <li>Ideal for detailed compositions, including intricate backgrounds and scenes.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-semibold mb-2">Pricing Framework</h2>
-                        <ul class="list-disc pl-5 text-gray-700">
-                            <li>Pricing is based on the artist’s base price per square inch.</li>
-                            <li>The total cost is calculated as: <span class="font-semibold">Length × Width × Base
-                                    Price</span></li>
-                            <li>Rush orders will have an additional fee.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-semibold mb-2">Details</h2>
-                        <ul class="list-disc pl-5 text-gray-700">
-                            <li>Sizes vary based on composition; custom dimensions available upon request.</li>
-                            <li>Full scenes included, incorporating depth and artistic storytelling.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-semibold mb-2">Important</h2>
-                        <ul class="list-disc pl-5 text-gray-700">
-                            <li>Base prices may vary depending on detail level, materials, and artist's experience.</li>
-                            <li>No cancellation once the commission has started.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                @auth
-                @if (auth()->user()->id !== $service->artist->user->id)
-                @if ($service->artist->available)
-                <div class="mt-4 flex flex-col gap-4 justify-center">
-                    <div class="flex items-center">
-                        <input id="terms" type="checkbox" class="mr-2">
-                        <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#"
-                                class="text-blue-600 underline">Terms of Service</a></label>
-                    </div>
-                    <div class="flex justify-center">
-                        <button id="start-request-btn" data-modal-target="authentication-modal"
-                            data-modal-toggle="authentication-modal"
-                            class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
-                            type="button" disabled>
-                            Start your request
-                        </button>
+                        <h2 class="text-xl font-semibold">Rush Order</h2>
+                        <p class="text-lg text-red-500">₱{{ number_format($service->rush_price_rate, 0, '.', ',') }} per square inch.</p>
+                        <p class="text-lg text-gray-500">Completion time: {{ $service->rush_timeframe }} - {{ $service->normal_timeframe - 1 }} days</p>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            @foreach ($service->tags as $tag)
+                            <span class="bg-green-200 text-sm text-gray-700 px-3 py-1 rounded-full">{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
                     </div>
 
-                    <script>
-                        document.getElementById('terms').addEventListener('change', function() {
-                            document.getElementById('start-request-btn').disabled = !this.checked;
-                        });
-                    </script>
+                    <div class="mt-4">
+                        <h2 class="text-xl font-semibold">Contact</h2>
+                        <p class="mt-2"><strong>Email:</strong> {{ $service->artist->user->email ?? 'test@email.com' }}</p>
+                        <p class="mt-1"><strong>Phone:</strong> {{ $service->artist->user->phone_number }}</p>
+                    </div>
+
+                    <div class="flex flex-col gap-4 p-4 bg-white rounded-md mt-4 border border-gray-300 shadow-sm">
+                        <div>
+                            <h2 class="text-lg font-semibold mb-2">Includes</h2>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Handcrafted illustrations using traditional mediums.</li>
+                                <li>Ideal for detailed compositions, including intricate backgrounds and scenes.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold mb-2">Pricing Framework</h2>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Pricing is based on the artist’s base price per square inch.</li>
+                                <li>The total cost is calculated as: <span class="font-semibold">Length × Width × Base Price</span></li>
+                                <li>Rush orders will have an additional fee.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold mb-2">Details</h2>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Sizes vary based on composition; custom dimensions available upon request.</li>
+                                <li>Full scenes included, incorporating depth and artistic storytelling.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-semibold mb-2">Important</h2>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>Base prices may vary depending on detail level, materials, and artist's experience.</li>
+                                <li>No cancellation once the commission has started.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    @auth
+                    @if (auth()->user()->id !== $service->artist->user->id)
+                    @if ($service->artist->available)
+                    <div class="mt-4 flex flex-col gap-4 justify-center">
+                        <div class="flex items-center">
+                            <input id="terms" type="checkbox" class="mr-2">
+                            <label for="terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 underline">Terms of Service</a></label>
+                        </div>
+                        <div class="flex justify-center">
+                            <button id="start-request-btn" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                                class="block w-full max-w-md text-white text-xl bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50"
+                                type="button" disabled>
+                                Start your request
+                            </button>
+                        </div>
+
+                        <script>
+                            document.getElementById('terms').addEventListener('change', function() {
+                                document.getElementById('start-request-btn').disabled = !this.checked;
+                            });
+                        </script>
+                    </div>
+                    @else
+                    <div class="mt-4 flex flex-col gap-4 justify-center">
+                        <p class="text-red-500 text-center">The artist is currently not available for commissions.</p>
+                    </div>
+                    @endif
+                    @endif
+                    @endauth
                 </div>
-                @else
-                <div class="mt-4 flex flex-col gap-4 justify-center">
-                    <p class="text-red-500 text-center">The artist is currently not available for commissions.
-                    </p>
-                </div>
-                @endif
-                @endif
-                @endauth
+
+                <style>
+                    /* Hide scrollbar for Chrome, Safari, and Opera */
+                    .scrollbar-hide::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    /* Hide scrollbar for IE, Edge, and Firefox */
+                    .scrollbar-hide {
+                        -ms-overflow-style: none;
+                        /* IE and Edge */
+                        scrollbar-width: none;
+                        /* Firefox */
+                    }
+                </style>
 
                 <!-- Main modal -->
                 <div id="authentication-modal" tabindex="-1" aria-hidden="true"
@@ -177,8 +191,7 @@
                         <!-- Modal content -->
                         <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                             <!-- Modal header -->
-                            <div
-                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                                     Checkout
                                 </h3>
@@ -194,11 +207,11 @@
                                 </button>
                             </div>
                             <!-- Modal body -->
-                            <div class="flex gap-2 w-full justify-center p-4 md:p-5">
-                                <div class="w-1/2">
+                            <div class="flex flex-col md:flex-row gap-4 p-4 md:p-5">
+                                <div class="w-full md:w-1/2">
                                     <div class="flex items-center gap-2 mt-2">
-                                        <img src="{{ asset('images/profile.default.jpg') }}" alt="Artist"
-                                            class="w-10 h-10 rounded-full border border-white">
+                                        <img src="{{ $service->artist->user->profileImage ? asset('storage/' . $service->artist->user->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Artist"
+                                            class="w-10 h-10 rounded-full object-cover border border-white">
                                         <div>
                                             <p class="text-sm font-medium flex items-center">
                                                 {{ $service->artist->user->name ?? 'John Doe' }}
@@ -285,7 +298,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form class="space-y-4 w-1/2" action="{{ route('client.request.store', $service) }}"
+                                <form class="w-full md:w-1/2 space-y-4" action="{{ route('client.request.store', $service) }}"
                                     method="POST" enctype="multipart/form-data" x-data="orderForm()">
                                     @csrf
                                     <h1 class="text-xl font-bold">Request an Artwork</h1>
@@ -299,7 +312,8 @@
                                     </div>
 
                                     <!-- Dimensions -->
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
+                                        <!-- Width Input -->
                                         <div>
                                             <x-input-label for="width" :value="__('Width')" />
                                             <div class="flex">
@@ -314,6 +328,7 @@
                                             <small class="text-gray-500">Enter the width of your artwork.</small>
                                         </div>
 
+                                        <!-- Height Input -->
                                         <div>
                                             <x-input-label for="height" :value="__('Height')" />
                                             <div class="flex">
@@ -356,7 +371,9 @@
                                             Choose quantity:
                                         </label>
 
-                                        <div class="relative flex items-center max-w-[8rem]">
+                                        <!-- Quantity Input Container -->
+                                        <div class="relative flex items-center w-full md:max-w-[8rem]">
+                                            <!-- Decrement Button -->
                                             <button type="button" @click="quantity = Math.max(1, quantity - 1)"
                                                 :disabled="quantity <= 1"
                                                 class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
@@ -389,6 +406,7 @@
                                             </button>
                                         </div>
 
+                                        <!-- Helper Text -->
                                         <p id="helper-text-explanation"
                                             class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                             Please select a quantity from 1 to 5.
@@ -402,18 +420,17 @@
                                         <input id="references" type="file" name="references[]" accept="image/*"
                                             multiple required class="block w-full border-gray-300 rounded-md shadow-sm"
                                             @change="files = Array.from($event.target.files)">
-                                        <small class="text-gray-500">Upload images that help illustrate your request
-                                            (max 5 images).</small>
+                                        <small class="text-gray-500">Upload images that help illustrate your request (max 5 images).</small>
                                         <x-input-error :messages="$errors->get('references')" class="mt-2" />
 
                                         <!-- Display selected images -->
-                                        <div class="mt-4 grid grid-cols-2 gap-4">
+                                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <template x-for="file in files" :key="file.name">
                                                 <div class="relative">
                                                     <img :src="URL.createObjectURL(file)"
                                                         class="w-full h-32 object-cover rounded-md">
                                                     <button type="button"
-                                                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1"
+                                                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full px-1"
                                                         @click="files = files.filter(f => f !== file)">
                                                         &times;
                                                     </button>
@@ -429,7 +446,7 @@
                                         <p class="text-xl font-bold text-indigo-600"
                                             x-text="'₱' + totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })">
                                         </p>
-                                        <span class="flex">Guaranteed to get by <p
+                                        <span class="flex items-center">Guaranteed to get by <p
                                                 class="text-md font-bold text-gray-600 ml-1"
                                                 x-text="estimatedReceiveDate"></p></span>
                                         <input type="hidden" name="total_price" x-model="totalPrice">
@@ -437,7 +454,7 @@
 
                                     <!-- Continue Button -->
                                     <button data-modal-target="payment-modal" data-modal-toggle="payment-modal"
-                                        class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        class="w-full md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         type="button">
                                         Continue
                                     </button>

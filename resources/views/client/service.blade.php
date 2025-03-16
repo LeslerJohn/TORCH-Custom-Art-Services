@@ -28,27 +28,27 @@
 
                 <!-- Filters -->
                 <form method="GET" action="{{ route('client.service') }}" class="mb-4">
-                    <div class="flex items-center gap-3 whitespace-nowrap py-2 border rounded-lg shadow-sm px-4 overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-3 whitespace-nowrap py-2 border rounded-lg shadow-sm px-4 overflow-hidden">
 
                         <!-- Availability -->
                         <button type="submit" name="available" value="1"
-                            class="px-5 py-2 border rounded-full {{ request('available') == '1' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
+                            class="w-full md:w-auto px-5 py-2 border rounded-full {{ request('available') == '1' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
                             Open Services
                         </button>
 
                         <!-- Sort Options -->
                         <button type="submit" name="sort" value="random"
-                            class="px-5 py-2 border rounded-full {{ request('sort') == 'random' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
+                            class="w-full md:w-auto px-5 py-2 border rounded-full {{ request('sort') == 'random' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
                             Random
                         </button>
                         <button type="submit" name="sort" value="latest"
-                            class="px-5 py-2 border rounded-full {{ request('sort') == 'latest' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
+                            class="w-full md:w-auto px-5 py-2 border rounded-full {{ request('sort') == 'latest' ? 'bg-black text-white' : 'bg-gray-200 text-black' }}">
                             Latest
                         </button>
 
                         <!-- Category Filter -->
                         <select name="category" onchange="this.form.submit()"
-                            class="px-5 py-2 border rounded-full bg-gray-200 text-black">
+                            class="w-full md:w-auto px-5 py-2 border rounded-full bg-gray-200 text-black">
                             <option value="">All Categories</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -59,22 +59,22 @@
 
                         <!-- Tags Section with Smooth Navigation -->
                         <div x-data="{
-                    scrollAmount: 300, 
-                    showLeft: false, 
-                    showRight: false,
-                    updateButtons() {
-                        this.showLeft = this.$refs.tagsContainer.scrollLeft > 0;
-                        this.showRight = this.$refs.tagsContainer.scrollLeft < (this.$refs.tagsContainer.scrollWidth - this.$refs.tagsContainer.clientWidth);
-                    },
-                    scrollLeft() {
-                        this.$refs.tagsContainer.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' });
-                        setTimeout(() => this.updateButtons(), 300);
-                    },
-                    scrollRight() {
-                        this.$refs.tagsContainer.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
-                        setTimeout(() => this.updateButtons(), 300);
-                    }
-                }"
+            scrollAmount: 300, 
+            showLeft: false, 
+            showRight: false,
+            updateButtons() {
+                this.showLeft = this.$refs.tagsContainer.scrollLeft > 0;
+                this.showRight = this.$refs.tagsContainer.scrollLeft < (this.$refs.tagsContainer.scrollWidth - this.$refs.tagsContainer.clientWidth);
+            },
+            scrollLeft() {
+                this.$refs.tagsContainer.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' });
+                setTimeout(() => this.updateButtons(), 300);
+            },
+            scrollRight() {
+                this.$refs.tagsContainer.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
+                setTimeout(() => this.updateButtons(), 300);
+            }
+        }"
                             x-init="$nextTick(() => updateButtons())"
                             class="relative flex items-center w-full max-w-xl">
 
