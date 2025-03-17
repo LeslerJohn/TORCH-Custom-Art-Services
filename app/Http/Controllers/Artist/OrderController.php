@@ -56,8 +56,7 @@ class OrderController extends Controller
     
     public function delivered(Order $order)
     {
-        $order->delivery->update(['status' => 'completed']);
-        $order->update(['status' => 'completed']);
+        $order->delivery->update(['status' => 'delivered']);
 
         return redirect()->route('artist.order.show', $order);
     }

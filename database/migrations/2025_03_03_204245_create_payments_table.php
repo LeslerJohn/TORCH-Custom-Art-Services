@@ -32,8 +32,10 @@ return new class extends Migration
             $table->foreignUlid('artist_id')->constrained('artist_profile')->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
             $table->text('reason');
+            $table->foreignUlid('attachment_id')->nullable()->constrained('attachment')->cascadeOnDelete();
             $table->enum('refund_method', ['GCash', 'PayMaya', 'Bank Transfer', 'Credit Card'])->default('GCash');
             $table->enum('status', ['pending', 'approved', 'rejected', 'processed'])->default('pending');
+            $table->string('transaction_id')->nullable();
             $table->boolean('admin_approved')->nullable();
             $table->timestamps();
         });
@@ -57,6 +59,22 @@ return new class extends Migration
             $table->string('transaction_id', 255)->unique();
             $table->timestamps();
         });
+
+        // Schema::table('order_payment_cut', function (Blueprint $table) {
+        //     $table->ulid('id')->primary();
+        //     $table->foreignUlid('order_id')->constrained('order')->cascadeOnDelete();
+        //     $table->foreignUlid('payment_id')->constrained('payments')->cascadeOnDelete();
+        //     $table->decimal('amount', 10, 2);
+        //     $table->timestamps();
+        // });
+
+        // Schema::table('commission_payment_cut', function (Blueprint $table) {
+        //     $table->ulid('id')->primary();
+        //     $table->foreignUlid('commission_id')->constrained('commission')->cascadeOnDelete();
+        //     $table->foreignUlid('payment_id')->constrained('payments')->cascadeOnDelete();
+        //     $table->decimal('amount', 10, 2);
+        //     $table->timestamps();
+        // });
     }
 
     /**

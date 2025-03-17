@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Artwork;
+use App\Models\Attachment;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\Payment;
@@ -169,11 +170,11 @@ class OrderController extends Controller
             $order->items()->create([
                 'artwork_id' => $artwork->id,
                 'quantity' => 1,
-                'price' => $artwork->discount && $artwork->discount->status === 'active' ? 
-                            ($artwork->discount->value_type === 'percentage' ? 
-                            $artwork->price - ($artwork->price * ($artwork->discount->value / 100)) : 
-                            $artwork->price - $artwork->discount->value) : 
-                            $artwork->price
+                'price' => $artwork->discount && $artwork->discount->status === 'active' ?
+                    ($artwork->discount->value_type === 'percentage' ?
+                        $artwork->price - ($artwork->price * ($artwork->discount->value / 100)) :
+                        $artwork->price - $artwork->discount->value) :
+                    $artwork->price
             ]);
 
             $artwork->update(['status' => 'sold']);
@@ -216,36 +217,25 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function return(Request $request, Order $order)
     {
-        //
-    }
+        $request->validate([
+            'reason' => 'required|string',
+            'evidence' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $file = $request->file('evidence');
+        $path = $file->store('evidences', 'public');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        // Check if order is within the cancellation timeline
-        $cancellationDeadline = $order->created_at->addHours(24); // Example: 24-hour cancellation window
-        if (now()->greaterThan($cancellationDeadline)) {
-            return redirect()->route('client.order.index')->with('error', 'Order cancellation period has expired.');
-        }
+        $attachment = Attachment::create([
+            'filename' => $file->getClientOriginalName(),
+            'path' => $path,
+            'mime_type' => $file->getMimeType(),
+        ]);
 
         // Company cut (10% fee) on refund amount
-        $company_cut = $order->total_amount * 0.10; // Adjust percentage as needed
-        if ($order->delivery && $order->delivery->status === 'in-transit') {
-            $company_cut = $order->total_amount * 0.20; // 20% fee if in-transit
-        }
-        $refund_amount = $order->total_amount - $company_cut;
+        $company_cut = $order->total * 0.10; // Adjust percentage as needed
+        $refund_amount = $order->total - $company_cut;
 
         // Create a refund request
         Refund::create([
@@ -254,18 +244,102 @@ class OrderController extends Controller
             'client_id' => $order->client_id,
             'artist_id' => $order->items->first()->artwork->artist_id,
             'amount' => $refund_amount,
-            'reason' => 'Client cancelled order',
-            'refund_method' => $order->payment->payment_method === 'GCash' ? 'Gcash' : 'Bank Transfer',
+            'reason' => $request->reason,
+            'attachment_id' => $attachment->id,
+            'refund_method' => $order->payment->payment_method === 'GCash' ? 'GCash' : 'PayMaya',
             'status' => 'pending',
             'admin_approved' => false
         ]);
 
-        // Update order and delivery statuses
-        $order->update(['status' => 'cancelled']);
+        $order->update(['status' => 'hold']);
         if ($order->delivery) {
-            $order->delivery->update(['status' => 'cancelled']);
+            $order->delivery->update(['status' => 'hold']);
         }
 
-        return redirect()->route('client.order.index')->with('success', 'Order cancelled. Refund request sent to admin.');
+        return redirect()->route('client.order.show', $order)->with('success', 'Order return request sent.');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Order $order)
+    {
+        $order->update([
+            'status' => 'completed'
+        ]);
+        $order->delivery->update([
+            'status' => 'completed'
+        ]);
+
+        return redirect()->route('client.order.show', $order)->with('success', 'Order status updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function cancel(Order $order)
+    {
+        if ($order->status === 'completed' || $order->delivery->status === 'in-transit') {
+            dd('Cannot cancel a completed order.');
+            return redirect()->route('client.order.index')->withErrors(['error' => 'Cannot cancel a completed order.']);
+        }
+
+        $refund_amount = $order->total;
+
+        // Call PayMongo Refund API
+        $response = Http::withOptions(['verify' => false])->withHeaders([
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json',
+            'Authorization' => 'Basic ' . env('AUTH_PAY'),
+        ])->post('https://api.paymongo.com/v1/refunds', [
+            'data' => [
+            'attributes' => [
+                'amount' => $refund_amount * 100, // Convert to centavos
+                'payment_id' => $order->payment->transaction_id,
+                'reason' => 'requested_by_customer',
+                "send_email_receipt" => true,
+                'payment_method_types' => [
+                    'gcash',
+                    'paymaya',
+                ],
+                'default_payment_method_type' => 'gcash',
+                "merchant" => "Paymongo Test Account",
+                'success_url' => route('client.order.show', $order),
+                'cancel_url' => route('client.order.index'),
+                'notes' => 'Order Cancellation',
+                'statement_descriptor' => 'Torch Payment',
+                "show_description" => true,
+            ]
+            ]
+        ]);
+
+        $response_data = $response->json();
+
+        // Check if refund is successful
+        if (isset($response_data['data'])) {
+            // Save refund in the database
+            Refund::create([
+                'payment_id' => $order->payment->id,
+                'order_id' => $order->id,
+                'client_id' => $order->client_id,
+                'artist_id' => $order->items->first()->artwork->artist_id,
+                'amount' => $refund_amount,
+                'reason' => 'Client cancelled order',
+                'refund_method' => $order->payment->payment_method === 'GCash' ? 'GCash' : 'Bank Transfer',
+                'status' => 'approved',
+                'transaction_id' => $response_data['data']['id'],
+                'admin_approved' => true, // Mark as approved
+            ]);
+
+            // Update order and delivery statuses
+            $order->update(['status' => 'cancelled']);
+            if ($order->delivery) {
+                $order->delivery->update(['status' => 'cancelled']);
+            }
+
+            return redirect()->route('client.order.index')->with('success', 'Order cancelled and refund processed successfully.');
+        } else {
+            return redirect()->route('client.order.index')->with('error', 'Refund failed. Please try again.');
+        }
     }
 }

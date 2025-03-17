@@ -16,7 +16,9 @@ class Refund extends Model
         'artist_id',
         'amount',
         'reason',
+        'attachment_id',
         'refund_method',
+        'transaction_id',
         'status',
         'admin_approved',
     ];
@@ -44,5 +46,10 @@ class Refund extends Model
     public function artist()
     {
         return $this->belongsTo(ArtistProfile::class, 'artist_id');
+    }
+
+    public function attachment()
+    {
+        return $this->belongsTo(Attachment::class, 'attachment_id');
     }
 }

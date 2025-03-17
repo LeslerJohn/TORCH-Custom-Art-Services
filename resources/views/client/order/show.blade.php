@@ -2,9 +2,12 @@
     <div class="max-w-5xl mt-4 md:mt-10 mx-4 md:mx-auto bg-white p-4 md:p-6 rounded-lg shadow-lg relative">
         <!-- Back Button -->
         <div class="mb-4 pt-4">
-            <button onclick="window.history.back()" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+            <button onclick="window.history.back()"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h14M5 12l4-4m-4 4 4 4" />
                 </svg>
             </button>
         </div>
@@ -12,24 +15,28 @@
         <!-- Status on Top Right -->
         <div class="absolute top-4 right-2 md:top-6 md:right-6">
             <span
-                class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white text-sm md:text-base
-                {{ $order->delivery->status == 'completed' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                {{ ucfirst($order->delivery->status ?? 'Pending') }}
+            class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white text-sm md:text-base
+            {{ $order->delivery->status == 'completed' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : ($order->delivery->status == 'hold' ? 'bg-orange-500' : ($order->delivery->status == 'returned' ? 'bg-purple-500' : 'bg-red-500'))) }}">
+            {{ ucfirst($order->delivery->status ?? 'Pending') }}
             </span>
         </div>
 
         <!-- Expected Delivery & Shipping Info -->
         <div class="mb-6">
             <p class="text-xl md:text-2xl font-bold mb-2">
-                @if ($order->delivery->status == 'pending')
+            @if ($order->delivery->status == 'pending')
                 The artist is preparing your order.
-                @elseif ($order->delivery->status == 'in-transit')
+            @elseif ($order->delivery->status == 'in-transit')
                 Your artwork is on the way.
-                @elseif ($order->delivery->status == 'completed')
+            @elseif ($order->delivery->status == 'completed')
                 Your order is completed.
-                @else
+            @elseif ($order->delivery->status == 'hold')
+                Your order is on hold. </br> Please contact support for more information.
+            @elseif ($order->delivery->status == 'returned')
+                Your order has been returned. </br> The refund process has been initiated.
+            @else
                 Cancelled
-                @endif
+            @endif
             </p>
             <p class="text-gray-600 text-sm md:text-base">Expected Delivery Date:
                 <strong
@@ -47,7 +54,7 @@
             <h2 class="text-lg md:text-xl font-semibold mb-2">Order Details</h2>
             <p class="text-sm md:text-base"><strong>Order ID:</strong> #{{ $order->id }}</p>
             @php
-            $totalPrice = $order->items->sum('price');
+                $totalPrice = $order->items->sum('price');
             @endphp
             <p class="text-sm md:text-base"><strong>Total Price:</strong> ₱{{ number_format($totalPrice, 2) }}</p>
         </div>
@@ -75,22 +82,27 @@
             </h2>
             <div class="space-y-4">
                 @foreach ($order->items as $item)
-                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 w-full">
-                    <!-- Artwork Image -->
-                    @php
-                    $thumbnail = $item->artwork->images->first()?->attachment;
-                    @endphp
-                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                        alt="{{ $item->artwork->title }}" class="w-full md:w-48 h-32 object-cover rounded-md">
+                    <div
+                        class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 w-full">
+                        <!-- Artwork Image -->
+                        @php
+                            $thumbnail = $item->artwork->images->first()?->attachment;
+                        @endphp
+                        <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                            alt="{{ $item->artwork->title }}" class="w-full md:w-48 h-32 object-cover rounded-md">
 
-                    <!-- Artwork Details -->
-                    <div class="flex-1">
-                        <h3 class="text-base md:text-lg font-semibold"><strong>Title:</strong> {{ $item->artwork->title }}</h3>
-                        <p class="text-sm md:text-base"><strong>Category:</strong> {{ $item->artwork->category->name }}</p>
-                        <p class="text-sm md:text-base"><strong>Price:</strong> ₱{{ number_format($item->price, 2) }}</p>
-                        <p class="text-sm md:text-base"><strong>Size:</strong> {{$item->artwork->width}} x {{$item->artwork->height}} {{$item->artwork->unit}}</p>
+                        <!-- Artwork Details -->
+                        <div class="flex-1">
+                            <h3 class="text-base md:text-lg font-semibold"><strong>Title:</strong>
+                                {{ $item->artwork->title }}</h3>
+                            <p class="text-sm md:text-base"><strong>Category:</strong>
+                                {{ $item->artwork->category->name }}</p>
+                            <p class="text-sm md:text-base"><strong>Price:</strong>
+                                ₱{{ number_format($item->price, 2) }}</p>
+                            <p class="text-sm md:text-base"><strong>Size:</strong> {{ $item->artwork->width }} x
+                                {{ $item->artwork->height }} {{ $item->artwork->unit }}</p>
+                        </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
@@ -106,24 +118,110 @@
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row justify-end gap-4">
             @if ($order->delivery->status == 'pending')
-            <form action="{{ route('client.order.destroy', $order) }}" method="POST" class="w-full md:w-auto">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg shadow">Cancel
-                    Order</button>
-            </form>
+                <form action="{{ route('client.order.cancel', $order) }}" method="POST" class="w-full md:w-auto">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit"
+                        class="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg shadow">Cancel
+                        Order</button>
+                </form>
+            @elseif ($order->delivery->status == 'in-transit')
+                <button data-tooltip-target="tooltip-default" type="button"
+                    class="w-full md:w-auto px-4 py-2 bg-gray-400 text-white rounded-lg shadow cursor-not-allowed"
+                    disabled>
+                    Cancel Order
+                </button>
+
+                <div id="tooltip-default" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                    Order cannot be cancelled while in transit. </br> You can initiate a refund/return after delivery.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+            @elseif ($order->delivery->status == 'delivered')
+                <!-- Received Button -->
+                <form action="{{ route('client.order.update', $order) }}" method="POST" class="w-full md:w-auto">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="status" value="completed">
+                    <button type="submit"
+                        class="w-full md:w-auto px-4 py-2 bg-green-500 text-white rounded-lg shadow">Received</button>
+                </form>
+
+                <!-- Return/Refund Button -->
+                @if (!$order->refund)
+                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
+                        class="w-full md:w-auto px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm text-center dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-yellow-600"
+                        type="button">
+                        Return/Refund
+                    </button>
+                @else
+                    <p class="text-red-500 text-sm md:text-base">Refund request already submitted for this order.</p>
+                @endif
+
             @elseif ($order->delivery->status == 'completed')
-            <!-- Modal toggle -->
-            @if (!$order->reviews->where('order_id', $order->id)->count())
-            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                class="w-full md:w-auto px-4 py-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button">
-                Review
-            </button>
-            @else
-            <p class="text-green-500 text-sm md:text-base">You have already reviewed this order.</p>
+                <!-- Modal toggle -->
+                @if (!$order->reviews->where('order_id', $order->id)->count())
+                    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                        class="w-full md:w-auto px-4 py-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button">
+                        Review
+                    </button>
+                @else
+                    <p class="text-green-500 text-sm md:text-base">You have already reviewed this order.</p>
+                @endif
+
+                <!-- Return/Refund Button -->
+                @if (!$order->refund)
+                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
+                        class="w-full md:w-auto px-4 py-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                        type="button">
+                        Return/Refund
+                    </button>
+                @else
+                    <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted for this order. Please wait for further updates.</p>
+                @endif
+            @elseif ($order->status == 'hold')
+                <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted for this order. </br> Please wait for further updates.</p>
+            @elseif ($order->status == 'returned')
+                <p class="text-red-500 text-sm md:text-base">Your order has been refunded with a 10% service fee deducted. Please check your payment method for the refund.</p>
             @endif
-            @endif
+
+            <!-- Return/Refund Modal -->
+            <div id="return-refund-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-md max-h-full">
+                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                        <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="return-refund-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                        <div class="p-4 md:p-5 text-center">
+                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Return/Refund Request</h3>
+                            <form action="{{ route('client.return.order', $order) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-4">
+                                    <label for="reason" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reason</label>
+                                    <select id="reason" name="reason" class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="Damaged item">Damaged item</option>
+                                        <option value="Wrong item">Wrong item</option>
+                                        <option value="Item not as described">Item not as described</option>
+                                        <option value="Late delivery">Late delivery</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="evidence" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attach Image</label>
+                                    <input type="file" id="evidence" name="evidence" accept="image/*" required class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400">
+                                </div>
+                                <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                    Submit Request
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Main modal -->
@@ -150,7 +248,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form action="{{route('client.review.order', $order)}}" method="POST" class="p-4 md:p-5">
+                    <form action="{{ route('client.review.order', $order) }}" method="POST" class="p-4 md:p-5">
                         @csrf
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="mb-4" x-data="{ rating: 0 }">
@@ -158,7 +256,8 @@
 
                                 <div class="flex items-center">
                                     <template x-for="star in 5">
-                                        <svg @click="rating = star" :class="rating >= star ? 'text-yellow-300' : 'text-gray-300'"
+                                        <svg @click="rating = star"
+                                            :class="rating >= star ? 'text-yellow-300' : 'text-gray-300'"
                                             class="w-8 h-8 cursor-pointer transition duration-200" fill="currentColor"
                                             viewBox="0 0 22 20" xmlns="http://www.w3.org/2000/svg">
                                             <path
