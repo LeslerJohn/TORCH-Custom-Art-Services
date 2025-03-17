@@ -2,21 +2,21 @@
     <div class="max-w-5xl mt-4 md:mt-10 mx-4 md:mx-auto bg-white p-4 md:p-6 rounded-lg shadow-lg relative">
         <!-- Back Button -->
         <div class="mb-4 pt-4">
-            <button onclick="window.history.back()"
+            <a href="{{ route('client.order.index') }}"
                 class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
                 <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M5 12h14M5 12l4-4m-4 4 4 4" />
                 </svg>
-            </button>
+            </a>
         </div>
 
         <!-- Status on Top Right -->
         <div class="absolute top-10 right-2 md:top-10 md:right-6">
             <span
                 class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white text-sm md:text-base
-            {{ $order->delivery->status == 'completed' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : ($order->delivery->status == 'hold' ? 'bg-orange-500' : ($order->delivery->status == 'returned' ? 'bg-purple-500' : 'bg-red-500'))) }}">
+            {{ $order->delivery->status == 'delivered' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : ($order->delivery->status == 'hold' ? 'bg-orange-500' : ($order->delivery->status == 'returned' ? 'bg-purple-500' : 'bg-red-500'))) }}">
                 {{ ucfirst($order->delivery->status ?? 'Pending') }}
             </span>
         </div>
@@ -46,11 +46,38 @@
                             <path d="m7.5 4.27 9 5.15" />
                         </svg>
                     </div>
+                    @elseif ($order->delivery->status == 'delivered')
+                    <div class="bg-blue-100 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f83f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-open">
+                            <path d="M12 22v-9" />
+                            <path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" />
+                            <path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" />
+                            <path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" />
+                        </svg>
+                    </div>
                     @elseif ($order->delivery->status == 'completed')
                     <div class="bg-green-100 p-2 rounded-full">
+
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#039900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big">
                             <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                             <path d="m9 11 3 3L22 4" />
+                        </svg>
+                    </div>
+                    @elseif ($order->delivery->status == 'hold')
+                    <div class="bg-orange-100 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e05a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause">
+                            <rect x="14" y="4" width="4" height="16" rx="1" />
+                            <rect x="6" y="4" width="4" height="16" rx="1" />
+                        </svg>
+                    </div>
+                    @elseif ($order->delivery->status == 'returned')
+                    <div class="bg-purple-100 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9d00d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-x">
+                            <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" />
+                            <path d="m7.5 4.27 9 5.15" />
+                            <polyline points="3.29 7 12 12 20.71 7" />
+                            <line x1="12" x2="12" y1="22" y2="12" />
+                            <path d="m17 13 5 5m-5 0 5-5" />
                         </svg>
                     </div>
                     @else
@@ -67,8 +94,14 @@
                     The artist is preparing your order
                     @elseif ($order->delivery->status == 'in-transit')
                     Your artwork is on the way
+                    @elseif ($order->delivery->status == 'delivered')
+                    Your order is delivered
                     @elseif ($order->delivery->status == 'completed')
                     Your order is completed
+                    @elseif ($order->delivery->status == 'hold')
+                    Your order is on hold
+                    @elseif ($order->delivery->status == 'returned')
+                    Item is returned
                     @else
                     Cancelled
                     @endif
@@ -81,8 +114,8 @@
                     <!-- Progress Line -->
                     <div class="absolute top-4 left-4 right-4 h-2 bg-gray-200 z-0 rounded-full overflow-hidden">
                         <div class="h-2 bg-blue-500 rounded-full progress-line" style="--progress-width: 
-            {{ $order->delivery->status == 'pending' ? '0%' : 
-               ($order->delivery->status == 'in-transit' ? '50%' : '100%') }}">
+            {{ $order->delivery->status == 'pending' || $order->delivery->status == 'cancelled' || $order->delivery->status == 'hold' || $order->delivery->status == 'returned' ? '0%' : 
+               ($order->delivery->status == 'in-transit' ? '33%' : ($order->delivery->status == 'delivered' ? '65%' : '100%')) }}">
                         </div>
                     </div>
 
@@ -90,7 +123,7 @@
                     <div class="flex flex-col items-center relative z-10">
                         <div class="w-10 h-10 flex items-center justify-center rounded-full 
             {{ $order->delivery->status == 'pending' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 
-               ($order->delivery->status == 'in-transit' || $order->delivery->status == 'completed' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 'bg-gray-300') }} icon-animation">
+               ($order->delivery->status == 'in-transit' || $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 'bg-gray-300') }} icon-animation">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-fading">
                                 <path d="M12 2a10 10 0 0 1 7.38 16.75" />
                                 <path d="M12 6v6l4 2" />
@@ -100,13 +133,13 @@
                                 <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
                             </svg>
                         </div>
-                        <p class="text-sm font-medium mt-2 text-animation {{ $order->delivery->status == 'pending' || $order->delivery->status == 'in-transit' || $order->delivery->status == 'completed' ? 'text-blue-500' : 'text-gray-400' }}">Pending</p>
+                        <p class="text-sm font-medium mt-2 text-animation {{ $order->delivery->status == 'pending' || $order->delivery->status == 'in-transit' || $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'text-blue-500' : 'text-gray-400' }}">Pending</p>
                     </div>
 
                     <!-- In-Transit -->
                     <div class="flex flex-col items-center relative z-10">
                         <div class="w-10 h-10 flex items-center justify-center rounded-full 
-            {{ $order->delivery->status == 'in-transit' || $order->delivery->status == 'completed' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 'bg-gray-300' }} icon-animation-delay-1">
+            {{ $order->delivery->status == 'in-transit' || $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 'bg-gray-300' }} icon-animation-delay-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package">
                                 <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
                                 <path d="M12 22V12" />
@@ -114,19 +147,33 @@
                                 <path d="m7.5 4.27 9 5.15" />
                             </svg>
                         </div>
-                        <p class="text-sm font-medium mt-2 text-animation-delay-1 {{ $order->delivery->status == 'in-transit' || $order->delivery->status == 'completed' ? 'text-blue-500' : 'text-gray-400' }}">In-Transit</p>
+                        <p class="text-sm font-medium mt-2 text-animation-delay-1 {{ $order->delivery->status == 'in-transit' || $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'text-blue-500' : 'text-gray-400' }}">In-Transit</p>
+                    </div>
+
+                    <!-- Delivered -->
+                    <div class="flex flex-col items-center relative z-10">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full 
+            {{ $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'bg-blue-500 shadow-lg shadow-blue-200' : 'bg-gray-300' }} icon-animation-delay-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-open">
+                                <path d="M12 22v-9" />
+                                <path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" />
+                                <path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" />
+                                <path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium mt-2 text-animation-delay-2 {{ $order->delivery->status == 'delivered' || $order->delivery->status == 'completed' ? 'text-blue-500' : 'text-gray-400' }}">Delivered</p>
                     </div>
 
                     <!-- Completed -->
                     <div class="flex flex-col items-center relative z-10">
                         <div class="w-10 h-10 flex items-center justify-center rounded-full 
-            {{ $order->delivery->status == 'completed' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-gray-300' }} icon-animation-delay-2">
+            {{ $order->delivery->status == 'completed' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-gray-300' }} icon-animation-delay-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big">
                                 <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                                 <path d="m9 11 3 3L22 4" />
                             </svg>
                         </div>
-                        <p class="text-sm font-medium mt-2 text-animation-delay-2 {{ $order->delivery->status == 'completed' ? 'text-green-500' : 'text-gray-400' }}">Completed</p>
+                        <p class="text-sm font-medium mt-2 text-animation-delay-3 {{ $order->delivery->status == 'completed' ? 'text-green-500' : 'text-gray-400' }}">Completed</p>
                     </div>
                 </div>
             </div>
@@ -263,6 +310,12 @@
                     /* Start invisible */
                 }
 
+                .icon-animation-delay-3 {
+                    animation: icon-pulse 0.6s ease-in-out 0.6s forwards;
+                    opacity: 0;
+                    /* Start invisible */
+                }
+
                 .text-animation {
                     animation: text-fade-in 0.5s ease-in-out 0.3s forwards;
                     opacity: 0;
@@ -277,6 +330,12 @@
 
                 .text-animation-delay-2 {
                     animation: text-fade-in 0.5s ease-in-out 0.7s forwards;
+                    opacity: 0;
+                    /* Start invisible */
+                }
+
+                .text-animation-delay-3 {
+                    animation: text-fade-in 0.5s ease-in-out 0.9s forwards;
                     opacity: 0;
                     /* Start invisible */
                 }
@@ -501,9 +560,8 @@
                 </div>
 
                 <!-- Order Actions Section -->
-                @if (!in_array($order->delivery->status, ['pending', 'in-transit']))
+                @if (!in_array($order->delivery->status, ['pending', 'in-transit','cancelled']))
                 <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col justify-center">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">Order Actions</h2>
 
                     <div class="flex flex-col sm:flex-row gap-4">
                         @if ($order->delivery->status == 'completed')
