@@ -2,9 +2,12 @@
     <div class="max-w-5xl mt-4 md:mt-10 mx-4 md:mx-auto bg-white p-4 md:p-6 rounded-lg shadow-lg relative">
         <!-- Back Button -->
         <div class="mb-4 pt-4">
-            <button onclick="window.history.back()" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+            <button onclick="window.history.back()"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h14M5 12l4-4m-4 4 4 4" />
                 </svg>
             </button>
         </div>
@@ -13,7 +16,7 @@
         <div class="absolute top-10 right-2 md:top-10 md:right-6">
             <span
                 class="px-3 py-1 md:px-4 md:py-2 rounded-full text-white text-sm md:text-base
-                {{ $order->delivery->status == 'completed' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : 'bg-red-500') }}">
+            {{ $order->delivery->status == 'completed' ? 'bg-green-500' : ($order->delivery->status == 'in-transit' ? 'bg-yellow-500' : ($order->delivery->status == 'hold' ? 'bg-orange-500' : ($order->delivery->status == 'returned' ? 'bg-purple-500' : 'bg-red-500'))) }}">
                 {{ ucfirst($order->delivery->status ?? 'Pending') }}
             </span>
         </div>
@@ -592,7 +595,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form action="{{route('client.review.order', $order)}}" method="POST" class="p-4 md:p-5">
+                    <form action="{{ route('client.review.order', $order) }}" method="POST" class="p-4 md:p-5">
                         @csrf
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="mb-4" x-data="{ rating: 0 }">
@@ -600,7 +603,8 @@
 
                                 <div class="flex items-center">
                                     <template x-for="star in 5">
-                                        <svg @click="rating = star" :class="rating >= star ? 'text-yellow-300' : 'text-gray-300'"
+                                        <svg @click="rating = star"
+                                            :class="rating >= star ? 'text-yellow-300' : 'text-gray-300'"
                                             class="w-8 h-8 cursor-pointer transition duration-200" fill="currentColor"
                                             viewBox="0 0 22 20" xmlns="http://www.w3.org/2000/svg">
                                             <path

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('google_id')->nullable();
             $table->string('phone_number')->nullable();
             $table->enum('role', ['client', 'artist', 'admin'])->default('client');
             $table->timestamp('email_verified_at')->nullable();
