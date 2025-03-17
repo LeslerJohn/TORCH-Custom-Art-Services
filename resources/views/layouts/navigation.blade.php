@@ -176,9 +176,12 @@
         <!-- Responsive Settings Options -->
         @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            <div class="flex items-center px-4">
+                <img src="{{ Auth::user()->profileImage ? Storage::url(Auth::user()->profileImage->path) : asset('images/profile.default.jpg') }}" alt="Profile Image" class="h-12 w-12 rounded-full object-cover">
+                <div class="ml-4">
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
             </div>
             <div class="mt-3 space-y-1">
                 <!-- Profile Link -->

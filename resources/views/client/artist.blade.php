@@ -1,10 +1,21 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div class="flex items-center justify-between w-full mb-4">
-            <h2 class="text-xl font-bold">Artists</h2>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full mb-4">
+            <!-- Back Button and Title -->
+            <div class="mb-4 sm:mb-0 pt-4 flex items-center">
+                <button onclick="window.history.back()"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors mr-4">
+                    <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 12h14M5 12l4-4m-4 4 4 4" />
+                    </svg>
+                </button>
+                <h2 class="text-xl font-bold">Artists</h2>
+            </div>
 
             <!-- Search Form -->
-            <form method="GET" action="{{ route('client.artist') }}" class="flex items-center max-w-sm mr-8">
+            <form method="GET" action="{{ route('client.artist') }}" class="w-full sm:w-auto flex items-center max-w-sm">
                 <input type="text" name="search" id="search"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full ps-10 p-2.5"
                     placeholder="Search artist name..." value="{{ request('search') }}" />
@@ -15,7 +26,6 @@
                     </svg>
                 </button>
             </form>
-
         </div>
 
         <!-- Selected Tags Section -->

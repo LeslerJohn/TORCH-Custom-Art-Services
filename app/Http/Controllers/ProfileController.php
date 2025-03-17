@@ -187,9 +187,9 @@ class ProfileController extends Controller
             ->get();
 
         $liked = ClientLiked::where('client_id', Auth::id())
-        ->with('artwork')
-        ->latest()
-        ->get();
+            ->with('artwork')
+            ->latest()
+            ->get();
 
         return view('client.profile.show', compact('client', 'collections', 'liked'));
     }
@@ -205,10 +205,10 @@ class ProfileController extends Controller
         })
             ->whereNotNull('review')
             ->with([
-            'order.client',
-            'order.items.artwork.images.attachment',
-            'order.items.artwork.category',
-            'order.items.artwork.artist'
+                'order.client',
+                'order.items.artwork.images.attachment',
+                'order.items.artwork.category',
+                'order.items.artwork.artist'
             ])
             ->latest()
             ->get();
@@ -218,10 +218,10 @@ class ProfileController extends Controller
         })
             ->whereNotNull('review')
             ->with([
-            'commission.request.client',
-            'commission.request.images.attachment',
-            'commission.request.service.category',
-            'commission.request.service.artist'
+                'commission.request.client',
+                'commission.request.images.attachment',
+                'commission.request.service.category',
+                'commission.request.service.artist'
             ])
             ->latest()
             ->get();
@@ -229,11 +229,11 @@ class ProfileController extends Controller
         $reviews = $commission_reviews->merge($order_reviews);
 
         $collections = Order::where('client_id', Auth::id())
-        ->where('status', 'completed')
-        ->whereHas('items.artwork')
-        ->with('items.artwork')
-        ->latest()
-        ->get();
+            ->where('status', 'completed')
+            ->whereHas('items.artwork')
+            ->with('items.artwork')
+            ->latest()
+            ->get();
 
         $liked = ClientLiked::where('client_id', $artist->id)
             ->with('artwork')
@@ -258,7 +258,7 @@ class ProfileController extends Controller
             'house_number' => $request->house_number,
         ]);
 
-        return Redirect::route('client.profile')->with('success', 'Address updated successfully!');
+        return Redirect::route('profile.edit')->with('success', 'Address updated successfully!');
     }
 
     public function storeAddress(Request $request, User $user)
