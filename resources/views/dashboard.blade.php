@@ -191,24 +191,23 @@
             </div>
             <div id="default-tab-content" class="px-4 sm:px-6 lg:px-8" data-aos="fade-up" data-aos-delay="500">
                 <!-- Artwork Grid -->
-                <div class="hidden rounded-lg dark:bg-gray-800" id="profile" role="tabpanel"
-                    aria-labelledby="showcase-tab">
+                <div class="hidden rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="showcase-tab">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($artworks as $artwork)
                         @if ($artwork->is_showcase)
                         <button type="button" onclick="openArtworkModal(this)"
                             data-artwork="{{ json_encode([
-                                        'title' => $artwork->title,
-                                        'category' => $artwork->category->name,
-                                        'artist' => $artwork->artist->username,
-                                        'artist_image' => $artwork->artist->user->profileImage
-                                            ? asset('storage/' . $artwork->artist->user->profileImage->path)
-                                            : asset('images/profile.default.jpg'),
-                                        'description' => $artwork->description,
-                                        'created_at' => $artwork->created_at->format('F j, Y'),
-                                        'tags' => $artwork->tags->pluck('name'),
-                                        'images' => $artwork->images->map(fn($img) => asset('storage/' . $img->attachment->path)),
-                                    ]) }}">
+                        'title' => $artwork->title,
+                        'category' => $artwork->category->name,
+                        'artist' => $artwork->artist->username,
+                        'artist_image' => $artwork->artist->user->profileImage
+                            ? asset('storage/' . $artwork->artist->user->profileImage->path)
+                            : asset('images/profile.default.jpg'),
+                        'description' => $artwork->description,
+                        'created_at' => $artwork->created_at->format('F j, Y'),
+                        'tags' => $artwork->tags->pluck('name'),
+                        'images' => $artwork->images->map(fn($img) => asset('storage/' . $img->attachment->path)),
+                    ]) }}">
                             @php
                             $thumbnail = $artwork->images->first()?->attachment;
                             @endphp
@@ -219,8 +218,7 @@
                                     alt="{{ $artwork->title }}" class="w-full h-full object-cover">
 
                                 <!-- Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent">
-                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
                                 <!-- Text Content -->
                                 <div class="absolute bottom-4 left-4 text-white">
@@ -234,116 +232,20 @@
                                             class="w-6 h-6 rounded-full object-cover border border-white">
                                         <p class="text-sm font-medium flex items-center">
                                             {{ $artwork->artist->username }}
-                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
+                                            <svg class="w-4 h-4 text-blue-400 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
                                             </svg>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </button>
-
-                        <div id="popup-modal"
-                            class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
-                            <div
-                                class="bg-white rounded-lg shadow-lg p-4 md:p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative mx-4">
-                                <!-- Close Button -->
-                                <button
-                                    class="absolute top-2 right-2 md:top-10 md:right-5 text-gray-600 hover:text-gray-900"
-                                    onclick="closeArtworkModal()">
-                                    <svg class="w-4 h-4" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 14 14">
-                                        <path stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2"
-                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                    </svg>
-                                </button>
-
-                                <div class="flex flex-col md:flex-row gap-4">
-                                    <!-- Carousel Section -->
-                                    <div class="w-full md:w-1/2 relative">
-                                        <!-- Carousel Container with Fixed Height -->
-                                        <div id="carousel-items"
-                                            class="relative h-64 md:h-96 overflow-hidden rounded-lg">
-                                            <!-- Add your carousel images here -->
-                                            <img src="your-image.jpg" alt="Carousel Image"
-                                                class="w-full h-full object-cover">
-                                        </div>
-
-                                        <!-- Carousel Controls -->
-                                        <button type="button"
-                                            class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/30 px-3 py-2 rounded-full"
-                                            onclick="prevSlide()">
-                                            <svg class="w-4 h-4 text-black dark:text-gray-800 rtl:rotate-180"
-                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="M5 1 1 5l4 4" />
-                                            </svg>
-                                        </button>
-                                        <button type="button"
-                                            class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/30 px-3 py-2 rounded-full"
-                                            onclick="nextSlide()">
-                                            <svg class="w-4 h-4 text-black dark:text-gray-800 rtl:rotate-180"
-                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m1 9 4-4-4-4" />
-                                            </svg>
-                                        </button>
-
-                                        <!-- Carousel Indicators -->
-                                        <div id="carousel-indicators"
-                                            class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
-                                            <!-- Indicators will be dynamically added here -->
-                                        </div>
-                                    </div>
-
-                                    <!-- Artwork Details -->
-                                    <div class="w-full md:w-1/2">
-                                        <div class="flex items-center gap-2 mt-2">
-                                            <img id="modal-artist-image" src="" alt="Artist"
-                                                class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border border-white">
-                                            <div>
-                                                <div class="flex items-center gap-1">
-                                                    <p id="modal-artist"
-                                                        class="text-base md:text-lg font-medium flex items-center">
-                                                    </p>
-                                                    <svg class="w-4 h-4 text-blue-400 ml-1"
-                                                        fill="currentColor" viewBox="0 0 24 24">
-                                                        <path
-                                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z" />
-                                                    </svg>
-                                                </div>
-                                                <p id="modal-date" class="text-xs md:text-sm text-gray-400">
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <h2 id="modal-title" class="text-xl md:text-2xl font-bold mt-4"></h2>
-                                        <p id="modal-description"
-                                            class="text-sm md:text-base text-gray-700 mb-2"></p>
-                                        <p id="modal-category" class="text-base md:text-lg text-black-500">
-                                        </p>
-                                        <div class="mt-4">
-                                            <h3 class="text-sm md:text-md font-semibold">Tags:</h3>
-                                            <div id="modal-tags"
-                                                class="flex flex-wrap text-xs md:text-sm gap-2 mt-2">
-                                                <!-- Tags will be dynamically added here -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         @endif
                         @endforeach
                     </div>
                 </div>
+
+
 
                 <div class="hidden rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                     aria-labelledby="dashboard-tab">
@@ -569,6 +471,68 @@
                 @endforeach
             </div>
         </div>
+        <!-- Artwork Modal -->
+        <div id="popup-modal" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
+            <div class="bg-white rounded-lg shadow-lg p-4 md:p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative mx-4">
+                <!-- Close Button -->
+                <button class="absolute top-2 right-2 md:top-4 md:right-4 text-gray-600 hover:text-gray-900" onclick="closeArtworkModal()">
+                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                </button>
+
+                <!-- Modal Content -->
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Carousel Section -->
+                    <div class="w-full md:w-1/2">
+                        <div id="carousel-container" class="relative">
+                            <!-- Carousel Images -->
+                            <div id="carousel-items" class="relative h-64 md:h-96 overflow-hidden rounded-lg">
+                                <!-- Images will be dynamically added here -->
+                            </div>
+
+                            <!-- Carousel Controls -->
+                            <button type="button" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/50 px-3 py-2 rounded-full hover:bg-white/80 transition" onclick="prevSlide()">
+                                <svg class="w-4 h-4 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                                </svg>
+                            </button>
+                            <button type="button" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/50 px-3 py-2 rounded-full hover:bg-white/80 transition" onclick="nextSlide()">
+                                <svg class="w-4 h-4 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                            </button>
+
+                            <!-- Carousel Indicators -->
+                            <div id="carousel-indicators" class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2">
+                                <!-- Indicators will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Artwork Details -->
+                    <div class="w-full md:w-1/2">
+                        <!-- Artist Info -->
+                        <div class="flex items-center gap-3">
+                            <img id="modal-artist-image" src="" alt="Artist"
+                                class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                            <div>
+                                <p id="modal-artist" class="text-lg font-semibold"></p>
+                                <p id="modal-date" class="text-sm text-gray-500"></p>
+                            </div>
+                        </div>
+
+                        <!-- Title and Description -->
+                        <h2 id="modal-title" class="text-2xl font-bold mt-4"></h2>
+                        <p id="modal-description" class="text-gray-700 mt-2"></p>
+
+                        <!-- Category -->
+                        <p id="modal-category" class="text-lg text-gray-800 mt-4"></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer class="bg-gray-50 py-8">
@@ -577,89 +541,78 @@
                 @include('layouts.footer')
             </div>
             <script>
+                let currentSlide = 0;
+
                 function openArtworkModal(button) {
-                    let artwork = JSON.parse(button.getAttribute('data-artwork'));
+                    const artwork = JSON.parse(button.getAttribute('data-artwork'));
+                    const modal = document.getElementById('popup-modal');
+                    const carouselItems = document.getElementById('carousel-items');
+                    const carouselIndicators = document.getElementById('carousel-indicators');
 
-                    // Populate modal content
+                    // Set artwork details
                     document.getElementById('modal-title').textContent = artwork.title;
-                    document.getElementById('modal-category').textContent = artwork.category;
+                    document.getElementById('modal-category').textContent = `Category: ${artwork.category}`;
                     document.getElementById('modal-artist').textContent = artwork.artist;
-                    document.getElementById('modal-description').textContent = artwork.description;
-                    document.getElementById('modal-date').textContent = artwork.created_at;
                     document.getElementById('modal-artist-image').src = artwork.artist_image;
+                    document.getElementById('modal-date').textContent = `Created: ${artwork.created_at}`;
+                    document.getElementById('modal-description').textContent = artwork.description;
 
-                    // Populate tags
-                    let tagsContainer = document.getElementById('modal-tags');
-                    tagsContainer.innerHTML = "";
-                    artwork.tags.forEach(tag => {
-                        let span = document.createElement('span');
-                        span.className = "bg-orange-200 text-gray-700 px-2 py-1 rounded-full";
-                        span.textContent = tag;
-                        tagsContainer.appendChild(span);
-                    });
+                    // Clear existing carousel items and indicators
+                    carouselItems.innerHTML = '';
+                    carouselIndicators.innerHTML = '';
 
-                    // Populate Carousel
-                    let carouselWrapper = document.getElementById('carousel-items');
-                    let indicators = document.getElementById('carousel-indicators');
-                    carouselWrapper.innerHTML = "";
-                    indicators.innerHTML = "";
-
+                    // Add images to carousel
                     artwork.images.forEach((image, index) => {
-                        // Create slide
-                        let slide = document.createElement('div');
-                        slide.className =
-                            `absolute inset-0 transition-opacity duration-700 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
-                        slide.setAttribute('data-carousel-item', index);
-                        slide.innerHTML = `<img src="${image}" class="w-full h-full object-cover rounded-lg">`;
-                        carouselWrapper.appendChild(slide);
+                        const img = document.createElement('img');
+                        img.src = image;
+                        img.alt = artwork.title;
+                        img.classList.add('w-full', 'h-full', 'object-cover', index === 0 ? 'block' : 'hidden');
+                        carouselItems.appendChild(img);
 
-                        // Create indicator
-                        let indicator = document.createElement('button');
-                        indicator.type = "button";
-                        indicator.className = `w-3 h-3 rounded-full ${index === 0 ? 'bg-white' : 'bg-gray-500'}`;
-                        indicator.setAttribute('data-carousel-slide-to', index);
-                        indicator.onclick = () => showSlide(index);
-                        indicators.appendChild(indicator);
+                        // Add indicators
+                        const indicator = document.createElement('button');
+                        indicator.classList.add('w-2', 'h-2', 'rounded-full', 'bg-white/50', 'hover:bg-white/80', 'transition');
+                        indicator.addEventListener('click', () => showSlide(index));
+                        carouselIndicators.appendChild(indicator);
                     });
 
                     // Show modal
-                    document.getElementById('popup-modal').classList.remove('hidden');
-                    currentSlideIndex = 0;
-                    showSlide(currentSlideIndex);
+                    modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
                 }
 
                 function closeArtworkModal() {
                     document.getElementById('popup-modal').classList.add('hidden');
+                    document.body.style.overflow = 'auto'; // Re-enable background scrolling
                 }
-
-                // Carousel Functionality
-                let currentSlideIndex = 0;
 
                 function showSlide(index) {
-                    let slides = document.querySelectorAll('[data-carousel-item]');
-                    let indicators = document.querySelectorAll('[data-carousel-slide-to]');
+                    const carouselItems = document.getElementById('carousel-items').children;
+                    const indicators = document.getElementById('carousel-indicators').children;
 
-                    slides.forEach((slide, i) => {
-                        slide.classList.toggle('opacity-100', i === index);
-                        slide.classList.toggle('opacity-0', i !== index);
-                    });
+                    // Hide all slides
+                    for (let i = 0; i < carouselItems.length; i++) {
+                        carouselItems[i].classList.add('hidden');
+                        indicators[i].classList.remove('bg-white/80', 'bg-white/50');
+                        indicators[i].classList.add('bg-white/50');
+                    }
 
-                    indicators.forEach((dot, i) => {
-                        dot.classList.toggle('bg-white', i === index);
-                        dot.classList.toggle('bg-gray-500', i !== index);
-                    });
+                    // Show selected slide
+                    carouselItems[index].classList.remove('hidden');
+                    indicators[index].classList.remove('bg-white/50');
+                    indicators[index].classList.add('bg-white/80');
 
-                    currentSlideIndex = index;
-                }
-
-                function nextSlide() {
-                    let totalSlides = document.querySelectorAll('[data-carousel-item]').length;
-                    showSlide((currentSlideIndex + 1) % totalSlides);
+                    currentSlide = index;
                 }
 
                 function prevSlide() {
-                    let totalSlides = document.querySelectorAll('[data-carousel-item]').length;
-                    showSlide((currentSlideIndex - 1 + totalSlides) % totalSlides);
+                    const totalSlides = document.getElementById('carousel-items').children.length;
+                    showSlide((currentSlide - 1 + totalSlides) % totalSlides);
+                }
+
+                function nextSlide() {
+                    const totalSlides = document.getElementById('carousel-items').children.length;
+                    showSlide((currentSlide + 1) % totalSlides);
                 }
 
                 // Function to generate random values for floating animation

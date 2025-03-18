@@ -1,4 +1,12 @@
 <section class="bg-white p-6 shadow-md rounded-lg">
+    @if (session('status') === 'profile-updated')
+    <p
+        x-data="{ show: true }"
+        x-show="show"
+        x-transition
+        x-init="setTimeout(() => show = false, 2000)"
+        class="text-sm text-green-600 ml-4">{{ __('Saved.') }}</p>
+    @endif
     <header class="mb-6">
         <h2 class="text-xl font-semibold text-gray-900">
             {{ __('Profile Information') }}
@@ -153,7 +161,7 @@
             </div>
         </div>
 
-        <!-- Cover Image Upload (Placed at the bottom of both columns) -->
+        <!-- Cover Image Upload -->
         <div class="col-span-1 md:col-span-2">
             <div class="space-y-2">
                 <x-input-label for="cover_image" :value="__('Cover Image')" />
@@ -204,14 +212,6 @@
         <div class="col-span-1 md:col-span-2 flex justify-end mt-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
-            @if (session('status') === 'profile-updated')
-            <p
-                x-data="{ show: true }"
-                x-show="show"
-                x-transition
-                x-init="setTimeout(() => show = false, 2000)"
-                class="text-sm text-green-600 ml-4">{{ __('Saved.') }}</p>
-            @endif
         </div>
     </form>
 
