@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold mb-4">Your Cart</h1>
 
         @if ($cart && $cart->items->count() > 0)
-            <form action="{{ route('client.cart.checkout', $cart) }}" method="POST">
+            <form id="cart-form" action="{{ route('client.cart.checkout', $cart) }}" method="POST">
                 @csrf
 
                 <div class="space-y-6">
@@ -71,7 +71,7 @@
 
                 <!-- Checkout Button -->
                 <div class="mt-6 text-right">
-                    <button type="submit" id="checkout-button" class="bg-blue-500 text-white py-2 px-6 rounded-lg shadow" disabled>
+                    <button type="button" id="checkout-button" class="bg-blue-500 text-white py-2 px-6 rounded-lg shadow" disabled onclick="openCheckoutModal()">
                         Checkout
                     </button>
                 </div>
@@ -105,7 +105,7 @@
             <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1-18 0Z" />
             </svg>
 
             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -126,6 +126,54 @@
                 </button>
             </form>
         </div>
+    </div>
+
+    <!-- Checkout Details Modal -->
+    <div id="checkout-modal" tabindex="-1"
+        class="hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-5xl text-center dark:bg-gray-700 relative">
+            <button type="button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-900"
+                onclick="closeCheckoutModal()">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13" />
+                </svg>
+            </button>
+
+            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Checkout Details
+            </h3>
+
+            <div id="checkout-details" class="mb-5 text-left">
+                <!-- Selected Artworks and Order Details will be populated here by JavaScript -->
+            </div>
+
+            <div class="text-left mb-5">
+                <h4 class="text-lg font-semibold mb-2">Shipping Details:</h4>
+                @if(Auth::user()->phone_number && Auth::user()->address)
+                    <p><strong>Name:</strong> {{ Auth::user()->name }}</p>
+                    <p><strong>Phone:</strong> {{ Auth::user()->phone_number }}</p>
+                    <p>{{ Auth::user()->address->house_number . ' ' . Auth::user()->address->street . ' ' . Auth::user()->address->barangay }}</p>
+                @else
+                    <p class="text-red-500">Please update your profile with your phone number and address to place an order.</p>
+                    <a href="{{ route('profile.edit') }}" class="text-blue-500 hover:underline">Update Profile</a>
+                @endif
+            </div>
+
+            <div class="text-right">
+                <button type="button" onclick="closeCheckoutModal()"
+                    class="py-2.5 px-5 ml-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                    Cancel
+                </button>
+                @if(Auth::user()->phone_number && Auth::user()->address)
+                    <button type="submit" form="cart-form"
+                        class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Place Order
+                    </button>
+                @endif
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- JavaScript to Handle Modal and Total Calculation -->
@@ -156,6 +204,49 @@
             modal.classList.remove("z-50");
         }
 
+        function openCheckoutModal() {
+            const modal = document.getElementById("checkout-modal");
+            const checkoutDetails = document.getElementById("checkout-details");
+            const checkboxes = document.querySelectorAll('input[name="selected_items[]"]:checked');
+
+            let detailsHtml = '<h4 class="text-lg font-semibold mb-2">Selected Artworks:</h4><ul class="mb-4">';
+            checkboxes.forEach(checkbox => {
+                const item = checkbox.closest('.flex');
+                const title = item.querySelector('h3').innerText;
+                const price = checkbox.getAttribute('data-price');
+                const discountElement = item.querySelector('.text-green-500');
+                const discount = discountElement ? discountElement.innerText : '';
+
+                detailsHtml += `<li class="mb-2">
+                    <p class="font-semibold">${title}</p>
+                    ${discount ? `<p class="text-green-500">${discount}</p>` : ''}
+                    <p>Price: ₱${parseFloat(price).toFixed(2)}</p>
+                </li>`;
+            });
+            detailsHtml += '</ul>';
+
+            const totalPrice = document.getElementById('total-price').innerText;
+            const totalSelected = document.getElementById('total-selected').innerText;
+
+            detailsHtml += `<p class="text-lg font-semibold">${totalPrice}</p>`;
+            detailsHtml += `<p class="text-md text-gray-500">${totalSelected}</p>`;
+
+            checkoutDetails.innerHTML = detailsHtml;
+
+            // Show modal
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeCheckoutModal() {
+            const modal = document.getElementById("checkout-modal");
+
+            // Hide modal
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+            modal.classList.remove("z-50");
+        }
+
         function updateTotal() {
             const checkboxes = document.querySelectorAll('input[name="selected_items[]"]:checked');
             let totalPrice = 0;
@@ -173,4 +264,5 @@
             checkoutButton.disabled = totalSelected === 0;
         }
     </script>
+    
 </x-app-layout>

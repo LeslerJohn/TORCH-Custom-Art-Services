@@ -19,19 +19,19 @@
                     <!-- Title -->
                     <div>
                         <x-input-label for="title" class="text-sm" :value="__('Title')" />
-                        <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" required autofocus placeholder="Enter the title of your artwork." />
+                        <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ old('title') }}" required autofocus placeholder="Enter the title of your artwork." />
                         <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
 
                     <!-- Description -->
                     <div class="mt-6">
                         <x-input-label for="description" class="text-sm" :value="__('Description')" />
-                        <textarea id="description" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm" name="description" required placeholder="Provide a detailed description of your artwork." rows="4"></textarea>
+                        <textarea id="description" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm" name="description" required placeholder="Provide a detailed description of your artwork." rows="4">{{ old('description') }}</textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
                     <!-- Dimensions -->
-                    <div class="mt-6" x-data="{ width: '', height: '', unit: 'cm' }">
+                    <div class="mt-6" x-data="{ width: '{{ old('width') }}', height: '{{ old('height') }}', unit: '{{ old('unit', 'cm') }}' }">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="width" :value="__('Width')" />
@@ -43,6 +43,7 @@
                                     </select>
                                 </div>
                                 <small class="text-gray-500">Enter the width of your artwork.</small>
+                                <x-input-error :messages="$errors->get('width')" class="mt-2" />
                             </div>
 
                             <div>
@@ -55,6 +56,7 @@
                                     </select>
                                 </div>
                                 <small class="text-gray-500">Enter the height of your artwork.</small>
+                                <x-input-error :messages="$errors->get('height')" class="mt-2" />
                             </div>
                         </div>
                     </div>
@@ -65,7 +67,7 @@
                     <div class="mt-6">
                         <x-input-label for="price" class="text-sm" :value="__('Price')" />
                         <div class="flex">
-                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" required placeholder="Set the price for your artwork." />
+                            <x-text-input id="price" class="block mt-1 w-full" type="number" name="price" value="{{ old('price') }}" required placeholder="Set the price for your artwork." />
                             <button data-tooltip-target="tooltip-price" type="button" class="ml-4">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
@@ -77,7 +79,7 @@
 
                     <!-- Showcase Toggle -->
                     <label class="inline-flex items-center cursor-pointer mt-6">
-                        <input type="checkbox" value="1" name="is_showcase" class="sr-only peer">
+                        <input type="checkbox" value="1" name="is_showcase" class="sr-only peer" {{ old('is_showcase') ? 'checked' : '' }}>
                         <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                         <span class="ms-3 text-sm font-medium text-gray-900">Showcase this Artwork</span>
                     </label>
@@ -88,19 +90,21 @@
                     <!-- Category Selection -->
                     <div>
                         <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Select a Category</label>
-                        <select id="categories" name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <select id="categories" name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                             <option selected disabled>Choose a category</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        <x-input-error :messages="$errors->get('categories')" class="mt-2" />
                     </div>
 
                     <!-- Tags Selection -->
                     <div class="mt-6">
                         <label for="tags" class="block mb-2 text-sm">Select Tags</label>
                         <div id="tags-container" class="flex flex-wrap gap-2"></div>
-                        <input type="hidden" id="selected-tags" name="tags[]" value="">
+                        <input type="hidden" id="selected-tags" name="tags[]" value="" required>
+                        <x-input-error :messages="$errors->get('tags')" class="mt-2" />
                     </div>
 
                     <!-- Media Upload -->
@@ -123,6 +127,7 @@
                             </label>
                         </div>
                         <div id="file-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4 hidden"></div>
+                        <x-input-error :messages="$errors->get('thumbnails')" class="mt-2" />
                     </div>
                 </div>
             </div>
@@ -139,7 +144,7 @@
     <!-- Success Message -->
     <div id="success-message" class="hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <p class="text-lg font-semibold">Artwork created successfully</p>
+            <p class="text-lg font-semibold">Creating artwork...</p>
         </div>
     </div>
 

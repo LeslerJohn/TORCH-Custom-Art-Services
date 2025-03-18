@@ -38,3 +38,11 @@ Route::put('/admin/commission/{commission}/extend-deadline', [CommissionControll
 
 Route::get('/admin/report', [ReportController::class, 'index'])->name('admin.report.index');
 Route::get('/admin/report/{report}', [ReportController::class, 'show'])->name('admin.report.show');
+
+Route::get('/admin/order', 'App\Http\Controllers\Admin\OrderController@index')->name('admin.order.index');
+Route::get('/admin/order/{order}', 'App\Http\Controllers\Admin\OrderController@show')->name('admin.order.show');
+Route::get('/admin/order/{order}/cancel', 'App\Http\Controllers\Admin\OrderController@cancel')->name('admin.order.cancel');
+Route::get('/admin/order/{order}/return', 'App\Http\Controllers\Admin\OrderController@return')->name('admin.order.return');
+Route::get('/admin/order/{order}/refund', 'App\Http\Controllers\Admin\OrderController@refund')->name('admin.order.refund');
+Route::get('/admin/order/{order}/deliver', 'App\Http\Controllers\Admin\OrderController@deliver')->name('admin.order.deliver');
+Route::get('/admin/order/{order}/delivered', 'App\Http\Controllers\Admin\OrderController@delivered')->name('admin.order.delivered');

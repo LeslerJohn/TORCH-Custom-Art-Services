@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->foreignUlid('commission_id')->nullable()->constrained('commission')->cascadeOnDelete();
             $table->foreignUlid('order_id')->nullable()->constrained('order')->cascadeOnDelete();
+            $table->foreignUlid('request_id')->nullable()->constrained('request')->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
             $table->enum('payment_method', ['GCash', 'PayMaya', 'Bank Transfer', 'Credit Card'])->default('GCash');
             $table->string('transaction_id', 255)->unique();
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->foreignUlid('payment_id')->constrained('payments')->cascadeOnDelete();
             $table->foreignUlid('commission_id')->nullable()->constrained('commission')->cascadeOnDelete();
             $table->foreignUlid('order_id')->nullable()->constrained('order')->cascadeOnDelete();
+            $table->foreignUlid('request_id')->nullable()->constrained('request')->cascadeOnDelete();
             $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->foreignUlid('artist_id')->constrained('artist_profile')->cascadeOnDelete();
             $table->decimal('amount', 10, 2);

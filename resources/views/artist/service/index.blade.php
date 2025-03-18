@@ -1,6 +1,6 @@
 <x-artist-layout>
-    <div class="flex justify-between pt-16">
-        <h1 class="text-2lg text-bold text-black-500">Services</h1>
+    <div class="flex flex-col md:flex-row justify-between pt-16">
+        <h1 class="text-2lg text-bold text-black-500 mb-4 md:mb-0">Services</h1>
         <a href="{{ route('artist.service.create') }}">
             <button class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700">
                 Add Service
@@ -8,9 +8,9 @@
         </a>
     </div>
 
-    <div class="flex mt-8 flex-wrap gap-6">
+    <div class="flex flex-col sm:flex-row sm:flex-wrap mt-8 gap-6">
         @foreach ($services as $artwork)
-            <a href="{{ route('artist.service.show', $artwork) }}" class="w-1/4">
+            <a href="{{ route('artist.service.show', $artwork) }}" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
                 <div class="shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     @php
                         $thumbnail = $artwork->images->first()?->attachment;

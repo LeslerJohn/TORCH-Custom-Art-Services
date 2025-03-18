@@ -276,7 +276,7 @@ class ProfileController extends Controller
             'house_number' => $request->house_number,
         ]);
 
-        return Redirect::route('client.profile')->with('success', 'Address added successfully!');
+        return Redirect::back()->with('success', 'Address added successfully!');
     }
 
     public function updatePaymentMethod(Request $request)

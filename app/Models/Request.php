@@ -43,4 +43,9 @@ class Request extends Model
     {
         return $this->hasMany(Commission::class, 'request_id');
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'request_id');
+    }
 }

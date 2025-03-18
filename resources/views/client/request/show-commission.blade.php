@@ -2,20 +2,26 @@
     <div class="max-w-5xl mt-10 mx-auto bg-white p-6 rounded-lg mb-8 shadow-lg relative">
         <!-- Header based on status -->
         <div
-            class="mb-4 absolute top-0 left-0 right-0 rounded-lg 
-            {{ $commission->status == 'done' ? 'bg-green-100' : ($commission->status == 'wip' ? 'bg-yellow-100' : ($commission->status == 'ready' ? 'bg-blue-100' : ($commission->status == 'in_progress' ? 'bg-gray-100' : 'bg-red-100'))) }}">
-            <h1 class="text-2xl font-bold p-4">
-                @if ($commission->status == 'done')
-                    The artist is preparing to ship your order.
-                @elseif ($commission->status == 'wip')
-                    Your commission is in progress.
-                @elseif ($commission->status == 'ready')
-                    Awaiting artist to start your commission.
-                @elseif ($commission->status == 'completed')
-                    Your commission is completed.
-                @else
-                    Your commission has been cancelled.
-                @endif
+            class="mb-4 absolute top-0 left-0 right-0 rounded-lg p-4 md:text-md
+            {{ $commission->status == 'done' ? 'bg-green-100' : ($commission->status == 'wip' ? 'bg-yellow-100' : ($commission->status == 'ready' ? 'bg-blue-100' : ($commission->status == 'in_progress' ? 'bg-gray-100' : ($commission->status == 'cancelled' ? 'bg-red-100' : ($commission->status == 'hold' ? 'bg-orange-100' : ($commission->status == 'returned' ? 'bg-purple-100' : 'bg-red-100')))))) }}">
+            <h1 class="text-lg md:text-2xl font-bold">
+            @if ($commission->status == 'done')
+                Preparing to ship your order.
+            @elseif ($commission->status == 'wip')
+                Commission in progress.
+            @elseif ($commission->status == 'ready')
+                Awaiting artist to start.
+            @elseif ($commission->status == 'completed')
+                Commission completed.
+            @elseif ($commission->status == 'cancelled')
+                Commission cancelled.
+            @elseif ($commission->status == 'hold')
+                On hold due to refund request.
+            @elseif ($commission->status == 'returned')
+                Refunded with 10% service fee deducted.
+            @else
+                Commission cancelled.
+            @endif
             </h1>
         </div>
 
@@ -31,30 +37,42 @@
         <div class="mb-6 mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Commission Details -->
             <div class="bg-white p-4 rounded-lg shadow-lg">
-            <h1 class="text-2xl font-bold mb-2">{{ $commission->request->service->category->name }}</h1>
-            <h2 class="text-red-500 text-xl mb-2">₱{{ number_format($commission->request->total_price, 2) }}</h2>
-            <p class="mb-2">{{ $commission->request->description }}</p>
-            <p class="mb-2"><strong>Dimension:</strong> {{ $commission->request->width }} x
-                {{ $commission->request->height }}
-                {{ $commission->request->unit }}</p>
-            <p class="mb-2"><strong>Quantity:</strong> {{ $commission->request->quantity }}</p>
-            <p class="mb-2"><strong>Order Type:</strong> {{ ucfirst($commission->request->order_type) }}</p>
-            <p class="mb-2"><strong>Deadline:</strong>
-                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
+                <h1 class="text-2xl font-bold mb-2">{{ $commission->request->service->category->name }}</h1>
+                <h2 class="text-red-500 text-xl mb-2">₱{{ number_format($commission->request->total_price, 2) }}</h2>
+                <p class="mb-2">{{ $commission->request->description }}</p>
+                <p class="mb-2"><strong>Dimension:</strong> {{ $commission->request->width }} x
+                    {{ $commission->request->height }}
+                    {{ $commission->request->unit }}</p>
+                <p class="mb-2"><strong>Quantity:</strong> {{ $commission->request->quantity }}</p>
+                <p class="mb-2"><strong>Order Type:</strong> {{ ucfirst($commission->request->order_type) }}</p>
+                {{-- <p class="mb-2"><strong>Deadline:</strong>
+                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p> --}}
             </div>
 
             <!-- Delivery Information -->
             <div class="bg-white p-4 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold mb-2">Delivery Details</h2>
-            <p><strong>Status:</strong> {{ ucfirst($commission->delivery->status) }}</p>
-            <p><strong>Contact Number:</strong> +63 {{ Auth::user()->phone_number }}</p>
-            <p><strong>Address:</strong> {{ $commission->delivery->address->barangay }},
-                {{ $commission->delivery->address->street }}, House No.
-                {{ $commission->delivery->address->house_number }}</p>
-            <p><strong>Expected Delivery:</strong>
-                {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} - {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
+                <h2 class="text-xl font-semibold mb-2">Delivery Details</h2>
+                <p><strong>Status:</strong> {{ ucfirst($commission->delivery->status) }}</p>
+                <p><strong>Contact Number:</strong> +63 {{ Auth::user()->phone_number }}</p>
+                <p><strong>Address:</strong> {{ $commission->delivery->address->barangay }},
+                    {{ $commission->delivery->address->street }}, House No.
+                    {{ $commission->delivery->address->house_number }}</p>
+                <p><strong>Expected Delivery:</strong>
+                    {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} -
+                    {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}</p>
             </div>
         </div>
+
+        <!-- Extension Information -->
+        @if ($commission->extension->status == 'approved')
+            <div class="mb-6 mt-4 bg-yellow-100 p-4 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-2">Extension Details</h2>
+                <p><strong>New Deadline:</strong>
+                    {{ \Carbon\Carbon::parse($commission->extension->new_deadline)->format('j F, Y') }}</p>
+                <p class="text-gray-600">Your commission has been granted an extension. Please note the new deadline
+                    above.</p>
+            </div>
+        @endif
 
         <!-- Drafts -->
         <div class="mb-8">
@@ -78,12 +96,27 @@
             </p>
         </div>
 
-        @if ($commission->status == 'done')
+        @if ($commission->status == 'done' && $commission->delivery->status == 'pending')
+            <div class="mb-6">
+                <p class="text-gray-600">Your commission is ready be delivered. Please wait for further updates.</p>
+            </div>
+        @elseif ($commission->delivery->status == 'in-transit')
             <div class="flex justify-end space-x-4">
                 <form action="{{ route('client.commission.receive', $commission) }}" method="POST">
                     @csrf
                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow">Received</button>
                 </form>
+
+                <!-- Return/Refund Button -->
+                @if (!$commission->refund)
+                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
+                        class="w-full md:w-auto px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg shadow transition-colors">
+                        Return/Refund
+                    </button>
+                @else
+                    <p class="text-red-500 text-sm md:text-base">Refund request already submitted for this
+                        commission.</p>
+                @endif
             </div>
         @elseif ($commission->status == 'completed')
             @if (!$commission->reviews->where('commission_id', $commission->id)->count())
@@ -95,6 +128,12 @@
             @else
                 <p class="text-green-500">You have already reviewed this commission.</p>
             @endif
+        @elseif ($commission->status == 'hold')
+            <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted for
+                this commission. </br> Please wait for further updates.</p>
+        @elseif ($commission->status == 'returned')
+            <p class="text-red-500 text-sm md:text-base">Your commission has been refunded with a 10% service
+                fee deducted. </br> Please check your payment method for the refund.</p>
         @endif
     </div>
 
@@ -161,6 +200,56 @@
                         Submit Review
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return/Refund Modal -->
+    <div id="return-refund-modal" tabindex="-1"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="return-refund-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="p-4 md:p-5 text-center">
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Return/Refund Request
+                    </h3>
+                    <form action="{{ route('client.return.commission', $commission) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="reason"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Reason</label>
+                            <select id="reason" name="reason"
+                                class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="Damaged item">Damaged item</option>
+                                <option value="Wrong item">Wrong item</option>
+                                <option value="Item not as described">Item not as described</option>
+                                <option value="Late delivery">Late delivery</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="evidence"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attach
+                                Image</label>
+                            <input type="file" id="evidence" name="evidence" accept="image/*" required
+                                class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400">
+                        </div>
+                        <button type="submit"
+                            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                            Submit Request
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

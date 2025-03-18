@@ -81,7 +81,7 @@
 
         <!-- Right Section: Form Content -->
         <div class="w-full mx-6">
-            @if ($errors->any())
+            {{-- @if ($errors->any())
                 <div class="text-red-600">
                     <strong>{{ __('Please fix the following errors:') }}</strong>
                     <ul>
@@ -90,7 +90,7 @@
                         @endforeach
                     </ul>
                 </div>
-            @endif
+            @endif --}}
 
             <!-- Personal Section -->
             <div id="personal-section" class="w-full">
@@ -127,12 +127,19 @@
                     <!-- Birthdate -->
                     <div class="w-full md:w-1/2 relative">
                         <x-input-label for="birthdate" :value="__('Birthdate')" />
-                        <div class="absolute inset-y-0 top-6 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                        <div
+                            class="absolute inset-y-0 top-6 start-0 flex justify-center items-center ps-3.5 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                             </svg>
                         </div>
-                        <input id="datepicker-format" datepicker datepicker-min-date="06/04/2024" datepicker-max-date="{{ now()->format('m/d/Y') }}" name="birthdate" type="text" class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                        <input id="datepicker-format" datepicker datepicker-max-date="{{ now()->format('m/d/Y') }}"
+                            name="birthdate" type="text"
+                            class="mt-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Select date" value="{{ old('birthdate') }}">
+                        <x-input-error :messages="$errors->get('birthdate')" class="mt-2" />
                     </div>
 
                     <!-- Gender -->
@@ -141,9 +148,12 @@
                         <select id="gender" name="gender"
                             class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             <option value="">{{ __('Select Gender') }}</option>
-                            <option value="male">{{ __('Male') }}</option>
-                            <option value="female">{{ __('Female') }}</option>
-                            <option value="other">{{ __('Other') }}</option>
+                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>
+                                {{ __('Male') }}</option>
+                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>
+                                {{ __('Female') }}</option>
+                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>
+                                {{ __('Other') }}</option>
                         </select>
                         <x-input-error :messages="$errors->get('gender')" class="mt-2" />
                     </div>
@@ -236,7 +246,7 @@
 
                         <div class="relative">
                             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                                placeholder="password" required autocomplete="new-password" />
+                                placeholder="password" :value="old('password')" required autocomplete="new-password" />
                             <button type="button"
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
                                 onclick="togglePasswordVisibility('password')">
@@ -260,7 +270,7 @@
 
                         <div class="relative">
                             <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                                placeholder="password" name="password_confirmation" required
+                                placeholder="password" name="password_confirmation" :value="old('password_confirmation')" required
                                 autocomplete="new-password" />
                             <button type="button"
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
@@ -351,7 +361,7 @@
                 <div class="mt-4 border border-gray-300 p-4 rounded-md">
                     <x-input-label for="portfolio" :value="__('Portfolio')" />
                     <x-text-input id="portfolio" class="block mt-1 w-full" type="file" name="portfolio"
-                        required />
+                        :value="old('portfolio')" required />
                     <x-input-error :messages="$errors->get('portfolio')" class="mt-2" />
                 </div>
 
@@ -484,7 +494,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="payment_method" name="payment_method"
-                        value="{{ old('payment_method') }}">
+                        value="{{ old('payment_method', 'GCash') }}">
                     <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
                 </div>
 

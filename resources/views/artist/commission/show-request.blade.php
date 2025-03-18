@@ -16,7 +16,18 @@
                 <p class="mb-2"><strong>Dimension:</strong> {{ $request->width }} x {{ $request->height }} {{ $request->unit }}</p>
                 <p class="mb-2"><strong>Quantity:</strong> {{ $request->quantity }}</p>
                 <p class="mb-2"><strong>Order Type:</strong> {{ ucfirst($request->order_type) }}</p>
-                <p class="mb-2"><strong>Deadline:</strong> {{ \Carbon\Carbon::parse($request->deadline)->format('F j, Y') }}</p>
+                <div class="relative flex items-center justify-start gap-2 mb-4">
+                    <p><strong>Deadline:</strong> {{ \Carbon\Carbon::parse($request->deadline)->format('F j, Y') }}</p>
+                    <button data-tooltip-target="tooltip-deadline" type="button" class="ml-2">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                    </button>
+                    <div id="tooltip-deadline" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
+                        <p class="text-sm">The deadline can be extended for 5 days upon acceptance.</p>
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
 
                 <!-- Client Information -->
                 <div class="mb-6">
@@ -29,9 +40,9 @@
                 <!-- Delivery Information -->
                 <div class="mb-6">
                     <h2 class="text-xl font-semibold mb-2">Delivery Information</h2>
-                    <p class="mb-2"><strong>Address:</strong> {{ $request->client->address }}</p>
-                    <p class="mb-2"><strong>City:</strong> {{ $request->client->city }}</p>
-                    <p class="mb-2"><strong>Postal Code:</strong> {{ $request->client->postal_code }}</p>
+                    <p class="mb-2"><strong>Address:</strong> {{ $request->client->user->address->house_number . ' ' . $request->client->user->address->street . ' ' . $request->client->user->address->barangay }}</p>
+                    <p class="mb-2"><strong>City:</strong> {{ 'Zamboanga' }}</p>
+                    <p class="mb-2"><strong>Postal Code:</strong> 7000</p>
                 </div>
             </div>
 

@@ -496,20 +496,45 @@
                                                 </div>
                                                 <!-- Modal body -->
                                                 <div class="flex flex-col gap-4 justify-center p-4 md:p-5">
-                                                    <div class="w-full">
-                                                        <div class="bg-white p-4 rounded-md shadow-lg mb-4">
-                                                            <p class="mb-2"><strong>Description:</strong> <span x-text="description"></span></p>
-                                                            <p class="mb-2"><strong>Dimensions:</strong> <span x-text="width"></span> x <span x-text="height"></span> <span x-text="unit"></span></p>
-                                                            <p class="mb-2"><strong>Order Type:</strong> <span x-text="orderType === 'rush' ? 'Rush Order' : 'Normal Order'"></span></p>
-                                                            <p class="mb-2"><strong>Quantity:</strong> <span x-text="quantity"></span></p>
-                                                            <p class="mb-2"><strong>Total Price:</strong> ₱<span x-text="totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span></p>
-                                                            <p class="mb-2"><strong>Estimated Receive Date:</strong> <span x-text="estimatedReceiveDate"></span></p>
+                                                    @auth
+                                                        <div class="w-full">
+                                                            <div class="bg-white p-4 rounded-md shadow-lg mb-4">
+                                                                <p class="mb-2"><strong>Description:</strong> <span x-text="description"></span></p>
+                                                                <p class="mb-2"><strong>Dimensions:</strong> <span x-text="width"></span> x <span x-text="height"></span> <span x-text="unit"></span></p>
+                                                                <p class="mb-2"><strong>Order Type:</strong> <span x-text="orderType === 'rush' ? 'Rush Order' : 'Normal Order'"></span></p>
+                                                                <p class="mb-2"><strong>Quantity:</strong> <span x-text="quantity"></span></p>
+                                                                <p class="mb-2"><strong>Total Price:</strong> ₱<span x-text="totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })"></span></p>
+                                                                <p class="mb-2"><strong>Estimated Receive Date:</strong> <span x-text="estimatedReceiveDate"></span></p>
+                                                            </div>
+                                                            <div class="bg-white p-4 rounded-md shadow-lg mb-4">
+                                                                <p class="mb-2"><strong>Client Name:</strong> {{ auth()->user()->name ?? 'N/A' }}</p>
+                                                                <p class="mb-2"><strong>Address:</strong> {{ auth()->user()->address ? auth()->user()->address->house_number . ' ' . auth()->user()->address->street . ' ' . auth()->user()->address->barangay : 'N/A' }}</p>
+                                                                <p class="mb-2"><strong>Phone Number:</strong> {{ auth()->user()->phone_number ?? 'N/A' }}</p>
+                                                                <a href="{{ route('profile.edit') }}"
+                                                                    class="block w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                                    Edit Address
+                                                                </a>
+                                                            </div>
+                                                            @if (auth()->user()->address && auth()->user()->phone_number)
+                                                                <button type="submit"
+                                                                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                                    Proceed to Payment
+                                                                </button>
+                                                            @else
+                                                                <p class="text-red-500 text-center mb-4">Please add your address and phone number before submitting the request.</p>
+                                                                <a href="{{ route('profile.edit') }}"
+                                                                    class="block w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                                    Update Profile
+                                                                </a>
+                                                            @endif
                                                         </div>
-                                                        <button type="submit"
-                                                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                            Proceed to Payment
-                                                        </button>
-                                                    </div>
+                                                    @else
+                                                        <p class="text-red-500 text-center mb-4">Please log in to proceed with your request.</p>
+                                                        <a href="{{ route('login') }}"
+                                                            class="block w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            Log In
+                                                        </a>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </div>

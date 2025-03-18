@@ -12,6 +12,7 @@ class Refund extends Model
         'payment_id',
         'commission_id',
         'order_id',
+        'request_id',
         'client_id',
         'artist_id',
         'amount',
@@ -31,6 +32,11 @@ class Refund extends Model
     public function commission()
     {
         return $this->belongsTo(Commission::class, 'commission_id');
+    }
+
+    public function request()
+    {
+        return $this->belongsTo(Request::class, 'request_id');
     }
 
     public function order()

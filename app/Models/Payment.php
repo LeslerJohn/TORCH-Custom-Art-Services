@@ -12,6 +12,7 @@ class Payment extends Model
         'client_id',
         'commission_id',
         'order_id',
+        'request_id',
         'amount',
         'payment_method',
         'transaction_id',
@@ -31,5 +32,10 @@ class Payment extends Model
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function request()
+    {
+        return $this->belongsTo(Request::class, 'request_id');
     }
 }

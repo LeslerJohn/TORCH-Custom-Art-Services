@@ -473,7 +473,7 @@
                     <div class="mt-4">
                         <h4 class="text-lg font-semibold">Address</h4>
                         <p class="text-gray-700">
-                            {{ $user->address ? $user->address->house_number . ', ' . $user->address->street . ', ' . $user->address->barangay : 'Address not provided.' }}
+                            {{ $artist->user->address ? $artist->user->address->house_number . ', ' . $artist->user->address->street . ', ' . $artist->user->address->barangay : 'Address not provided.' }}
                         </p>
                     </div>
                 </div>

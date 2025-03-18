@@ -37,6 +37,12 @@
                     </x-responsive-nav-link>
                 </li>
                 <li>
+                    <x-responsive-nav-link :href="route('admin.order.index')" :active="request()->routeIs('admin.order.index')">
+                        <i class="material-icons">list_alt</i>
+                        {{ __('Orders') }}
+                    </x-responsive-nav-link>
+                </li>
+                <li>
                     <x-responsive-nav-link :href="route('admin.user.index')" :active="request()->routeIs('admin.user.index')">
                         <i class="material-icons">people</i>
                         {{ __('User Management') }}

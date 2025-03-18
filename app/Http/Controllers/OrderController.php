@@ -219,6 +219,7 @@ class OrderController extends Controller
      */
     public function return(Request $request, Order $order)
     {
+        // dd($request->all());
         $request->validate([
             'reason' => 'required|string',
             'evidence' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -238,7 +239,7 @@ class OrderController extends Controller
         $refund_amount = $order->total - $company_cut;
 
         // Create a refund request
-        Refund::create([
+        $refund = Refund::create([
             'payment_id' => $order->payment->id,
             'order_id' => $order->id,
             'client_id' => $order->client_id,
@@ -325,7 +326,7 @@ class OrderController extends Controller
                 'artist_id' => $order->items->first()->artwork->artist_id,
                 'amount' => $refund_amount,
                 'reason' => 'Client cancelled order',
-                'refund_method' => $order->payment->payment_method === 'GCash' ? 'GCash' : 'Bank Transfer',
+                'refund_method' => $order->payment->payment_method === 'GCash' ? 'GCash' : 'PayMaya',
                 'status' => 'approved',
                 'transaction_id' => $response_data['data']['id'],
                 'admin_approved' => true, // Mark as approved
@@ -337,9 +338,16 @@ class OrderController extends Controller
                 $order->delivery->update(['status' => 'cancelled']);
             }
 
-            return redirect()->route('client.order.index')->with('success', 'Order cancelled and refund processed successfully.');
+            foreach ($order->items as $item) {
+                $item->artwork->update(['status' => 'sale']);
+                if ($item->artwork->discount) {
+                    $item->artwork->discount->update(['status' => 'active']);
+                }
+            }
+
+            return redirect()->route('client.order.show', $order)->with('success', 'Order cancelled and refund processed successfully.');
         } else {
-            return redirect()->route('client.order.index')->with('error', 'Refund failed. Please try again.');
+            return redirect()->route('client.order.show', $order)->with('error', 'Refund failed. Please try again.');
         }
     }
 }

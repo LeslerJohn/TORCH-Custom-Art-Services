@@ -19,7 +19,7 @@
                 </div>
             </div>
             <input type="hidden" id="payment_method" name="payment_method"
-                value="{{ old('payment_method', $user->artist->payment->payment_method) }}">
+                value="{{ old('payment_method', $user->artist->payment->payment_method ?? 'GCash') }}">
             <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
             </div>
 
@@ -39,7 +39,7 @@
 
             // Set initial selected payment method
             document.addEventListener('DOMContentLoaded', function () {
-                const initialMethod = "{{ old('payment_method', $user->artist->payment->payment_method) }}";
+                const initialMethod = "{{ old('payment_method', $user->artist->payment->payment_method ?? 'GCash') }}";
                 if (initialMethod) {
                 selectPaymentMethod(initialMethod);
                 }
@@ -50,7 +50,7 @@
             <div class="mt-4">
             <x-input-label for="payment_name" :value="__('Name')" />
             <x-text-input id="payment_name" class="block mt-1 w-full" type="text" name="payment_name"
-                placeholder="John Doe" :value="old('payment_name', $user->artist->payment->account_name)" required />
+                placeholder="John Doe" :value="old('payment_name', $user->artist->payment->account_name ?? '')" required />
             <x-input-error :messages="$errors->get('payment_name')" class="mt-2" />
             </div>
 
@@ -60,7 +60,7 @@
                 <span
                 class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">+63</span>
                 <x-text-input id="payment_number" class="block mt-1 w-full rounded-l-none" type="text"
-                name="payment_number" placeholder="9123456789" :value="old('payment_number', $user->artist->payment->account_number)" required
+                name="payment_number" placeholder="9123456789" :value="old('payment_number', $user->artist->payment->account_number ?? '')" required
                 maxlength="10" />
             </div>
             <x-input-error :messages="$errors->get('payment_number')" class="mt-2" />

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\Attachment;
 use App\Models\Commission;
 use App\Models\Delivery;
+use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -65,5 +67,48 @@ class CommissionController extends Controller
         ]);
 
         return redirect()->route('client.commission.show', $commission)->with('success', 'Commission received!');
+    }
+
+    public function return(Request $request, Commission $commission)
+    {
+        // dd($request->all());
+        $request->validate([
+            'reason' => 'required|string',
+            'evidence' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $file = $request->file('evidence');
+        $path = $file->store('evidences', 'public');
+
+        $attachment = Attachment::create([
+            'filename' => $file->getClientOriginalName(),
+            'path' => $path,
+            'mime_type' => $file->getMimeType(),
+        ]);
+
+        // Company cut (10% fee) on refund amount
+        $company_cut = $commission->request->total_price * 0.10; // Adjust percentage as needed
+        $refund_amount = $commission->request->total_price - $company_cut;
+
+        // Create a refund request
+        $refund = Refund::create([
+            'payment_id' => $commission->request->payment->id,
+            'commission_id' => $commission->id,
+            'client_id' => $commission->request->client_id,
+            'artist_id' => $commission->request->service->artist_id,
+            'amount' => $refund_amount,
+            'reason' => $request->reason,
+            'attachment_id' => $attachment->id,
+            'refund_method' => $commission->request->payment->payment_method === 'GCash' ? 'GCash' : 'PayMaya',
+            'status' => 'pending',
+            'admin_approved' => false
+        ]);
+
+        $commission->update(['status' => 'hold']);
+        if ($commission->delivery) {
+            $commission->delivery->update(['status' => 'hold']);
+        }
+
+        return redirect()->route('client.commission.show', $commission)->with('success', 'Order return request sent.');
     }
 }

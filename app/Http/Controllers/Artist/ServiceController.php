@@ -78,7 +78,7 @@ class ServiceController extends Controller
             $service->tags()->attach($tags);
         }
 
-        return redirect()->route('artist.service.index')->with('success', 'Service created successfully');
+        return redirect()->route('artist.service.show', $service)->with('success', 'Service created successfully');
     }
 
     /**
@@ -155,7 +155,7 @@ class ServiceController extends Controller
             $service->tags()->sync($tags);
         }
 
-        return redirect()->route('artist.service.index')->with('success', 'Service updated successfully');
+        return redirect()->route('artist.service.show', $service)->with('success', 'Service updated successfully');
     }
 
     /**

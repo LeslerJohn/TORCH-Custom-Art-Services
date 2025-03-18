@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/commission', [CommissionController::class, 'index'])->name('client.commission.index');
     Route::get('/commission/{commission}', [CommissionController::class, 'show'])->name('client.commission.show');
     Route::post('/commission/{commission}/receive', [CommissionController::class, 'receive'])->name('client.commission.receive');
+    Route::post('/commission/{commission}/return', [CommissionController::class, 'return'])->name('client.return.commission');
 });
 
 Route::get('mail/{name}', function ($name) {

@@ -7,6 +7,7 @@ use App\Models\Attachment;
 use App\Models\Commission;
 use App\Models\Delivery;
 use App\Models\Draft;
+use App\Models\Extension;
 use App\Models\Request as ModelsRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -122,6 +123,22 @@ class CommissionController extends Controller
                 'attachment_id' => $attachment->id,
             ]);
         }
+
+        return redirect()->route('artist.commission.show', $commission);
+    }
+
+    public function requestExtension(Request $request, Commission $commission)
+    {
+        $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $extension = Extension::create([
+            'commission_id' => $commission->id,
+            'status' => 'pending',
+            'reason' => $request->reason,
+            'artist_id' => Auth::user()->artist->id,
+        ]);
 
         return redirect()->route('artist.commission.show', $commission);
     }

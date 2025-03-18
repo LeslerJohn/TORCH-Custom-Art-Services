@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/artist/commission/{commission}/deliver', [CommissionController::class, 'deliver'])->name('artist.commission.deliver');
     Route::post('/artist/commission/{commission}/delivered', [CommissionController::class, 'delivered'])->name('artist.commission.delivered');
     Route::post('/artist/commission/{commission}/draft', [CommissionController::class, 'draft'])->name('artist.commission.draft');
+    Route::post('/artist/commission/{commission}/request-extension', [CommissionController::class, 'requestExtension'])->name('artist.commission.request-extension');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

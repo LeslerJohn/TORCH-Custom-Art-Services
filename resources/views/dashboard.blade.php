@@ -510,7 +510,7 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-16 mt-12 overflow-hidden px-4 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-bold text-center sm:text-left" data-aos="fade-right" data-aos-delay="700">Your
-                Trusted Custom Art Platform</h1>
+                Trusted Platform for Custom Art Services</h1>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-16 mt-12">
                 <div>
                     <h3 class="text-xl font-bold mb-2 text-gray-600" data-aos="fade-right" data-aos-delay="800">

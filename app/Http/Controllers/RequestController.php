@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Commission;
+use App\Models\Payment;
+use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use App\Models\RequestImage;
 use App\Models\Service;
@@ -42,7 +44,7 @@ class RequestController extends Controller
     public function store(Request $request, Service $service)
     {
         $user = $request->user();
-        $price = $request->total_price;
+        $price = $request->total_price / $request->quantity;
 
         $referenceIds = [];
 
@@ -114,7 +116,7 @@ class RequestController extends Controller
                         'requestData' => base64_encode(json_encode($requestData)), // Encode
                         'service' => $service->id
                     ]),
-                    'cancel_url' => route('client.request.index'),
+                    'cancel_url' => route('service.show', $service),
                     'description' => 'Request Payment',
                     'statement_descriptor' => 'Torch Payment',
                     "send_email_receipt" => true,
@@ -175,29 +177,48 @@ class RequestController extends Controller
         ])->get("https://api.paymongo.com/v1/payments/{$payment_id}")->object();
 
         if ($payment->data->attributes->status === 'paid') {
-            $modelrequest = ModelsRequest::create([
-                'client_id' => Auth::user()->id,
-                'total_price' => $decodedRequestData['total_price'],
-                'description' => $decodedRequestData['description'],
-                'width' => $decodedRequestData['width'],
-                'height' => $decodedRequestData['height'],
-                'quantity' => $decodedRequestData['quantity'],
-                'unit' => $decodedRequestData['unit'],
-                'order_type' => $decodedRequestData['order_type'],
-                'deadline' => $decodedRequestData['order_type'] === 'normal'
-                    ? now()->addDays(($service->normal_timeframe * $decodedRequestData['quantity']) + 5)
-                    : now()->addDays(($service->rush_timeframe * $decodedRequestData['quantity']) + 5),
-                'service_id' => $service->id,
-                'status' => 'pending',
-            ]);
+            $existingRequest = ModelsRequest::where('client_id', Auth::user()->id)
+                ->where('total_price', $decodedRequestData['total_price'])
+                ->where('description', $decodedRequestData['description'])
+                ->where('service_id', $service->id)
+                ->first();
 
-            if (!empty($decodedRequestData['reference_ids'])) {
-                foreach ($decodedRequestData['reference_ids'] as $attachmentId) {
-                    RequestImage::create([
-                        'request_id' => $modelrequest->id,
-                        'attachment_id' => $attachmentId,
-                    ]);
+            if (!$existingRequest) {
+                $modelrequest = ModelsRequest::create([
+                    'client_id' => Auth::user()->id,
+                    'total_price' => $decodedRequestData['total_price'],
+                    'description' => $decodedRequestData['description'],
+                    'width' => $decodedRequestData['width'],
+                    'height' => $decodedRequestData['height'],
+                    'quantity' => $decodedRequestData['quantity'],
+                    'unit' => $decodedRequestData['unit'],
+                    'order_type' => $decodedRequestData['order_type'],
+                    'deadline' => $decodedRequestData['order_type'] === 'normal'
+                        ? now()->addDays(($service->normal_timeframe * $decodedRequestData['quantity']) + 5)
+                        : now()->addDays(($service->rush_timeframe * $decodedRequestData['quantity']) + 5),
+                    'service_id' => $service->id,
+                    'status' => 'pending',
+                ]);
+
+                if (!empty($decodedRequestData['reference_ids'])) {
+                    foreach ($decodedRequestData['reference_ids'] as $attachmentId) {
+                        RequestImage::create([
+                            'request_id' => $modelrequest->id,
+                            'attachment_id' => $attachmentId,
+                        ]);
+                    }
                 }
+
+                Payment::create([
+                    'client_id' => Auth::user()->id,
+                    'request_id' => $modelrequest->id,
+                    'amount' => $payment->data->attributes->amount / 100,
+                    'payment_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
+                    'transaction_id' => $payment->data->id,
+                    'status' => 'completed'
+                ]);
+
+                return redirect()->route('client.request.show', $modelrequest)->with('success', 'Request created successfully!');
             }
 
             return redirect()->route('client.request.index')->with('success', 'Request created successfully!');
@@ -236,10 +257,63 @@ class RequestController extends Controller
      */
     public function destroy(ModelsRequest $request)
     {
-        $request->update([
-            'status' => 'cancelled',
+        if ($request->status === 'accepted') {
+            return redirect()->route('client.request.show', $request)->withErrors(['error' => 'Cannot cancel a completed request.']);
+        }
+
+        $refund_amount = (int)($request->total_price * 100);
+
+        // Call PayMongo Refund API
+        $response = Http::withOptions(['verify' => false])->withHeaders([
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json',
+            'Authorization' => 'Basic ' . env('AUTH_PAY'),
+        ])->post('https://api.paymongo.com/v1/refunds', [
+            'data' => [
+                'attributes' => [
+                    'amount' => $refund_amount, // Convert to centavos
+                    'payment_id' => $request->payment->transaction_id,
+                    'reason' => 'requested_by_customer',
+                    "send_email_receipt" => true,
+                    'payment_method_types' => [
+                        'gcash',
+                        'paymaya',
+                    ],
+                    'default_payment_method_type' => 'gcash',
+                    "merchant" => "Paymongo Test Account",
+                    'success_url' => route('client.request.show', $request),
+                    'cancel_url' => route('client.request.index'),
+                    'notes' => 'Request Cancellation',
+                    'statement_descriptor' => 'Torch Payment',
+                    "show_description" => true,
+                ]
+            ]
         ]);
 
-        return redirect()->route('client.request.index')->with('success', 'Request cancelled successfully!');
+        $response_data = $response->json();
+
+        // Check if refund is successful
+        if (isset($response_data['data'])) {
+            // Save refund in the database
+            Refund::create([
+                'payment_id' => $request->payment->id,
+                'request_id' => $request->id,
+                'client_id' => $request->client_id,
+                'artist_id' => $request->service->artist_id,
+                'amount' => $refund_amount,
+                'reason' => 'Client cancelled request',
+                'refund_method' => $request->payment->payment_method === 'GCash' ? 'GCash' : 'PayMaya',
+                'status' => 'approved',
+                'transaction_id' => $response_data['data']['id'],
+                'admin_approved' => true, // Mark as approved
+            ]);
+
+            // Update request status
+            $request->update(['status' => 'cancelled']);
+
+            return redirect()->route('client.request.show', $request)->with('success', 'Request cancelled and refund processed successfully.');
+        } else {
+            return redirect()->route('client.request.show', $request)->with('error', 'Refund failed. Please try again.');
+        }
     }
 }
