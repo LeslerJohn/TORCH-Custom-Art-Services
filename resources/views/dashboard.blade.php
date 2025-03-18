@@ -13,44 +13,6 @@
                         <p class="text-lg sm:text-xl text-gray-700 font-bold mt-6 floating-element floating-p" data-aos="fade-left" data-aos-delay="400">
                             Explore traditional masterpieces by passionate artists, ready to transform your ideas into reality.
                         </p>
-                        <style>
-                            /* Text Floating Animation */
-                            @keyframes float {
-                                0% {
-                                    transform: translate(var(--translateX-start), var(--translateY-start));
-                                }
-
-                                50% {
-                                    transform: translate(var(--translateX-mid), var(--translateY-mid));
-                                }
-
-                                100% {
-                                    transform: translate(var(--translateX-end), var(--translateY-end));
-                                }
-                            }
-
-                            /* Common Floating Styles */
-                            .floating-element {
-                                animation: float var(--animation-duration) ease-in-out infinite;
-                                will-change: transform;
-                                /* Optimize for performance */
-                            }
-
-                            /* Different Timings for h1 and p */
-                            .floating-h1 {
-                                --animation-duration: 8s;
-                                /* Longer duration for h1 */
-                                --animation-delay: 0s;
-                            }
-
-                            .floating-p {
-                                --animation-duration: 6s;
-                                /* Shorter duration for p */
-                                --animation-delay: 2s;
-                                /* Delay to make it out of sync with h1 */
-                                animation-delay: var(--animation-delay);
-                            }
-                        </style>
                         <div class="mt-8" data-aos="fade-up" data-aos-once="false" data-aos-delay="600">
                             <a href="{{ route('client.artwork') }}"
                                 class="cta-button inline-block bg-orange-500 text-white pl-3 sm:pl-3 py-3 rounded-full text-lg font-semibold hover:bg-orange-600 transition">
@@ -430,8 +392,46 @@
                         commissions and offer a selection of beautiful premade artworks to enhance your space.</p>
                 </div>
             </div>
-            <img src="{{ asset('images/default.image.jpg') }}" alt=""
-                class="w-full h-64 sm:h-96 object-cover rounded-lg mt-12" data-aos="fade-up" data-aos-delay="900">
+            <div class="relative w-full max-w-7xl mx-auto mt-12 overflow-hidden rounded-lg" data-aos="fade-up" data-aos-delay="900">
+                <!-- Carousel Container -->
+                <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Slide 1 -->
+                    <div class="min-w-full">
+                        <figure>
+                            <img src="{{ asset('images/387463047_369822405595785_307693669332539475_n.jpg') }}" alt="Slide 1" class="w-full h-96 sm:h-[500px] object-cover">
+                            <figcaption class="text-center text-sm text-gray-600 mt-2">Photo by Mimorod Banaag</figcaption>
+                        </figure>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="min-w-full">
+                        <figure>
+                            <img src="{{ asset('images/c66c41bd-af7b-4ee7-b622-3cc554a6b620.jpg') }}" alt="Slide 2" class="w-full h-96 sm:h-[500px] object-cover">
+                            <figcaption class="text-center text-sm text-gray-600 mt-2">Photo by Mimorod Banaag</figcaption>
+                        </figure>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="min-w-full">
+                        <figure>
+                            <img src="{{ asset('images/0f4b8aac-f842-4beb-9451-518664bcece9.jpg') }}" alt="Slide 3" class="w-full h-96 sm:h-[500px] object-cover">
+                            <figcaption class="text-center text-sm text-gray-600 mt-2">Photo by Mimorod Banaag</figcaption>
+                        </figure>
+                    </div>
+                    <!-- Add more slides as needed -->
+                </div>
+
+                <!-- Navigation Buttons -->
+                <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-75 rounded-full p-2 shadow-md hover:bg-opacity-100 transition">
+                    &larr;
+                </button>
+                <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-75 rounded-full p-2 shadow-md hover:bg-opacity-100 transition">
+                    &rarr;
+                </button>
+
+                <!-- Pagination Dots -->
+                <div id="pagination" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <!-- Dots will be dynamically added here -->
+                </div>
+            </div>
         </div>
 
         <div
@@ -637,6 +637,69 @@
                 // Apply random floating to all elements with the class 'floating-element'
                 document.querySelectorAll('.floating-element').forEach(element => {
                     randomizeFloating(element);
+                });
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    const carousel = document.getElementById('carousel');
+                    const prevBtn = document.getElementById('prevBtn');
+                    const nextBtn = document.getElementById('nextBtn');
+                    const pagination = document.getElementById('pagination');
+                    const slides = document.querySelectorAll('#carousel > div');
+                    let currentIndex = 0;
+
+                    // Create Pagination Dots
+                    slides.forEach((_, index) => {
+                        const dot = document.createElement('div');
+                        dot.classList.add('w-3', 'h-3', 'bg-white', 'bg-opacity-75', 'rounded-full', 'cursor-pointer', 'hover:bg-opacity-100', 'transition');
+                        dot.addEventListener('click', () => goToSlide(index));
+                        pagination.appendChild(dot);
+                    });
+
+                    // Update Active Dot
+                    const updatePagination = () => {
+                        const dots = pagination.querySelectorAll('div');
+                        dots.forEach((dot, index) => {
+                            dot.classList.toggle('bg-opacity-100', index === currentIndex);
+                            dot.classList.toggle('bg-opacity-75', index !== currentIndex);
+                        });
+                    };
+
+                    // Go to Specific Slide
+                    const goToSlide = (index) => {
+                        currentIndex = index;
+                        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        updatePagination();
+                    };
+
+                    // Next Slide
+                    nextBtn.addEventListener('click', () => {
+                        currentIndex = (currentIndex + 1) % slides.length;
+                        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        updatePagination();
+                    });
+
+                    // Previous Slide
+                    prevBtn.addEventListener('click', () => {
+                        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        updatePagination();
+                    });
+
+                    // Auto Play (Optional)
+                    let autoPlayInterval = setInterval(() => {
+                        nextBtn.click();
+                    }, 7000);
+
+                    // Pause on Hover
+                    carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+                    carousel.addEventListener('mouseleave', () => {
+                        autoPlayInterval = setInterval(() => {
+                            nextBtn.click();
+                        }, 3000);
+                    });
+
+                    // Initialize
+                    updatePagination();
                 });
             </script>
 </x-app-layout>

@@ -116,7 +116,7 @@
                 <img src="{{ $client->user->profileImage ? asset('storage/' . $client->user->profileImage->path) : asset('images/profile.default.jpg') }}"
                     class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-md mx-auto">
                 <h2 class="text-xl font-semibold mt-3">{{ $client->user->name }}</h2>
-                
+
                 <!-- Action Button -->
                 <div class="mt-4">
                     <a href="{{ route('profile.edit', $client) }}"
@@ -238,6 +238,11 @@
             </div>
         </div>
     </div>
+    <footer>
+        <div>
+            @include('layouts.footer')
+        </div>
+    </footer>
 </x-app-layout>
 
 <style>
