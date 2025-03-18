@@ -129,8 +129,6 @@
                             <p>{{ $artist->available ? 'Available' : 'Not Available' }}</p>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

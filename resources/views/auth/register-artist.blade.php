@@ -361,7 +361,7 @@
                 <div class="mt-4 border border-gray-300 p-4 rounded-md">
                     <x-input-label for="portfolio" :value="__('Portfolio')" />
                     <x-text-input id="portfolio" class="block mt-1 w-full" type="file" name="portfolio"
-                        :value="old('portfolio')" required />
+                        accept=".pdf,.docx,.doc" :value="old('portfolio')" required />
                     <x-input-error :messages="$errors->get('portfolio')" class="mt-2" />
                 </div>
 

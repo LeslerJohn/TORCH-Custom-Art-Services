@@ -24,6 +24,11 @@ class Extension extends Model
         return $this->belongsTo(Commission::class, 'commission_id');
     }
 
+    public function attachment()
+    {
+        return $this->hasOne(Attachment::class, 'id', 'attachment_id');
+    }
+
     public function artist()
     {
         return $this->belongsTo(ArtistProfile::class, 'artist_id');

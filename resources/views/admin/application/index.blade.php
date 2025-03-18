@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <!-- Search Form -->
-                    <form method="GET" action="{{ route('admin.user.index') }}" class="relative">
+                    <form method="GET" action="{{ route('admin.application.index') }}" class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -69,7 +69,7 @@
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <th scope="row"
                                     class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg"
+                                    <img class="w-10 h-10 rounded-full" src="{{ $user->profileImage ? asset('storage/' . $user->profileImage->path) : asset('images/profile.default.jpg') }}"
                                         alt="img">
                                     <div class="ps-3">
                                         <div class="text-base font-semibold">{{ $user->name }}</div>

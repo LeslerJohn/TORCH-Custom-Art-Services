@@ -88,10 +88,12 @@
         </div>
 
         <div class="flex flex-col items-center justify-center mt-6">
-            <x-secondary-button class="w-full py-4 text-sm justify-center">
-                <img src="{{ asset('images/google.png')}}" alt="Google Logo" class="w-6 h-6 me-2">
-                {{ __('Continue with Google') }}
-            </x-secondary-button>
+            <a href="{{ route('auth.google') }}" class="w-full">
+                <x-secondary-button class="w-full py-4 text-sm justify-center">
+                    <img src="{{ asset('images/google.png')}}" alt="Google Logo" class="w-6 h-6 me-2">
+                    {{ __('Continue with Google') }}
+                </x-secondary-button>
+            </a>
 
             <div class="mt-2 mb-6 text-sm">
                 Don't have account?
