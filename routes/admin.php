@@ -35,6 +35,9 @@ Route::get('/admin/commission/{commission}/cancel', [CommissionController::class
 Route::put('/admin/commission/{commission}/update-status', [CommissionController::class, 'updateStatus'])->name('admin.commission.updateStatus');
 Route::put('/admin/commission/{commission}/update-delivery-status', [CommissionController::class, 'updateDeliveryStatus'])->name('admin.commission.updateDeliveryStatus');
 Route::put('/admin/commission/{commission}/extend-deadline', [CommissionController::class, 'extendDeadline'])->name('admin.commission.extendDeadline');
+Route::put('/admin/commission/{commission}/reject-extension', [CommissionController::class, 'rejectExtension'])->name('admin.commission.rejectExtension');
+Route::patch('/admin/commission/{commission}/approve-refund', [CommissionController::class, 'approveRefund'])->name('admin.commission.approveRefund');
+Route::patch('/admin/commission/{commission}/reject-refund', [CommissionController::class, 'rejectRefund'])->name('admin.commission.rejectRefund');
 
 Route::get('/admin/report', [ReportController::class, 'index'])->name('admin.report.index');
 Route::get('/admin/report/{report}', [ReportController::class, 'show'])->name('admin.report.show');

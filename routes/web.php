@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -28,6 +29,7 @@ Route::get('/privacy policy', function () {
 })->name('privacy');
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -88,6 +90,9 @@ Route::middleware('auth')->group(function () {
 Route::get('mail/{name}', function ($name) {
     Mail::to('leslerjohngantalao@gmail.com')->send(new TestMail($name));
 });
+
+Route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'googleCallback'])->name('auth.google.callback');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/artist.php';

@@ -13,17 +13,31 @@
         <!-- Status Display -->
         <div class="absolute top-6 right-4">
             <span
-                class="px-4 py-2 rounded-full text-white 
+            class="px-4 py-2 rounded-full text-white 
             {{ $commission->status == 'ready'
-                ? 'bg-blue-500'
-                : ($commission->status == 'wip'
-                    ? 'bg-yellow-500'
-                    : ($commission->status == 'done'
-                        ? 'bg-green-500'
-                        : 'bg-gray-500')) }}">
-                {{ ucfirst($commission->status) }}
+            ? 'bg-blue-500'
+            : ($commission->status == 'wip'
+                ? 'bg-yellow-500'
+                : ($commission->status == 'done'
+                ? 'bg-green-500'
+                : ($commission->status == 'hold'
+                    ? 'bg-red-500'
+                    : 'bg-gray-500'))) }}">
+            {{ ucfirst($commission->status) }}
             </span>
         </div>
+
+        @if ($commission->status == 'hold')
+            <div class="absolute top-16 right-4 bg-red-100 border border-red-500 text-red-700 p-4 rounded-lg">
+            <h3 class="font-bold">Refund Requested</h3>
+            <p><strong>Reason:</strong> {{ $commission->refund->reason }}</p>
+            <p><strong>Requested On:</strong> {{ \Carbon\Carbon::parse($commission->refund->created_at)->format('F j, Y') }}</p>
+            <p><strong>Status:</strong> {{ ucfirst($commission->refund->status) }}</p>
+            @if ($commission->refund->status == 'denied')
+                <p class="text-red-500"><strong>Note:</strong> Your refund request has been denied.</p>
+            @endif
+            </div>
+        @endif
 
         <!-- Commission Details and Drafts Container -->
         <div class="flex flex-col md:flex-row gap-6 mt-12">
@@ -93,7 +107,7 @@
                             <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow">Mark
                                 Done</button>
                         </form>
-                    @elseif ($commission->status == 'done')
+                    @elseif ($commission->status == 'done' && $commission->delivery->status == 'pending')
                         <form action="{{ route('artist.commission.deliver', $commission) }}" method="POST">
                             @csrf
                             <button type="submit"

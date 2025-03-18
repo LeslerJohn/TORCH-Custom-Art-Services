@@ -64,11 +64,10 @@
         </div>
 
         <!-- Extension Information -->
-        @if ($commission->extension->status == 'approved')
+        @if ($commission->extension && $commission->extension->status == 'approved')
             <div class="mb-6 mt-4 bg-yellow-100 p-4 rounded-lg shadow-lg">
                 <h2 class="text-xl font-semibold mb-2">Extension Details</h2>
-                <p><strong>New Deadline:</strong>
-                    {{ \Carbon\Carbon::parse($commission->extension->new_deadline)->format('j F, Y') }}</p>
+                <p><strong>Extension:</strong> The deadline has been extended by 7 days.</p>
                 <p class="text-gray-600">Your commission has been granted an extension. Please note the new deadline
                     above.</p>
             </div>
@@ -241,7 +240,7 @@
                             <label for="evidence"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Attach
                                 Image</label>
-                            <input type="file" id="evidence" name="evidence" accept="image/*" required
+                            <input type="file" id="evidence" name="evidence" accept="image/jpeg,image/png,image/jpg,image/gif" required
                                 class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400">
                         </div>
                         <button type="submit"

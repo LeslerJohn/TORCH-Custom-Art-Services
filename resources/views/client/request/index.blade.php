@@ -10,7 +10,7 @@
                         type="button" role="tab" aria-controls="all" aria-selected="false">
                         All
                         <span class="ml-2 bg-orange-500 text-white rounded-full px-2 py-1 text-xs">
-                            {{ $requests->where('status', '!=', 'accepted')->count() + $commissions->whereIn('status', ['ready', 'wip', 'done'])->count() }}
+                            {{ $requests->where('status', '!=', 'accepted')->count() + $commissions->whereIn('status', ['ready', 'wip', 'done', 'hold'])->count() }}
                         </span>
                     </button>
                 </li>
@@ -31,7 +31,7 @@
                         aria-controls="dashboard" aria-selected="false">
                         Commission
                         <span class="ml-2 bg-orange-500 text-white rounded-full px-2 py-1 text-xs">
-                            {{ $commissions->whereIn('status', ['ready', 'wip', 'done'])->count() }}
+                            {{ $commissions->whereIn('status', ['ready', 'wip', 'done', 'hold'])->count() }}
                         </span>
                     </button>
                 </li>
@@ -43,7 +43,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @if (
                         $requests->where('status', '!=', 'accepted')->isEmpty() &&
-                            $commissions->whereIn('status', ['ready', 'wip', 'done'])->isEmpty())
+                            $commissions->whereIn('status', ['ready', 'wip', 'done', 'hold', 'returned'])->isEmpty())
                         <p class="text-center text-gray-500">No requests or commissions found.</p>
                     @else
                         @foreach ($requests->where('status', '!=', 'accepted') as $request)
@@ -99,7 +99,7 @@
                             </div>
                         @endforeach
 
-                        @foreach ($commissions->whereIn('status', ['ready', 'wip', 'done']) as $commission)
+                        @foreach ($commissions->whereIn('status', ['ready', 'wip', 'done', 'hold']) as $commission)
                             @php
                                 $thumbnail = $commission->request->images->first()?->attachment;
                                 $service = $commission->request->service;
@@ -150,6 +150,10 @@
                                                     #10b981 
                                                 @elseif($commission->status == 'completed') 
                                                     #4ade80 
+                                                @elseif($commission->status == 'hold') 
+                                                    #f59e0b 
+                                                @elseif($commission->status == 'returned') 
+                                                    #ef4444 
                                                 @else 
                                                     #d1d5db @endif;">
                                             {{ ucfirst($commission->status ?? 'Pending') }}
@@ -226,10 +230,10 @@
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel"
                 aria-labelledby="dashboard-tab">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @if ($commissions->whereIn('status', ['ready', 'wip', 'done'])->isEmpty())
+                    @if ($commissions->whereIn('status', ['ready', 'wip', 'done', 'hold'])->isEmpty())
                         <p class="text-center text-gray-500">No commissions found.</p>
                     @else
-                        @foreach ($commissions->whereIn('status', ['ready', 'wip', 'done']) as $commission)
+                        @foreach ($commissions->whereIn('status', ['ready', 'wip', 'done', 'hold']) as $commission)
                             @php
                                 $thumbnail = $commission->request->images->first()?->attachment;
                                 $service = $commission->request->service;

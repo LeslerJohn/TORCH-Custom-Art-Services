@@ -87,8 +87,8 @@ class CommissionController extends Controller
         ]);
 
         // Company cut (10% fee) on refund amount
-        $company_cut = $commission->request->total_price * 0.10; // Adjust percentage as needed
-        $refund_amount = $commission->request->total_price - $company_cut;
+        $company_cut = ($commission->request->total_price * $commission->request->quantity) * 0.10; // Adjust percentage as needed
+        $refund_amount = ($commission->request->total_price * $commission->request->quantity) - $company_cut;
 
         // Create a refund request
         $refund = Refund::create([
