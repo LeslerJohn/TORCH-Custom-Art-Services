@@ -1,6 +1,15 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 min-h-screen">
-        <div class="flex items-center justify-between w-full mb-4">
+        <!-- Back Button -->
+        <div class="mb-4 pt-4 flex items-center">
+            <button onclick="window.history.back()"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors mr-4">
+                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h14M5 12l4-4m-4 4 4 4" />
+                </svg>
+            </button>
             <h2 class="text-xl font-bold">Artworks</h2>
         </div>
 
@@ -27,25 +36,25 @@
         <!-- Filters (Top Row) -->
         <form method="GET" action="{{ route('client.artwork') }}" class="mb-4">
             <div class="flex flex-wrap items-center gap-2 overflow-hidden py-2 border rounded-lg shadow-sm px-3">
-            <!-- Search -->
-            <input type="text" name="search" placeholder="Search by title..."
-                class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
-                value="{{ request('search') }}" onchange="this.form.submit()">
+                <!-- Search -->
+                <input type="text" name="search" placeholder="Search by title..."
+                    class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                    value="{{ request('search') }}" onchange="this.form.submit()">
 
-            <!-- Status Filter -->
-            <select name="status" onchange="this.form.submit()"
-                class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 appearance-none transition">
-                <option value="">All Status</option>
-                <option value="sale" {{ request('status') == 'sale' ? 'selected' : '' }}>For Sale</option>
-                <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Sold</option>
-            </select>
+                <!-- Status Filter -->
+                <select name="status" onchange="this.form.submit()"
+                    class="px-4 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 appearance-none transition">
+                    <option value="">All Status</option>
+                    <option value="sale" {{ request('status') == 'sale' ? 'selected' : '' }}>For Sale</option>
+                    <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Sold</option>
+                </select>
 
-            <!-- Showcase Toggle -->
-            <button type="submit" name="showcase" value="{{ request('showcase') ? '' : '1' }}"
-                class="px-4 py-1 border border-gray-300 rounded-full transition 
+                <!-- Showcase Toggle -->
+                <button type="submit" name="showcase" value="{{ request('showcase') ? '' : '1' }}"
+                    class="px-4 py-1 border border-gray-300 rounded-full transition 
                     {{ request('showcase') ? 'bg-black text-white' : 'text-black hover:bg-gray-200' }}">
-                Showcases
-            </button>
+                    Showcases
+                </button>
 
                 <!-- Category Filter -->
                 <select name="category" onchange="this.form.submit()"
@@ -59,48 +68,48 @@
                     @endforeach
                 </select>
 
-            <!-- Price Range -->
-            <div class="flex items-center gap-2">
-                <input type="number" name="min_price" placeholder="Min Price"
-                class="w-24 px-2 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
-                value="{{ request('min_price') }}" onchange="this.form.submit()">
-                <input type="number" name="max_price" placeholder="Max Price"
-                class="w-24 px-2 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
-                value="{{ request('max_price') }}" onchange="this.form.submit()">
-            </div>
+                <!-- Price Range -->
+                <div class="flex items-center gap-2">
+                    <input type="number" name="min_price" placeholder="Min Price"
+                        class="w-24 px-2 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                        value="{{ request('min_price') }}" onchange="this.form.submit()">
+                    <input type="number" name="max_price" placeholder="Max Price"
+                        class="w-24 px-2 py-1 border border-gray-300 rounded-md text-black focus:border-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                        value="{{ request('max_price') }}" onchange="this.form.submit()">
+                </div>
 
-            <!-- Discounted Artworks Filter -->
-            <button type="submit" name="discounted" value="{{ request('discounted') ? '' : '1' }}"
-                class="px-4 py-1 border border-gray-300 rounded-full transition 
+                <!-- Discounted Artworks Filter -->
+                <button type="submit" name="discounted" value="{{ request('discounted') ? '' : '1' }}"
+                    class="px-4 py-1 border border-gray-300 rounded-full transition 
                     {{ request('discounted') ? 'bg-black text-white' : 'text-black hover:bg-gray-200' }}">
-                Discounted
-            </button>
+                    Discounted
+                </button>
 
-            <!-- Sort Options -->
-            <button type="submit" name="sort" value="{{ request('sort') == 'random' ? '' : 'random' }}"
-                class="px-4 py-1 border border-gray-300 rounded-full transition
+                <!-- Sort Options -->
+                <button type="submit" name="sort" value="{{ request('sort') == 'random' ? '' : 'random' }}"
+                    class="px-4 py-1 border border-gray-300 rounded-full transition
                     {{ request('sort') == 'random' ? 'bg-black text-white' : 'text-black hover:bg-gray-200' }}">
-                Random
-            </button>
+                    Random
+                </button>
 
-            <button type="submit" name="sort" value="{{ request('sort') == 'latest' ? '' : 'latest' }}"
-                class="px-4 py-1 border border-gray-300 rounded-full transition
+                <button type="submit" name="sort" value="{{ request('sort') == 'latest' ? '' : 'latest' }}"
+                    class="px-4 py-1 border border-gray-300 rounded-full transition
                     {{ request('sort') == 'latest' ? 'bg-black text-white' : 'text-black hover:bg-gray-200' }}">
-                Latest
-            </button>
+                    Latest
+                </button>
 
-            <!-- Clear Sort (Fixed at the End) -->
-            <button type="submit" name="sort" value=""
-                class="px-2 py-2 border rounded-full bg-red-500 text-white hover:bg-red-600 transition ml-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="lucide lucide-eraser">
-                <path
-                    d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
-                <path d="M22 21H7" />
-                <path d="m5 11 9 9" />
-                </svg>
-            </button>
+                <!-- Clear Sort (Fixed at the End) -->
+                <button type="submit" name="sort" value=""
+                    class="px-2 py-2 border rounded-full bg-red-500 text-white hover:bg-red-600 transition ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="lucide lucide-eraser">
+                        <path
+                            d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
+                        <path d="M22 21H7" />
+                        <path d="m5 11 9 9" />
+                    </svg>
+                </button>
             </div>
 
             <!-- Tags Section with Auto-Hiding Scroll Buttons -->
@@ -122,16 +131,16 @@
             }
             }" x-init="$nextTick(() => updateButtons())">
 
-            <!-- Left Scroll Button -->
-            <button type="button" @click="scroll(-1)" x-show="showLeft"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 px-3 py-2 bg-gray-100 hover:bg-gray-400 rounded-full shadow-md transition"
-                x-transition.opacity>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="m15 18-6-6 6-6" />
-                </svg>
-            </button>
+                <!-- Left Scroll Button -->
+                <button type="button" @click="scroll(-1)" x-show="showLeft"
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 px-3 py-2 bg-gray-100 hover:bg-gray-400 rounded-full shadow-md transition"
+                    x-transition.opacity>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6" />
+                    </svg>
+                </button>
 
                 <!-- Tags Container -->
                 <div x-ref="tagsContainer" @scroll="updateButtons()"
@@ -148,16 +157,16 @@
                     @endforeach
                 </div>
 
-            <!-- Right Scroll Button -->
-            <button type="button" @click="scroll(1)" x-show="showRight"
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 px-3 py-2 bg-gray-100 hover:bg-gray-400 rounded-full shadow-md transition"
-                x-transition.opacity>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="m9 18 6-6-6-6" />
-                </svg>
-            </button>
+                <!-- Right Scroll Button -->
+                <button type="button" @click="scroll(1)" x-show="showRight"
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 px-3 py-2 bg-gray-100 hover:bg-gray-400 rounded-full shadow-md transition"
+                    x-transition.opacity>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </button>
 
             </div>
 

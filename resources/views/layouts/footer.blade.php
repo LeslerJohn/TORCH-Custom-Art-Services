@@ -1,4 +1,4 @@
-<div class="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto sm:px-6 pb-4">
+<div class="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto sm:px-6 sm:mt-5 pb-4">
     <!-- Logo and Social Links -->
     <div class="flex flex-col justify-start items-center sm:items-start mb-6 sm:mb-0">
         <img src="{{ asset('images/torch-full-high-resolution-logo-transparent.png') }}" alt="Torch Logo" class="w-32">

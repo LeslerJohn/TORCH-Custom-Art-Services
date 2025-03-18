@@ -2,8 +2,17 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex-grow">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-                <div class="flex items-center justify-between w-full mb-4">
-                    <h2 class="text-xl font-bold">Services</h2>
+                <!-- Back Button -->
+                <div class="mb-4 pt-4 flex items-center">
+                    <button onclick="window.history.back()"
+                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors mr-4">
+                        <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 12h14M5 12l4-4m-4 4 4 4" />
+                        </svg>
+                    </button>
+                    <h2 class="text-xl font-bold">Commissions</h2>
                 </div>
 
                 <!-- Selected Tags Section -->

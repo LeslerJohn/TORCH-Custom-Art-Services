@@ -1,6 +1,16 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto mt-8 sm:px-6 lg:px-8 pb-16 overflow-hidden shadow-sm sm:rounded-lg">
-        <h1 class="text-2xl font-bold">Orders</h1>
+        <div class="mb-4 pt-4 pl-4 flex items-center">
+            <button onclick="window.history.back()"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors mr-4">
+                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h14M5 12l4-4m-4 4 4 4" />
+                </svg>
+            </button>
+            <h2 class="text-xl font-bold">Orders</h2>
+        </div>
 
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-nowrap overflow-x-auto -mb-px text-sm font-medium text-center" id="default-tab"
