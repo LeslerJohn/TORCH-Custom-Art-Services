@@ -1,6 +1,6 @@
 <x-guest-artist-layout>
     <form method="POST" action="{{ route('register.store') }}" enctype="multipart/form-data"
-        class="flex flex-col md:flex-row my-6 gap-4 justify-center items-start">
+        class="flex flex-col md:flex-row my-6 gap-4 justify-center items-center md:items-start">
         @csrf
 
         <!-- Left Section: Logo and Progress Steps -->
