@@ -102,71 +102,76 @@
                     <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
                         <!-- Example row -->
                         @foreach ($orders as $order)
-                        @if(request('status') === 'all' || request('status') === $order->status)
-                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        @if($order->client->user->profileImage)
-                                            <img class="h-10 w-10 rounded-full" src="{{ asset('storage/' . $order->client->user->profileImage->path) }}" alt="img">
-                                        @else
-                                            <img class="h-10 w-10 rounded-full" src="{{asset('images/profile.default.jpg')}}" alt="img">
-                                        @endif
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                            {{$order->client->user->name}}
+                            {{-- @if (request('status') === 'all' || request('status') === $order->status) --}}
+                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                @if ($order->client->user->profileImage)
+                                                    <img class="h-10 w-10 rounded-full"
+                                                        src="{{ asset('storage/' . $order->client->user->profileImage->path) }}"
+                                                        alt="img">
+                                                @else
+                                                    <img class="h-10 w-10 rounded-full"
+                                                        src="{{ asset('images/profile.default.jpg') }}" alt="img">
+                                                @endif
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                    {{ $order->client->user->name }}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$order->items->first()->artwork->artist->user->name}}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$order->items->first()->artwork->category->name}}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">{{ \Carbon\Carbon::parse($order->delivery->expected_delivery)->format('Y-m-d')}}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">
-                                        ₱{{ $order->total }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    @if($order->status === 'pending') bg-yellow-100 text-yellow-800
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-gray-200">
+                                            {{ $order->items->first()->artwork->artist->user->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-gray-200">
+                                            {{ $order->items->first()->artwork->category->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-gray-200">
+                                            {{ \Carbon\Carbon::parse($order->delivery->expected_delivery)->format('Y-m-d') }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-gray-200">
+                                            ₱{{ $order->total }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if ($order->status === 'pending') bg-yellow-100 text-yellow-800
                                     @elseif($order->status === 'accepted') bg-blue-100 text-blue-800
                                     @elseif($order->status === 'in-transit') bg-orange-100 text-orange-800
                                     @elseif($order->status === 'completed') bg-green-100 text-green-800
                                     @elseif($order->status === 'cancelled') bg-red-100 text-red-800
                                     @elseif($order->status === 'returned') bg-purple-100 text-purple-800
-                                    @elseif($order->status === 'hold') bg-gray-100 text-gray-800
-                                    @endif">
-                                    {{ ucfirst($order->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    @if($order->delivery->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($order->status === 'hold') bg-gray-100 text-gray-800 @endif">
+                                            {{ ucfirst($order->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if ($order->delivery->status === 'pending') bg-yellow-100 text-yellow-800
                                     @elseif($order->delivery->status === 'in-transit') bg-blue-100 text-blue-800
                                     @elseif($order->delivery->status === 'completed') bg-green-100 text-green-800
-                                    @elseif($order->delivery->status === 'cancelled') bg-red-100 text-red-800
-                                    @endif">
-                                    {{ ucfirst($order->delivery->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.order.show', $order) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                        @endif
+                                    @elseif($order->delivery->status === 'cancelled') bg-red-100 text-red-800 @endif">
+                                            {{ ucfirst($order->delivery->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="{{ route('admin.order.show', $order) }}"
+                                            class="text-indigo-600 hover:text-indigo-900">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{-- @endif --}}
                         @endforeach
                         <!-- Add more rows as needed -->
                     </tbody>
@@ -254,46 +259,56 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                        <!-- Example row -->
+                        @foreach ($refunds as $refund)
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" src="" alt="img">
+                                        <img class="h-10 w-10 rounded-full" src="{{$refund->order->client->user->profileImage ? asset('storage/' . $refund->order->client->user->profileImage->path) : asset('images/profile.default.jpg')}}" alt="img">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                            John Doe
+                                            {{$refund->order->client->user->name}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Jane Smith</div>
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded-full" src="{{$refund->order->items->first()->artwork->artist->user->profileImage ? asset('storage/' . $refund->order->items->first()->artwork->artist->user->profileImage->path) : asset('images/profile.default.jpg')}}" alt="img">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                            {{$refund->order->items->first()->artwork->artist->user->name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200"></div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">$100</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">₱{{ number_format($refund->amount, 2, '.', ',') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">2023-01-01</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{ \Carbon\Carbon::parse($refund->created_at)->format('Y-m-d') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Product defect</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$refund->reason}}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    In Review
+                                    {{ucfirst($refund->status)}}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.order.refund', 1) }}"
+                                <a href="{{ route('admin.order.show', $refund->order) }}"
                                     class="text-indigo-600 hover:text-indigo-900">
                                     View
                                 </a>
                             </td>
                         </tr>
-                        <!-- Add more rows as needed -->
+                        @endforeach
                     </tbody>
                 </table>
                 {{-- PAGINATION --}}
@@ -379,46 +394,53 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                        <!-- Example row -->
+                        @foreach ($cancellations as $cancellation)
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" src="" alt="img">
+                                        <img class="h-10 w-10 rounded-full" src="{{$cancellation->order->client->user->profileImage ? asset('storage/' . $cancellation->order->client->user->profileImage->path) : asset('images/profile.default.jpg')}}" alt="img">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                            John Doe
+                                            {{$cancellation->order->client->user->name}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Jane Smith</div>
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded-full" src="{{$cancellation->order->items()->first()->artwork->artist->user->profileImage ? asset('storage/' . $cancellation->order->items->first()->artwork->artist->user->profileImage->path) : asset('images/profile.default.jpg')}}" alt="img">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                            {{$cancellation->order->items->first()->artwork->artist->user->name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200"></div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">$100</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">₱{{ number_format($cancellation->amount, 2, '.', ',') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">2023-01-01</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{ \Carbon\Carbon::parse($cancellation->created_at)->format('Y-m-d') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900 dark:text-gray-200">Product defect</div>
+                                <div class="text-sm text-gray-900 dark:text-gray-200">{{$cancellation->reason ?? 'None'}}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    In Review
+                                    {{ucfirst($cancellation->status)}}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.order.cancel', 1) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">
-                                    View
-                                </a>
+                                None
                             </td>
                         </tr>
-                        <!-- Add more rows as needed -->
+                        @endforeach
                     </tbody>
                 </table>
                 {{-- PAGINATION --}}
@@ -434,6 +456,7 @@
                 {{ $users->links() }}
             </div> --}}
             </div>
-`        @endif
+            `
+        @endif
     </div>
 </x-admin-layout>

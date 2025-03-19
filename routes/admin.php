@@ -46,6 +46,9 @@ Route::get('/admin/order', 'App\Http\Controllers\Admin\OrderController@index')->
 Route::get('/admin/order/{order}', 'App\Http\Controllers\Admin\OrderController@show')->name('admin.order.show');
 Route::get('/admin/order/{order}/cancel', 'App\Http\Controllers\Admin\OrderController@cancel')->name('admin.order.cancel');
 Route::get('/admin/order/{order}/return', 'App\Http\Controllers\Admin\OrderController@return')->name('admin.order.return');
-Route::get('/admin/order/{order}/refund', 'App\Http\Controllers\Admin\OrderController@refund')->name('admin.order.refund');
+Route::put('/admin/order/{order}/update-status', 'App\Http\Controllers\Admin\OrderController@updateStatus')->name('admin.order.updateStatus');
+Route::put('/admin/order/{order}/update-delivery-status', 'App\Http\Controllers\Admin\OrderController@updateDeliveryStatus')->name('admin.order.updateDeliveryStatus');
+Route::patch('/admin/order/{order}/approve-refund', 'App\Http\Controllers\Admin\OrderController@approveRefund')->name('admin.order.approveRefund');
+Route::patch('/admin/order/{order}/reject-refund', 'App\Http\Controllers\Admin\OrderController@rejectRefund')->name('admin.order.rejectRefund');
 Route::get('/admin/order/{order}/deliver', 'App\Http\Controllers\Admin\OrderController@deliver')->name('admin.order.deliver');
 Route::get('/admin/order/{order}/delivered', 'App\Http\Controllers\Admin\OrderController@delivered')->name('admin.order.delivered');

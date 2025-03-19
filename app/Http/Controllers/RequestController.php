@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\Commission;
 use App\Models\Payment;
+use App\Models\Payout;
 use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use App\Models\RequestImage;
@@ -209,13 +210,32 @@ class RequestController extends Controller
                     }
                 }
 
-                Payment::create([
+                $paymentCreated = Payment::create([
                     'client_id' => Auth::user()->id,
                     'request_id' => $modelrequest->id,
                     'amount' => $payment->data->attributes->amount / 100,
                     'payment_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
                     'transaction_id' => $payment->data->id,
                     'status' => 'completed'
+                ]);
+
+                $serviceFeePercentage = 3;
+                $artistId = $service->artist_id;
+                $paymentAmount = $payment->data->attributes->amount / 100;
+                $serviceFee = ($serviceFeePercentage / 100) * $paymentAmount;
+                $netAmount = $paymentAmount - $serviceFee;
+
+                Payout::create([
+                    'artist_id' => $artistId,
+                    'payment_id' => $paymentCreated->id,
+                    'amount' => $paymentAmount,
+                    'service_fee' => $serviceFeePercentage,
+                    'net_amount' => $netAmount,
+                    'company_cut' => $serviceFee,
+                    'payout_type' => 'commission',
+                    'payout_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
+                    'transaction_id' => $payment->data->id,
+                    'status' => 'pending',
                 ]);
 
                 return redirect()->route('client.request.show', $modelrequest)->with('success', 'Request created successfully!');

@@ -48,4 +48,9 @@ class Request extends Model
     {
         return $this->hasOne(Payment::class, 'request_id');
     }
+
+    public function payout()
+    {
+        return $this->hasOneThrough(Payout::class, Payment::class, 'request_id', 'payment_id', 'id', 'id');
+    }
 }
