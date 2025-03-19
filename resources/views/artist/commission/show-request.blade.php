@@ -1,5 +1,12 @@
 <x-artist-layout>
     <div class="max-w-5xl mt-10 p-6 relative bg-white shadow-lg rounded-lg">
+        <a href="{{ route('artist.commission.index') }}" class="inline-flex items-center rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 mb-4">
+            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+            </svg>
+            Back to Commissions
+        </a>
         <!-- Status on Top Right -->
         <div class="absolute top-6 right-6">
             <span class="px-4 py-2 rounded-full text-white 
@@ -20,7 +27,7 @@
                     <p><strong>Deadline:</strong> {{ \Carbon\Carbon::parse($request->deadline)->format('F j, Y') }}</p>
                     <button data-tooltip-target="tooltip-deadline" type="button" class="ml-2">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                     </button>
                     <div id="tooltip-deadline" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
@@ -51,11 +58,11 @@
                 <h2 class="text-xl font-semibold mb-2">Reference Images</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                     @foreach ($request->images as $image)
-                        <div class="border rounded-lg overflow-hidden">
-                            <a href="{{ asset('storage/' . $image->attachment->path) }}" download>
-                                <img src="{{ asset('storage/' . $image->attachment->path) }}" alt="Reference Image" class="w-full h-auto" style="width: 100%; height: auto; max-height: 500px;">
-                            </a>
-                        </div>
+                    <div class="border rounded-lg overflow-hidden">
+                        <a href="{{ asset('storage/' . $image->attachment->path) }}" download>
+                            <img src="{{ asset('storage/' . $image->attachment->path) }}" alt="Reference Image" class="w-full h-auto" style="width: 100%; height: auto; max-height: 500px;">
+                        </a>
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -64,14 +71,14 @@
         <!-- Buttons -->
         <div class="flex flex-col sm:flex-row justify-start gap-4">
             @if ($request->status == 'pending')
-                <form action="{{ route('artist.request.accept', $request) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow">Accept request</button>
-                </form>
-                <form action="{{ route('artist.request.reject', $request) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg shadow">Reject request</button>
-                </form>
+            <form action="{{ route('artist.request.accept', $request) }}" method="POST">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow">Accept request</button>
+            </form>
+            <form action="{{ route('artist.request.reject', $request) }}" method="POST">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg shadow">Reject request</button>
+            </form>
             @endif
         </div>
     </div>
