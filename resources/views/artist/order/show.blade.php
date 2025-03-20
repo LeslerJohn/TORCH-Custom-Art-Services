@@ -65,11 +65,13 @@
                 <div class="space-y-2 sm:space-y-3 text-sm sm:text-base">
                     @php
                     $statusClass = [
-                    'pending' => 'bg-amber-100 text-amber-800',
-                    'in-transit' => 'bg-blue-100 text-blue-800',
-                    'delivered' => 'bg-green-100 text-green-800',
-                    'completed' => 'bg-green-100 text-green-800',
-                    'hold' => 'bg-red-100 text-red-800'
+                        'pending' => 'bg-amber-100 text-amber-800',
+                        'in-transit' => 'bg-blue-100 text-blue-800',
+                        'delivered' => 'bg-green-100 text-green-800',
+                        'completed' => 'bg-green-100 text-green-800',
+                        'hold' => 'bg-red-100 text-red-800',
+                        'cancelled' => 'bg-gray-100 text-gray-800',
+                        'returned' => 'bg-purple-100 text-purple-800'
                     ][$order->delivery->status ?? 'pending'];
                     @endphp
                     <div class="flex flex-col sm:flex-row sm:items-center">

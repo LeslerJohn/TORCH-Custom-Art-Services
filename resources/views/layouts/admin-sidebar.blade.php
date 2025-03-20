@@ -55,9 +55,9 @@
                 </x-responsive-nav-link>
             </li>
             <li>
-                <x-responsive-nav-link :href="route('admin.report.index')" :active="request()->routeIs('admin.report.index')" class="flex items-center space-x-2">
-                <i class="material-icons">report</i>
-                <span>{{ __('Reports') }}</span>
+                <x-responsive-nav-link :href="route('admin.payout.index')" :active="request()->routeIs('admin.payout.index')" class="flex items-center space-x-2">
+                    <i class="material-icons">payment</i>
+                    <span>{{ __('Payouts') }}</span>
                 </x-responsive-nav-link>
             </li>
             </ul>

@@ -47,9 +47,9 @@ class DatabaseSeeder extends Seeder
             $category->tags()->attach($tagIds);
         }
         
-        $this->call([
-            ArtistSeeder::class,
-            ClientSeeder::class,
-        ]);
+        // $this->call([
+        //     ArtistSeeder::class,
+        //     ClientSeeder::class,
+        // ]);
     }
 }

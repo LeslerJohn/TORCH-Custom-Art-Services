@@ -29,8 +29,8 @@
                         @csrf
                         <span class="mr-2 text-sm font-medium text-gray-700">Available</span>
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="available" value="1" class="sr-only peer" {{ Auth::user()->artist->available ? 'checked' : '' }} onchange="this.form.submit()">
                             <input type="hidden" name="available" value="0">
+                            <input type="checkbox" name="available" value="1" class="sr-only peer" {{ Auth::user()->artist->available ? 'checked' : '' }} onchange="this.form.submit()">
                             <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-orange-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500"></div>
                         </label>
                     </form>

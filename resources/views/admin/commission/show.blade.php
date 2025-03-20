@@ -226,7 +226,7 @@
                         alt="img" class="w-full h-96 object-cover rounded-md shadow-md">
                 </div>
 
-                @if ($commission->delivery->status === 'completed')
+                @if ($commission->delivery->status === 'completed' || $commission->delivery->status === 'delivered' || $commission->delivery->status === 'returned' || $commission->delivery->status === 'hold')
                         <div class="bg-gray-50 p-6 mt-8 mb-6">
                             <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -299,22 +299,61 @@
                     <div>
                         <div class="flex space-x-4">
                             @if ($commission->refund->status === 'pending')
-                                <form action="{{ route('admin.commission.approveRefund', $commission) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
+                                <!-- Approve Refund Confirmation Modal -->
+                                <div x-data="{ showApproveModal: false }">
+                                    <button @click="showApproveModal = true"
                                         class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition duration-300">
                                         Approve
                                     </button>
-                                </form>
-                                {{-- <form action="{{ route('admin.commission.rejectRefund', $commission) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
+                                    <div x-show="showApproveModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                                            <h2 class="text-lg font-semibold mb-4">Confirm Approval</h2>
+                                            <p class="text-gray-700 mb-6">Are you sure you want to approve this refund?</p>
+                                            <div class="flex justify-end space-x-4">
+                                                <button @click="showApproveModal = false"
+                                                    class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 transition duration-300">
+                                                    Cancel
+                                                </button>
+                                                <form action="{{ route('admin.commission.approveRefund', $commission) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                        class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition duration-300">
+                                                        Confirm
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Reject Refund Confirmation Modal -->
+                                <div x-data="{ showRejectModal: false }">
+                                    <button @click="showRejectModal = true"
                                         class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition duration-300">
                                         Reject
-                                    </button> --}}
+                                    </button>
+                                    <div x-show="showRejectModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                                            <h2 class="text-lg font-semibold mb-4">Confirm Rejection</h2>
+                                            <p class="text-gray-700 mb-6">Are you sure you want to reject this refund?</p>
+                                            <div class="flex justify-end space-x-4">
+                                                <button @click="showRejectModal = false"
+                                                    class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 transition duration-300">
+                                                    Cancel
+                                                </button>
+                                                <form action="{{ route('admin.commission.rejectRefund', $commission) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                        class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition duration-300">
+                                                        Confirm
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 </form>
                             @elseif ($commission->refund->status === 'approved')
                                 <p class="text-green-600 font-semibold">Refund Approved</p>

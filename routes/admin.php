@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ArtistApplicationController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PayoutController;
 use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CommissionController;
@@ -60,3 +61,9 @@ Route::patch('/admin/order/{order}/approve-refund', [OrderController::class,'app
 Route::patch('/admin/order/{order}/reject-refund', [OrderController::class,'rejectRefund'])->name('admin.order.rejectRefund');
 Route::get('/admin/order/{order}/deliver', [OrderController::class,'deliver'])->name('admin.order.deliver');
 Route::get('/admin/order/{order}/delivered', [OrderController::class,'delivered'])->name('admin.order.delivered');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/payouts', [PayoutController::class, 'index'])->name('payout.index');
+    Route::patch('/payouts/{payout}/process', [PayoutController::class, 'processPayout'])->name('payout.process');
+    Route::post('/payouts/process-all', [PayoutController::class, 'processAllReadyPayouts'])->name('payout.processAll');
+});

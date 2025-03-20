@@ -2,9 +2,14 @@
 
 use App\Mail\WelcomeMail;
 use App\Models\ArtistProfile;
+use App\Models\Commission;
+use App\Models\Order;
+use App\Models\Refund;
+use App\Models\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schedule;
 
@@ -48,4 +53,84 @@ Artisan::command('artist:check-commissions', function () {
     $this->info('Artist commissions checked and availability updated.');
 })->purpose('Check artist commissions count and update availability');
 
+Artisan::command('request:auto-refund', function () {
+    $requests = Request::where('status', 'pending')
+        ->where('created_at', '<=', now()->subDays(2))
+        ->get();
+
+    foreach ($requests as $request) {
+        $refund_amount = (int)($request->total_price * 100);
+
+        $response = Http::withOptions(['verify' => false])->withHeaders([
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json',
+            'Authorization' => 'Basic ' . env('AUTH_PAY'),
+        ])->post('https://api.paymongo.com/v1/refunds', [
+            'data' => [
+                'attributes' => [
+                    'amount' => $refund_amount,
+                    'payment_id' => $request->payment->transaction_id,
+                    'reason' => 'unaccepted_request',
+                    "send_email_receipt" => true,
+                ]
+            ]
+        ]);
+
+        $response_data = $response->json();
+
+        if (isset($response_data['data'])) {
+            Refund::create([
+                'payment_id' => $request->payment->id,
+                'request_id' => $request->id,
+                'client_id' => $request->client_id,
+                'artist_id' => $request->service->artist_id,
+                'amount' => $refund_amount,
+                'reason' => 'Artist did not accept the request within 2 days',
+                'refund_method' => $request->payment->payment_method === 'GCash' ? 'GCash' : 'PayMaya',
+                'status' => 'approved',
+                'transaction_id' => $response_data['data']['id'],
+                'admin_approved' => true,
+            ]);
+
+            $request->update(['status' => 'cancelled']);
+            $request->payout->delete();
+        }
+    }
+
+    $this->info('Unaccepted requests have been refunded.');
+})->purpose('Automatically refund unaccepted requests after 2 days');
+
+Artisan::command('commission:auto-complete', function () {
+    $commissions = Commission::where('status', 'wip')
+        ->whereHas('delivery', function ($query) {
+            $query->where('status', 'delivered');
+        })
+        ->where('updated_at', '<=', now()->subDays(3))
+        ->get();
+
+    foreach ($commissions as $commission) {
+        $commission->update(['status' => 'completed']);
+    }
+
+    $this->info('Unconfirmed commissions have been marked as completed.');
+})->purpose('Automatically complete unconfirmed commissions after 3 days');
+
+Artisan::command('order:auto-complete', function () {
+    $orders = Order::where('status', 'ready')
+        ->whereHas('delivery', function ($query) {
+            $query->where('status', 'delivered');
+        })
+        ->where('updated_at', '<=', now()->subDays(3))
+        ->get();
+
+    foreach ($orders as $order) {
+        $order->update(['status' => 'completed']);
+    }
+
+    $this->info('Unconfirmed orders have been marked as completed.');
+})->purpose('Automatically complete unconfirmed orders after 3 days');
+
 Schedule::command('artist:check-commissions')->everyFiveSeconds();
+Schedule::command('request:auto-refund')->daily();
+Schedule::command('commission:auto-complete')->daily();
+Schedule::command('order:auto-complete')->daily();

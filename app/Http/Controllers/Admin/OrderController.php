@@ -167,4 +167,25 @@ class OrderController extends Controller
         return redirect()->route('admin.order.show', $order)->with('success', 'order refund has been approved.');
     }
 
+    public function rejectRefund(Order $order)
+    {
+        $order->refund->update([
+            'status' => 'rejected',
+            'admin_approved' => true,
+        ]);
+
+        $order->update([
+            'status' => 'completed',
+        ]);
+
+        $order->delivery->update([
+            'status' => 'completed',
+        ]);
+
+        $order->payout->update([
+            'status' => 'ready',
+        ]);
+
+        return redirect()->route('admin.order.show', $order)->with('success', 'order refund has been rejected.');
+    }
 }

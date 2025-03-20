@@ -206,6 +206,28 @@ class CommissionController extends Controller
         return redirect()->route('admin.commission.show', $commission)->with('success', 'Commission refund has been approved.');
     }
 
+    public function rejectRefund(Commission $commission)
+    {
+        $commission->refund->update([
+            'status' => 'rejected',
+            'admin_approved' => true,
+        ]);
+
+        $commission->update([
+            'status' => 'completed',
+        ]);
+
+        $commission->delivery->update([
+            'status' => 'completed',
+        ]);
+
+        $commission->request->payout->update([
+            'status' => 'ready',
+        ]);
+
+        return redirect()->route('admin.commission.show', $commission)->with('success', 'Commission refund has been rejected.');
+    }
+
     public function refund()
     {
         return view('admin.commission.refund');

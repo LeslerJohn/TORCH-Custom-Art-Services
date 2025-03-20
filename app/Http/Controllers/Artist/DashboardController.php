@@ -49,7 +49,7 @@ class DashboardController extends Controller
             DB::raw('SUM(amount) as total')
             )
             ->where('artist_id', $artist->id)
-            ->where('status', 'complete')
+            ->where('status', 'completed')
             ->groupBy('year', 'month')
             ->orderBy('year')
             ->orderBy('month')
@@ -204,14 +204,14 @@ class DashboardController extends Controller
                 'labels' => DB::table('payouts')
                     ->select(DB::raw("CAST(strftime('%m', created_at) AS INTEGER) as month"))
                     ->where('artist_id', $artist->id)
-                    ->where('status', 'complete')
+                    ->where('status', 'completed')
                     ->groupBy('month')
                     ->pluck('month')
                     ->map(fn($month) => date('F', mktime(0, 0, 0, $month, 10))),
                 'data' => DB::table('payouts')
                     ->select(DB::raw('SUM(amount) as total'))
                     ->where('artist_id', $artist->id)
-                    ->where('status', 'complete')
+                    ->where('status', 'completed')
                     ->groupBy(DB::raw("CAST(strftime('%m', created_at) AS INTEGER)"))
                     ->pluck('total'),
             ],

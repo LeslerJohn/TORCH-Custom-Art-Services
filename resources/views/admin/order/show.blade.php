@@ -181,7 +181,7 @@
                     </div>
                 @endforeach
 
-                @if ($order->delivery->status === 'completed')
+                @if ($order->delivery->status === 'completed' || $order->delivery->status === 'delivered' || $order->delivery->status === 'returned' || $order->delivery->status === 'hold')
                     <div class="bg-gray-50 p-6 mt-8 mb-6">
                         <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -252,22 +252,57 @@
                     <div>
                         <div class="flex space-x-4">
                             @if ($order->refund->status === 'pending')
-                                <form action="{{ route('admin.order.approveRefund', $order) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition duration-300">
-                                        Approve
-                                    </button>
-                                </form>
-                                {{-- <form action="{{ route('admin.order.rejectRefund', $order) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition duration-300">
-                                        Reject
-                                    </button> --}}
-                                </form>
+                                <!-- Approve Refund Button with Confirmation Modal -->
+                                <button type="button" onclick="document.getElementById('approveModal').classList.remove('hidden')"
+                                    class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition duration-300">
+                                    Approve
+                                </button>
+                                <div id="approveModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                    <div class="bg-white p-6 rounded-md shadow-md w-96">
+                                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirm Approval</h2>
+                                        <p class="text-gray-600 mb-6">Are you sure you want to approve this refund?</p>
+                                        <div class="flex justify-end space-x-4">
+                                            <button type="button" onclick="document.getElementById('approveModal').classList.add('hidden')"
+                                                class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 transition duration-300">
+                                                Cancel
+                                            </button>
+                                            <form action="{{ route('admin.order.approveRefund', $order) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit"
+                                                    class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition duration-300">
+                                                    Confirm
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Reject Refund Button with Confirmation Modal -->
+                                <button type="button" onclick="document.getElementById('rejectModal').classList.remove('hidden')"
+                                    class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition duration-300">
+                                    Reject
+                                </button>
+                                <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                    <div class="bg-white p-6 rounded-md shadow-md w-96">
+                                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Confirm Rejection</h2>
+                                        <p class="text-gray-600 mb-6">Are you sure you want to reject this refund?</p>
+                                        <div class="flex justify-end space-x-4">
+                                            <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')"
+                                                class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 transition duration-300">
+                                                Cancel
+                                            </button>
+                                            <form action="{{ route('admin.order.rejectRefund', $order) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit"
+                                                    class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition duration-300">
+                                                    Confirm
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             @elseif ($order->refund->status === 'approved')
                                 <p class="text-green-600 font-semibold">Refund Approved</p>
                             @elseif ($order->refund->status === 'rejected')

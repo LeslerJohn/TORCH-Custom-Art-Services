@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use App\Mail\RequestDetailsMail;
+use App\Mail\NewRequestMail;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -135,6 +138,10 @@ class RequestController extends Controller
 
         if (isset($response->data)) {
             Session::put(['checkout_session_id' => $response->data->id]);
+
+            // Send email to the artist
+            // Mail::to($service->artist->user->email)->send(new NewRequestMail($requestData));
+
             return redirect($response->data->attributes->checkout_url);
         } else {
             return redirect()->back()->withErrors(['error' => 'Payment creation failed.']);
@@ -237,6 +244,13 @@ class RequestController extends Controller
                     'transaction_id' => $payment->data->id,
                     'status' => 'pending',
                 ]);
+
+                // Send email to the client
+                // Mail::to(Auth::user()->email)->send(new RequestDetailsMail([
+                //     'description' => $decodedRequestData['description'],
+                //     'price' => $decodedRequestData['total_price'],
+                //     'deadline' => $decodedRequestData['deadline'],
+                // ]));
 
                 return redirect()->route('client.request.show', $modelrequest)->with('success', 'Request created successfully!');
             }
