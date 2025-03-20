@@ -8,6 +8,7 @@ use App\Models\Commission;
 use App\Models\Delivery;
 use App\Models\Draft;
 use App\Models\Extension;
+use App\Models\ProofOfDelivery;
 use App\Models\Request as ModelsRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -93,10 +94,30 @@ class CommissionController extends Controller
         return redirect()->route('artist.commission.show', $commission);
     }
 
-    public function delivered(Commission $commission) {
-        $commission->delivery->update([
-            'status' => 'delivered',
+    public function delivered(Request $request, Commission $commission)
+    {
+        $request->validate([
+            'proof_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('proof_images')) {
+            foreach ($request->file('proof_images') as $image) {
+                $path = $image->store('proof_of_delivery', 'public');
+
+                $attachment = Attachment::create([
+                    'filename' => $image->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $image->getMimeType(),
+                ]);
+
+                ProofOfDelivery::create([
+                    'delivery_id' => $commission->delivery->id,
+                    'attachment_id' => $attachment->id,
+                ]);
+
+                $commission->delivery->update(['status' => 'delivered']);
+            }
+        }
 
         return redirect()->route('artist.commission.show', $commission);
     }

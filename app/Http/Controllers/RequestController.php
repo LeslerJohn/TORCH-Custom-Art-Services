@@ -331,6 +331,8 @@ class RequestController extends Controller
             // Update request status
             $request->update(['status' => 'cancelled']);
 
+            $request->payout->delete();
+
             return redirect()->route('client.request.show', $request)->with('success', 'Request cancelled and refund processed successfully.');
         } else {
             return redirect()->route('client.request.show', $request)->with('error', 'Refund failed. Please try again.');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Artist;
 
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
+use App\Models\ProofOfDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,9 +56,30 @@ class OrderController extends Controller
     }
 
     
-    public function delivered(Order $order)
+    public function delivered(Request $request, Order $order)
     {
-        $order->delivery->update(['status' => 'delivered']);
+        $request->validate([
+            'proof_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('proof_images')) {
+            foreach ($request->file('proof_images') as $image) {
+                $path = $image->store('proof_of_delivery', 'public');
+
+                $attachment = Attachment::create([
+                    'filename' => $image->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $image->getMimeType(),
+                ]);
+
+                ProofOfDelivery::create([
+                    'delivery_id' => $order->delivery->id,
+                    'attachment_id' => $attachment->id,
+                ]);
+
+                $order->delivery->update(['status' => 'delivered']);
+            }
+        }
 
         return redirect()->route('artist.order.show', $order);
     }

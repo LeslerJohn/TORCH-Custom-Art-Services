@@ -136,7 +136,7 @@
                                 </div>
 
                                 <!-- Hidden Input to Store Selected Discount Type -->
-                                <input type="hidden" id="discount_type" name="value_type" value="">
+                                <input type="hidden" id="discount_type" name="value_type" value="" required>
 
                                 <p class="mt-1 text-sm text-green-600 dark:text-gray-400">Choose the type of discount you
                                     want to apply.</p>

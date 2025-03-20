@@ -149,6 +149,18 @@ class OrderController extends Controller
                 'status' => 'ready',
             ]);
 
+            foreach ($order->items as $item) {
+                $item->artwork->update([
+                    'status' => 'sale',
+                ]);
+
+                if ($item->artwork->discount) {
+                    $item->artwork->update([
+                        'status' => 'active',
+                    ]);
+                }
+            }
+
             return redirect()->route('admin.order.show', $order)->with('success', 'order refund has been approved.');
         }
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\ClientProfile;
+use App\Models\ArtistProfile;
 
 class UserManagementController extends Controller
 {
@@ -22,7 +25,10 @@ class UserManagementController extends Controller
                 ->orWhere('role', 'LIKE', "%{$search}%");
         }
 
-        $users = $query->get();
+        $users = $query->get()->map(function ($user) {
+            $user->is_online = DB::table('sessions')->where('user_id', $user->id)->exists();
+            return $user;
+        });
 
         return view('admin.user.index', compact('users'));
     }
@@ -56,7 +62,17 @@ class UserManagementController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if ($user->role === 'client') {
+            $profile = ClientProfile::where('id', $id)->first();
+        } elseif ($user->role === 'artist') {
+            $profile = ArtistProfile::where('id', $id)->first();
+        } else {
+            $profile = null;
+        }
+
+        return view('admin.user.edit', compact('user', 'profile'));
     }
 
     /**
@@ -72,6 +88,9 @@ class UserManagementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.user.index')->with('success', 'User deleted successfully.');
     }
 }

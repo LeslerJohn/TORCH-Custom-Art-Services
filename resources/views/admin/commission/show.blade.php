@@ -158,7 +158,8 @@
                     <div class="col-span-2 bg-gray-100 p-4 rounded-md">
                         <label class="text-gray-600 font-medium">Agreed Total Pricing</label>
                         <p class="text-2xl font-bold text-green-600">
-                            ₱{{ number_format($commission->request->total_price * $commission->request->quantity, 2) }}</p>
+                            ₱{{ number_format($commission->request->total_price * $commission->request->quantity, 2) }}
+                        </p>
                     </div>
 
                     <!-- Payment & Fees -->
@@ -224,6 +225,28 @@
                     <img src="{{ $commission->request->service->images->first() ? asset('storage/' . $commission->request->service->images->first()->attachment->path) : asset('images/default.image.jpg') }}"
                         alt="img" class="w-full h-96 object-cover rounded-md shadow-md">
                 </div>
+
+                @if ($commission->delivery->status === 'completed')
+                        <div class="bg-gray-50 p-6 mt-8 mb-6">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                @foreach ($commission->delivery->proofs as $proof)
+                                    <div class="relative group">
+                                        <img src="{{ asset('storage/' . $proof->attachment->path) }}"
+                                            alt="Proof of Delivery"
+                                            class="w-full h-32 object-cover rounded-md shadow-md">
+                                        <div
+                                            class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                                            <a href="{{ asset('storage/' . $proof->attachment->path) }}"
+                                                target="_blank" class="text-white text-sm font-semibold underline">
+                                                View Full Image
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
             </div>
         </div>
     </div>
@@ -238,7 +261,8 @@
                     </div>
                     <div class="mb-4">
                         <label class="text-gray-500 font-medium">Refund Amount</label>
-                        <p class="text-gray-800 font-semibold">₱{{ number_format($commission->refund->amount, 2) }}</p>
+                        <p class="text-gray-800 font-semibold">₱{{ number_format($commission->refund->amount, 2) }}
+                        </p>
                     </div>
                     <div class="mb-4">
                         <label class="text-gray-500 font-medium">Requested On</label>
@@ -275,7 +299,8 @@
                     <div>
                         <div class="flex space-x-4">
                             @if ($commission->refund->status === 'pending')
-                                <form action="{{ route('admin.commission.approveRefund', $commission) }}" method="POST">
+                                <form action="{{ route('admin.commission.approveRefund', $commission) }}"
+                                    method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"

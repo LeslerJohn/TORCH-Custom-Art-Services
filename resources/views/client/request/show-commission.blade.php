@@ -586,6 +586,27 @@
             </div>
         @endif
 
+        @if ($commission->delivery->status === 'completed')
+            <div class="bg-gray-50 p-6 mt-8 mb-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    @foreach ($commission->delivery->proofs as $proof)
+                        <div class="relative group">
+                            <img src="{{ asset('storage/' . $proof->attachment->path) }}" alt="Proof of Delivery"
+                                class="w-full h-32 object-cover rounded-md shadow-md">
+                            <div
+                                class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                                <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank"
+                                    class="text-white text-sm font-semibold underline">
+                                    View Full Image
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <!-- Action Buttons -->
         <div class="p-6 border-t border-gray-100">
             <div class="flex flex-col md:flex-row justify-between items-center">
@@ -603,12 +624,12 @@
                 <div class="flex space-x-3">
                     @if ($commission->status == 'done' && $commission->delivery->status == 'pending')
                         <p class="text-blue-500 font-medium">Your commission is ready for delivery.</p>
-                    @elseif ($commission->delivery->status == 'in-transit')
+                    @elseif ($commission->delivery->status == 'delivered')
                         <form action="{{ route('client.commission.receive', $commission) }}" method="POST">
                             @csrf
                             <button type="submit"
                                 class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-sm transition-colors">
-                                Mark as Received
+                                Received
                             </button>
                         </form>
 
@@ -718,7 +739,8 @@
                     <p class="mb-4 text-sm text-gray-600">Are you sure you want to request a return/refund? Please note
                         that a 15% service fee will be deducted from your refund amount.</p>
 
-                    <form action="{{ route('client.return.commission', $commission) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('client.return.commission', $commission) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
                             <label for="reason"
@@ -730,7 +752,8 @@
                         </div>
                         <div class="mb-4">
                             <label for="evidence"
-                                class="block mb-2 text-sm font-medium text-gray-900 text-left">Upload Evidence (Images Only):</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 text-left">Upload Evidence (Images
+                                Only):</label>
                             <input type="file" id="evidence" name="evidence" accept="image/*"
                                 class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                         </div>

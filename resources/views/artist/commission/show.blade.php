@@ -13,29 +13,30 @@
         <!-- Status Display -->
         <div class="absolute top-6 right-4">
             <span
-            class="px-4 py-2 rounded-full text-white 
+                class="px-4 py-2 rounded-full text-white 
             {{ $commission->status == 'ready'
-            ? 'bg-blue-500'
-            : ($commission->status == 'wip'
-                ? 'bg-yellow-500'
-                : ($commission->status == 'done'
-                ? 'bg-green-500'
-                : ($commission->status == 'hold'
-                    ? 'bg-red-500'
-                    : 'bg-gray-500'))) }}">
-            {{ ucfirst($commission->status) }}
+                ? 'bg-blue-500'
+                : ($commission->status == 'wip'
+                    ? 'bg-yellow-500'
+                    : ($commission->status == 'done'
+                        ? 'bg-green-500'
+                        : ($commission->status == 'hold'
+                            ? 'bg-red-500'
+                            : 'bg-gray-500'))) }}">
+                {{ ucfirst($commission->status) }}
             </span>
         </div>
 
         @if ($commission->status == 'hold')
             <div class="absolute top-16 right-4 bg-red-100 border border-red-500 text-red-700 p-4 rounded-lg">
-            <h3 class="font-bold">Refund Requested</h3>
-            <p><strong>Reason:</strong> {{ $commission->refund->reason }}</p>
-            <p><strong>Requested On:</strong> {{ \Carbon\Carbon::parse($commission->refund->created_at)->format('F j, Y') }}</p>
-            <p><strong>Status:</strong> {{ ucfirst($commission->refund->status) }}</p>
-            @if ($commission->refund->status == 'denied')
-                <p class="text-red-500"><strong>Note:</strong> Your refund request has been denied.</p>
-            @endif
+                <h3 class="font-bold">Refund Requested</h3>
+                <p><strong>Reason:</strong> {{ $commission->refund->reason }}</p>
+                <p><strong>Requested On:</strong>
+                    {{ \Carbon\Carbon::parse($commission->refund->created_at)->format('F j, Y') }}</p>
+                <p><strong>Status:</strong> {{ ucfirst($commission->refund->status) }}</p>
+                @if ($commission->refund->status == 'denied')
+                    <p class="text-red-500"><strong>Note:</strong> Your refund request has been denied.</p>
+                @endif
             </div>
         @endif
 
@@ -113,12 +114,63 @@
                             <button type="submit"
                                 class="px-4 py-2 bg-green-600 text-white rounded-lg shadow">Deliver</button>
                         </form>
-                    @elseif ($commission->status == 'delivered')
-                        <form action="{{ route('artist.commission.complete', $commission) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                class="px-4 py-2 bg-gray-600 text-white rounded-lg shadow">Completed</button>
-                        </form>
+                    @elseif ($commission->status == 'done' && $commission->delivery->status == 'in-transit')
+                        <!-- Modal Trigger -->
+                        <button type="button"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 mt-4 shadow-md"
+                            onclick="document.getElementById('proofModal').classList.remove('hidden')">
+                            Mark as Delivered
+                        </button>
+
+                        <!-- Modal -->
+                        <div id="proofModal"
+                            class="fixed inset-0 bg-gray-800 bg-opacity-50 z-40 flex items-center justify-center hidden">
+                            <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+                                <h2 class="text-lg font-semibold text-gray-800 mb-4">Upload Proof of Delivery</h2>
+                                <form action="{{ route('artist.commission.delivered', $commission) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="space-y-4">
+                                        <label class="block">
+                                            <span class="text-gray-700">Upload up to 5 images:</span>
+                                            <input type="file" name="proof_images[]" accept="image/*" multiple
+                                                class="block w-full mt-1 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none focus:ring focus:ring-orange-500">
+                                        </label>
+                                        <p class="text-sm text-gray-500">You can upload up to 5 images as proof of
+                                            delivery.</p>
+                                    </div>
+                                    <div class="flex justify-end mt-6">
+                                        <button type="button"
+                                            class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 mr-2"
+                                            onclick="document.getElementById('proofModal').classList.add('hidden')">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @elseif ($commission->delivery->status === 'delivered')
+                        <div class="bg-gray-50 p-6 rounded-md mt-8 shadow-md">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                @foreach ($commission->delivery->proofs as $proof)
+                                    <div class="relative group">
+                                        <img src="{{ asset('storage/' . $proof->attachment->path) }}" alt="Proof of Delivery" 
+                                            class="w-full h-32 object-cover rounded-md shadow-md">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                                            <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank" 
+                                                class="text-white text-sm font-semibold underline">
+                                                View Full Image
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -170,7 +222,8 @@
                         <h3 class="text-xl font-semibold">Request Extension</h3>
                     </div>
                     <div class="p-4">
-                        <form action="{{ route('artist.commission.request-extension', $commission) }}" method="POST">
+                        <form action="{{ route('artist.commission.request-extension', $commission) }}"
+                            method="POST">
                             @csrf
                             <textarea name="reason" class="w-full p-2 border rounded-lg" placeholder="Reason for extension" required></textarea>
                             <button type="submit" class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg">Request

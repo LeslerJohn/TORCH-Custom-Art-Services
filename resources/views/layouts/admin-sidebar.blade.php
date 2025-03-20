@@ -13,53 +13,53 @@
 
     <!-- Sidebar Navigation Menu using Flowbite Structure -->
     <aside id="default-sidebar"
-        class="top-0 left-0 z-40 w-auto transition-transform -translate-x-full sm:translate-x-0"
+        class="top-0 left-0 z-40 w-auto pt-16 h-screen sm:translate-x-0"
         aria-label="Sidenav">
         <div
-            class="overflow-y-auto py-5 px-3 h-screen bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            class="py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <ul class="space-y-2">
-                <li>
-                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                        <i class="material-icons">dashboard</i>
-                        {{ __('Overview') }}
-                    </x-responsive-nav-link>
-                </li>
-                                <li>
-                    <x-responsive-nav-link :href="route('admin.application.index')" :active="request()->routeIs('admin.application.index')">
-                        <i class="material-icons">assignment</i>
-                        {{ __('Artist Applications') }}
-                    </x-responsive-nav-link>
-                </li>
-                <li>
-                    <x-responsive-nav-link :href="route('admin.commission.index')" :active="request()->routeIs('admin.commission.index')">
-                        <i class="material-icons">monetization_on</i>
-                        {{ __('Commissions') }}
-                    </x-responsive-nav-link>
-                </li>
-                <li>
-                    <x-responsive-nav-link :href="route('admin.order.index')" :active="request()->routeIs('admin.order.index')">
-                        <i class="material-icons">list_alt</i>
-                        {{ __('Orders') }}
-                    </x-responsive-nav-link>
-                </li>
-                <li>
-                    <x-responsive-nav-link :href="route('admin.user.index')" :active="request()->routeIs('admin.user.index')">
-                        <i class="material-icons">people</i>
-                        {{ __('User Management') }}
-                    </x-responsive-nav-link>
-                </li>
-                <li>
-                    <x-responsive-nav-link :href="route('admin.category.index')" :active="request()->routeIs('admin.category.index')">
-                        <i class="material-icons">category</i>
-                        {{ __('Categories') }}
-                    </x-responsive-nav-link>
-                </li>
-                <li>
-                    <x-responsive-nav-link :href="route('admin.report.index')" :active="request()->routeIs('admin.report.index')">
-                        <i class="material-icons">report</i>
-                        {{ __('Reports') }}
-                    </x-responsive-nav-link>
-                </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="flex items-center space-x-2">
+                <i class="material-icons">dashboard</i>
+                <span>{{ __('Overview') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.application.index')" :active="request()->routeIs('admin.application.index')" class="flex items-center space-x-2">
+                <i class="material-icons">assignment</i>
+                <span>{{ __('Artist Applications') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.commission.index')" :active="request()->routeIs('admin.commission.index')" class="flex items-center space-x-2">
+                <i class="material-icons">monetization_on</i>
+                <span>{{ __('Commissions') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.order.index')" :active="request()->routeIs('admin.order.index')" class="flex items-center space-x-2">
+                <i class="material-icons">list_alt</i>
+                <span>{{ __('Orders') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.user.index')" :active="request()->routeIs('admin.user.index')" class="flex items-center space-x-2">
+                <i class="material-icons">people</i>
+                <span>{{ __('User Management') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.category.index')" :active="request()->routeIs('admin.category.index')" class="flex items-center space-x-2">
+                <i class="material-icons">category</i>
+                <span>{{ __('Categories') }}</span>
+                </x-responsive-nav-link>
+            </li>
+            <li>
+                <x-responsive-nav-link :href="route('admin.report.index')" :active="request()->routeIs('admin.report.index')" class="flex items-center space-x-2">
+                <i class="material-icons">report</i>
+                <span>{{ __('Reports') }}</span>
+                </x-responsive-nav-link>
+            </li>
             </ul>
         </div>
     </aside>

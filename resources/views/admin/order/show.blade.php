@@ -165,9 +165,8 @@
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="text-gray-400 mr-1">
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 mr-1">
                                             <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" />
                                             <path d="M12 12h5" />
                                             <path d="M12 6v6" />
@@ -181,6 +180,27 @@
                         </div>
                     </div>
                 @endforeach
+
+                @if ($order->delivery->status === 'completed')
+                    <div class="bg-gray-50 p-6 mt-8 mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach ($order->delivery->proofs as $proof)
+                                <div class="relative group">
+                                    <img src="{{ asset('storage/' . $proof->attachment->path) }}"
+                                        alt="Proof of Delivery" class="w-full h-32 object-cover rounded-md shadow-md">
+                                    <div
+                                        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                                        <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank"
+                                            class="text-white text-sm font-semibold underline">
+                                            View Full Image
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

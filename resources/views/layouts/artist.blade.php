@@ -13,6 +13,7 @@
     <link rel="icon" href="{{ asset('images/icon.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('images/icon.png') }}">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -38,6 +39,8 @@
             {{ $slot }}
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
     @stack('scripts')
 </body>
 

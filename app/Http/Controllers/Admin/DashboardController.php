@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ArtistProfile;
 use App\Models\Commission;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class DashboardController extends Controller
 {
@@ -114,7 +116,7 @@ class DashboardController extends Controller
         $data = [];
         foreach ($artistsMonthly as $row) {
             // Convert the numeric month (1..12) to a word
-            $monthName = \Carbon\Carbon::createFromFormat('m', $row->month_number)->format('M');
+            $monthName = Carbon::createFromFormat('m', $row->month_number)->format('M');
             // e.g. if month_number = 1 -> "January"
 
             $labels[] = $monthName;
@@ -153,7 +155,7 @@ class DashboardController extends Controller
         $data = [];
         foreach ($transactionsMonthly as $row) {
             // Convert the numeric month (1..12) to a word
-            $monthName = \Carbon\Carbon::createFromFormat('m', $row->month_number)->format('M');
+            $monthName = Carbon::createFromFormat('m', $row->month_number)->format('M');
             // e.g. if month_number = 1 -> "January"
 
             $labels[] = $monthName;
@@ -178,5 +180,76 @@ class DashboardController extends Controller
             'percentageChange' => round($percentageChange),
             'trendIndicator' => $trendIndicator,
         ];
+    }
+
+    public function exportStatistics(Request $request)
+    {
+        $type = $request->query('type', 'artists'); // Default to 'artists'
+        $data = [];
+        $headers = [];
+
+        switch ($type) {
+            case 'artists':
+                $data = $this->getUserStats('artist');
+                $headers = ['Date', 'Total Artists'];
+                break;
+            case 'clients':
+                $data = $this->getUserStats('client');
+                $headers = ['Date', 'Total Clients'];
+                break;
+            case 'applications':
+                $data = $this->getApplicationStats();
+                $headers = ['Status', 'Total Applications'];
+                break;
+            case 'transactions':
+                $data = $this->getMonthlyTransactionsStats(now()->year);
+                $headers = ['Month', 'Total Transactions'];
+                break;
+            default:
+                return response()->json(['error' => 'Invalid type'], 400);
+        }
+
+        $csvData = implode(',', $headers) . "\n";
+
+        foreach ($data['labels'] as $index => $label) {
+            $csvData .= $label . ',' . $data['data'][$index] . "\n";
+        }
+
+        $filename = "{$type}_statistics_" . now()->format('Y-m-d') . ".csv";
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ]);
+    }
+
+    public function exportAllStatistics()
+    {
+        $sections = [
+            'artists' => $this->getUserStats('artist'),
+            'clients' => $this->getUserStats('client'),
+            'applications' => $this->getApplicationStats(),
+            'transactions' => $this->getMonthlyTransactionsStats(now()->year),
+        ];
+
+        $csvData = '';
+
+        foreach ($sections as $sectionName => $data) {
+            $csvData .= strtoupper($sectionName) . "\n";
+            $csvData .= implode(',', ['Label', 'Value']) . "\n";
+
+            foreach ($data['labels'] as $index => $label) {
+                $csvData .= $label . ',' . $data['data'][$index] . "\n";
+            }
+
+            $csvData .= "\n"; // Add a blank line between sections
+        }
+
+        $filename = "all_statistics_" . now()->format('Y-m-d') . ".csv";
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ]);
     }
 }

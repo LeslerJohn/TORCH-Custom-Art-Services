@@ -67,6 +67,10 @@ class CommissionController extends Controller
             'status' => 'completed',
         ]);
 
+        $commission->request->payout->update([
+            'status' => 'ready',
+        ]);
+
         return redirect()->route('client.commission.show', $commission)->with('success', 'Commission received!');
     }
 

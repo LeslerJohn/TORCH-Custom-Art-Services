@@ -8,6 +8,7 @@ use App\Models\Extension;
 use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class CommissionController extends Controller
@@ -109,7 +110,7 @@ class CommissionController extends Controller
             'count' => 'required|integer|min:1',
         ]);
 
-        $newDeadline = \Carbon\Carbon::parse($commission->deadline)->addDays((int) $request->input('count'));
+        $newDeadline = Carbon::parse($commission->deadline)->addDays((int) $request->input('count'));
         $commission->extended_deadline = $newDeadline;
         $commission->is_extended = true;
         $commission->save();

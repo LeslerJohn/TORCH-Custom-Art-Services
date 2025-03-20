@@ -19,4 +19,9 @@ class Delivery extends Model
     {
         return $this->belongsTo(Address::class, 'address_id');
     }
+
+    public function proofs()
+    {
+        return $this->hasMany(ProofOfDelivery::class, 'delivery_id');
+    }
 }

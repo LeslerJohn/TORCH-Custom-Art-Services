@@ -292,6 +292,9 @@ class OrderController extends Controller
         $order->delivery->update([
             'status' => 'completed'
         ]);
+        $order->payout->update([
+            'status' => 'ready'
+        ]);
 
         return redirect()->route('client.order.show', $order)->with('success', 'Order status updated successfully.');
     }
@@ -358,6 +361,8 @@ class OrderController extends Controller
             if ($order->delivery) {
                 $order->delivery->update(['status' => 'cancelled']);
             }
+
+            $order->payout->delete();
 
             foreach ($order->items as $item) {
                 $item->artwork->update(['status' => 'sale']);
