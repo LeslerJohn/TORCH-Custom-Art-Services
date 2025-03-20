@@ -74,7 +74,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update(['name' => $request->name]);
+
+        return response()->json(['message' => 'Category updated successfully']);
     }
 
     /**
@@ -83,5 +90,26 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function addTag(Request $request, string $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $tag = Tag::firstOrCreate(['name' => $request->name]);
+        $category->tags()->attach($tag->id);
+
+        return response()->json(['message' => 'Tag added successfully']);
+    }
+
+    public function removeTag(string $categoryId, string $tagId)
+    {
+        $category = Category::findOrFail($categoryId);
+        $category->tags()->detach($tagId);
+
+        return response()->json(['message' => 'Tag removed successfully']);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Extension;
 use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class CommissionController extends Controller
@@ -30,28 +31,30 @@ class CommissionController extends Controller
         $commissions = $query->get();
 
         $refunds = Refund::whereHas('commission', function ($q) use ($request) {
+            $q->whereIn('status', ['hold', 'returned']);
             if ($request->has('search')) {
-                $search = $request->input('search');
-                $q->whereHas('request.service.artist.user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
-                })->orWhereHas('request.client.user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
-                });
+            $search = $request->input('search');
+            $q->whereHas('request.service.artist.user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            })->orWhereHas('request.client.user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
             }
         })->get();
 
-        $cancellations = Refund::whereHas('request', function ($q) use ($request) {
+        $cancellations = Refund::whereHas('commission', function ($q) use ($request) {
+            $q->where('status', 'cancelled');
             if ($request->has('search')) {
-                $search = $request->input('search');
-                $q->whereHas('service.artist.user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
-                })->orWhereHas('client.user', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
-                });
+            $search = $request->input('search');
+            $q->whereHas('request.service.artist.user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            })->orWhereHas('request.client.user', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
             }
         })->get();
 
@@ -107,7 +110,7 @@ class CommissionController extends Controller
             'count' => 'required|integer|min:1',
         ]);
 
-        $newDeadline = \Carbon\Carbon::parse($commission->deadline)->addDays((int) $request->input('count'));
+        $newDeadline = Carbon::parse($commission->deadline)->addDays((int) $request->input('count'));
         $commission->extended_deadline = $newDeadline;
         $commission->is_extended = true;
         $commission->save();
@@ -182,6 +185,19 @@ class CommissionController extends Controller
 
             $commission->delivery->update([
                 'status' => 'returned',
+            ]);
+
+            $refund_fee = ($commission->request->total_price * $commission->request->quantity) * 0.15;
+            $net_amount = ($commission->request->total_price * $commission->request->quantity) - $refund_fee;
+
+            $commission->request->payout->update([
+                'amount' => $commission->request->total_price * $commission->request->quantity,
+                'service_fee' => 15,
+                'net_amount' => $net_amount,
+                'company_cut' => $refund_fee,
+                'payout_type' => 'refund',
+                'transaction_id' => $response_data['data']['id'],
+                'status' => 'ready',
             ]);
 
             return redirect()->route('admin.commission.show', $commission)->with('success', 'Commission refund has been approved.');

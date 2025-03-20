@@ -9,6 +9,7 @@ use App\Models\Attachment;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Payout;
 use App\Models\Refund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -182,13 +183,33 @@ class OrderController extends Controller
                 $artwork->discount->update(['status' => 'inactive']);
             }
 
-            Payment::create([
+            $paymentCreated = Payment::create([
                 'client_id' => Auth::user()->id,
                 'order_id' => $order->id,
                 'amount' => $payment->data->attributes->amount / 100,
                 'payment_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
                 'transaction_id' => $payment->data->id,
                 'status' => 'completed'
+            ]);
+
+            // Calculate service fee and net amount for the artist
+            $serviceFeePercentage = 3; // 3% service fee
+            $artworkPrice = $payment->data->attributes->amount / 100;
+            $serviceFee = ($artworkPrice * $serviceFeePercentage) / 100;
+            $netAmount = $artworkPrice - $serviceFee;
+
+            // Create a pending payout for the artist
+            Payout::create([
+                'artist_id' => $artwork->artist_id,
+                'payment_id' => $paymentCreated->id,
+                'amount' => $artworkPrice,
+                'service_fee' => $serviceFeePercentage,
+                'net_amount' => $netAmount,
+                'company_cut' => $serviceFee,
+                'payout_type' => 'order',
+                'payout_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
+                'transaction_id' => $payment->data->id,
+                'status' => 'pending',
             ]);
 
             return redirect()->route('client.order.show', $order)->with('success', 'Order placed successfully!');
@@ -271,6 +292,9 @@ class OrderController extends Controller
         $order->delivery->update([
             'status' => 'completed'
         ]);
+        $order->payout->update([
+            'status' => 'ready'
+        ]);
 
         return redirect()->route('client.order.show', $order)->with('success', 'Order status updated successfully.');
     }
@@ -337,6 +361,8 @@ class OrderController extends Controller
             if ($order->delivery) {
                 $order->delivery->update(['status' => 'cancelled']);
             }
+
+            $order->payout->delete();
 
             foreach ($order->items as $item) {
                 $item->artwork->update(['status' => 'sale']);

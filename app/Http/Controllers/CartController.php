@@ -9,6 +9,7 @@ use App\Models\CartItem;
 use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Payout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -262,18 +263,36 @@ class CartController extends Controller
                         'status' => 'inactive',
                     ]);
                 }
+
+                $paymentCreated = Payment::create([
+                    'client_id' => Auth::user()->id,
+                    'order_id' => $order->id,
+                    'amount' => $payment->data->attributes->amount / 100,
+                    'payment_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
+                    'transaction_id' => $payment->data->id,
+                    'status' => 'completed'
+                ]);
+    
+                // Calculate the payout amount for the artist
+                $serviceFeePercentage = 3;
+                $serviceFee = ($orderTotal * $serviceFeePercentage) / 100;
+                $netAmount = $orderTotal - $serviceFee;
+    
+                Payout::create([
+                    'artist_id' => $artistId,
+                    'payment_id' => $paymentCreated->id,
+                    'amount' => $orderTotal,
+                    'service_fee' => $serviceFeePercentage,
+                    'net_amount' => $netAmount,
+                    'company_cut' => $serviceFee,
+                    'payout_type' => 'order',
+                    'payout_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
+                    'transaction_id' => $payment->data->id,
+                    'status' => 'pending',
+                ]);
+
+                return redirect()->route('client.order.show', $order)->with('success', 'Order placed successfully!');
             }
-
-            Payment::create([
-                'client_id' => Auth::user()->id,
-                'order_id' => $order->id,
-                'amount' => $payment->data->attributes->amount / 100,
-                'payment_method' => $payment->data->attributes->source->type === 'gcash' ? 'GCash' : 'PayMaya',
-                'transaction_id' => $payment->data->id,
-                'status' => 'completed'
-            ]);
-
-            return redirect()->route('client.order.show', $order)->with('success', 'Order placed successfully!');
         } else {
             return redirect()->route('client.order.index')->withErrors(['error' => 'Payment failed.']);
         }

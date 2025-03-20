@@ -27,102 +27,102 @@
             <div class="flex items-center mb-6">
                 <div class="mr-3">
                     @if ($order->delivery->status == 'pending')
-                    <div class="bg-blue-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#5257ff" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-clock-fading">
-                            <path d="M12 2a10 10 0 0 1 7.38 16.75" />
-                            <path d="M12 6v6l4 2" />
-                            <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
-                            <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
-                            <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
-                            <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
-                        </svg>
-                    </div>
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#5257ff" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-clock-fading">
+                                <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                                <path d="M12 6v6l4 2" />
+                                <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                                <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                                <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                                <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                            </svg>
+                        </div>
                     @elseif ($order->delivery->status == 'in-transit')
-                    <div class="bg-blue-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#5257ff" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-package">
-                            <path
-                                d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
-                            <path d="M12 22V12" />
-                            <polyline points="3.29 7 12 12 20.71 7" />
-                            <path d="m7.5 4.27 9 5.15" />
-                        </svg>
-                    </div>
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#5257ff" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-package">
+                                <path
+                                    d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+                                <path d="M12 22V12" />
+                                <polyline points="3.29 7 12 12 20.71 7" />
+                                <path d="m7.5 4.27 9 5.15" />
+                            </svg>
+                        </div>
                     @elseif ($order->delivery->status == 'delivered')
-                    <div class="bg-blue-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#3f83f8" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-package-open">
-                            <path d="M12 22v-9" />
-                            <path
-                                d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" />
-                            <path
-                                d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" />
-                            <path
-                                d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" />
-                        </svg>
-                    </div>
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#3f83f8" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-package-open">
+                                <path d="M12 22v-9" />
+                                <path
+                                    d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" />
+                                <path
+                                    d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" />
+                                <path
+                                    d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" />
+                            </svg>
+                        </div>
                     @elseif ($order->delivery->status == 'completed')
-                    <div class="bg-green-100 p-2 rounded-full">
+                        <div class="bg-green-100 p-2 rounded-full">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#039900" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-circle-check-big">
-                            <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                            <path d="m9 11 3 3L22 4" />
-                        </svg>
-                    </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#039900" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-circle-check-big">
+                                <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                                <path d="m9 11 3 3L22 4" />
+                            </svg>
+                        </div>
                     @elseif ($order->delivery->status == 'hold')
-                    <div class="bg-orange-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#e05a00" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-pause">
-                            <rect x="14" y="4" width="4" height="16" rx="1" />
-                            <rect x="6" y="4" width="4" height="16" rx="1" />
-                        </svg>
-                    </div>
+                        <div class="bg-orange-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#e05a00" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-pause">
+                                <rect x="14" y="4" width="4" height="16" rx="1" />
+                                <rect x="6" y="4" width="4" height="16" rx="1" />
+                            </svg>
+                        </div>
                     @elseif ($order->delivery->status == 'returned')
-                    <div class="bg-purple-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="#9d00d6" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-package-x">
-                            <path
-                                d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" />
-                            <path d="m7.5 4.27 9 5.15" />
-                            <polyline points="3.29 7 12 12 20.71 7" />
-                            <line x1="12" x2="12" y1="22" y2="12" />
-                            <path d="m17 13 5 5m-5 0 5-5" />
-                        </svg>
-                    </div>
+                        <div class="bg-purple-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#9d00d6" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-package-x">
+                                <path
+                                    d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" />
+                                <path d="m7.5 4.27 9 5.15" />
+                                <polyline points="3.29 7 12 12 20.71 7" />
+                                <line x1="12" x2="12" y1="22" y2="12" />
+                                <path d="m17 13 5 5m-5 0 5-5" />
+                            </svg>
+                        </div>
                     @else
-                    <div class="bg-red-100 p-2 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="text-red-500">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                    </div>
+                        <div class="bg-red-100 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="text-red-500">
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </div>
                     @endif
                 </div>
                 <h2 class="text-xl md:text-2xl font-bold text-gray-800 status-title">
                     @if ($order->delivery->status == 'pending')
-                    The artist is preparing your order
+                        The artist is preparing your order
                     @elseif ($order->delivery->status == 'in-transit')
-                    Your artwork is on the way
+                        Your artwork is on the way
                     @elseif ($order->delivery->status == 'delivered')
-                    Your order is delivered
+                        Your order is delivered
                     @elseif ($order->delivery->status == 'completed')
-                    Your order is completed
+                        Your order is completed
                     @elseif ($order->delivery->status == 'hold')
-                    Your order is on hold
+                        Your order is on hold
                     @elseif ($order->delivery->status == 'returned')
-                    Item is returned
+                        Item is returned
                     @else
-                    Cancelled
+                        Cancelled
                     @endif
                 </h2>
             </div>
@@ -442,7 +442,7 @@
             <h3 class="font-medium text-gray-700 mb-2">Order Summary</h3>
             <div class="space-y-2">
                 @php
-                $totalPrice = $order->items->sum('price');
+                    $totalPrice = $order->items->sum('price');
                 @endphp
                 <div class="flex justify-between">
                     <span class="text-gray-600">Subtotal</span>
@@ -481,60 +481,80 @@
             <!-- Ordered Items -->
             <div class="space-y-6">
                 @foreach ($order->items as $item)
-                <div class="bg-gray-50 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md">
-                    <div class="flex flex-col md:flex-row">
-                        <!-- Artwork Image -->
-                        @php
-                        $thumbnail = $item->artwork->images->first()?->attachment;
-                        @endphp
-                        <div class="md:w-1/3 lg:w-1/4">
-                            <div class="relative aspect-[4/3]">
-                                <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
-                                    alt="{{ $item->artwork->title }}" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-
-                        <!-- Artwork Details -->
-                        <div class="flex-1 p-4 md:p-6 flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $item->artwork->title }}
-                                </h3>
-
-                                <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500">Category</p>
-                                        <p class="font-medium">{{ $item->artwork->category->name }}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500">Size</p>
-                                        <p class="font-medium">{{ $item->artwork->width }} ×
-                                            {{ $item->artwork->height }} {{ $item->artwork->unit }}
-                                        </p>
-                                    </div>
+                    <div class="bg-gray-50 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md">
+                        <div class="flex flex-col md:flex-row">
+                            <!-- Artwork Image -->
+                            @php
+                                $thumbnail = $item->artwork->images->first()?->attachment;
+                            @endphp
+                            <div class="md:w-1/3 lg:w-1/4">
+                                <div class="relative aspect-[4/3]">
+                                    <img src="{{ $thumbnail ? asset('storage/' . $thumbnail->path) : asset('images/default-image.jpg') }}"
+                                        alt="{{ $item->artwork->title }}" class="w-full h-full object-cover">
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between mt-2">
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="text-gray-400 mr-1">
-                                        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" />
-                                        <path d="M12 12h5" />
-                                        <path d="M12 6v6" />
-                                    </svg>
-                                    <span class="text-sm text-gray-500">Item #{{ $loop->iteration }}</span>
+                            <!-- Artwork Details -->
+                            <div class="flex-1 p-4 md:p-6 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $item->artwork->title }}
+                                    </h3>
+
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
+                                        <div>
+                                            <p class="text-xs text-gray-500">Category</p>
+                                            <p class="font-medium">{{ $item->artwork->category->name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Size</p>
+                                            <p class="font-medium">{{ $item->artwork->width }} ×
+                                                {{ $item->artwork->height }} {{ $item->artwork->unit }}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <span
-                                    class="text-lg font-bold text-blue-600">₱{{ number_format($item->price, 2) }}</span>
+
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="text-gray-400 mr-1">
+                                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" />
+                                            <path d="M12 12h5" />
+                                            <path d="M12 6v6" />
+                                        </svg>
+                                        <span class="text-sm text-gray-500">Item #{{ $loop->iteration }}</span>
+                                    </div>
+                                    <span
+                                        class="text-lg font-bold text-blue-600">₱{{ number_format($item->price, 2) }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>
+
+        @if ($order->delivery->status === 'completed')
+            <div class="bg-gray-50 p-6 mt-8 mb-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    @foreach ($order->delivery->proofs as $proof)
+                        <div class="relative group">
+                            <img src="{{ asset('storage/' . $proof->attachment->path) }}" alt="Proof of Delivery" 
+                                class="w-full h-32 object-cover rounded-md shadow-md">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                                <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank" 
+                                    class="text-white text-sm font-semibold underline">
+                                    View Full Image
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         <!-- Support and Action Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -571,145 +591,128 @@
                 <!-- Buttons Section -->
                 <div class="flex flex-col md:flex-row justify-end gap-4">
                     @if ($order->delivery->status == 'pending')
-                    <button type="button" data-modal-target="cancel-order-modal" data-modal-toggle="cancel-order-modal"
-                        class="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors">
-                        Cancel Order
-                    </button>
+                        <button type="button" data-modal-target="cancel-order-modal"
+                            data-modal-toggle="cancel-order-modal"
+                            class="w-full md:w-auto px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors">
+                            Cancel Order
+                        </button>
 
-                    <!-- Cancel Order Modal -->
-                    <div id="cancel-order-modal" tabindex="-1"
-                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                        <div class="relative p-4 w-full max-w-md max-h-full">
-                            <div class="relative bg-white rounded-lg py-6 shadow-sm dark:bg-gray-700">
-                                <button type="button"
-                                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-hide="cancel-order-modal">
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 14 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                    </svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                                <div class="p-4 md:p-5 text-center">
-                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to cancel
-                                        this order?</h3>
-                                    <form action="{{ route('client.order.cancel', $order) }}" method="POST" class="space-x-4">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit"
-                                            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                                            Yes, Cancel Order
-                                        </button>
-                                        <button type="button" data-modal-hide="cancel-order-modal"
-                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                            No, Keep Order
-                                        </button>
-                                    </form>
+                        <!-- Cancel Order Modal -->
+                        <div id="cancel-order-modal" tabindex="-1"
+                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                <div class="relative bg-white rounded-lg py-6 shadow-sm dark:bg-gray-700">
+                                    <button type="button"
+                                        class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-hide="cancel-order-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round"
+                                                stroke-linejoin="round" stroke-width="2"
+                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <div class="p-4 md:p-5 text-center">
+                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you
+                                            sure you want to cancel
+                                            this order?</h3>
+                                        <form action="{{ route('client.order.cancel', $order) }}" method="POST"
+                                            class="space-x-4">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                                Yes, Cancel Order
+                                            </button>
+                                            <button type="button" data-modal-hide="cancel-order-modal"
+                                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                No, Keep Order
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @elseif ($order->delivery->status == 'in-transit')
-                    <button data-tooltip-target="tooltip-default" type="button"
-                        class="w-full md:w-auto px-4 py-2 bg-gray-400 text-white rounded-lg shadow cursor-not-allowed"
-                        disabled>
-                        Cancel Order
-                    </button>
-
-                    <div id="tooltip-default" role="tooltip"
-                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                        Order cannot be cancelled while in transit. </br> You can initiate a refund/return after
-                        delivery.
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    @elseif ($order->delivery->status == 'delivered')
-                    <!-- Received Button -->
-                    <form action="{{ route('client.order.update', $order) }}" method="POST"
-                        class="w-full md:w-auto">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="completed">
-                        <button type="submit"
-                            class="w-full md:w-auto px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors">
-                            Received
+                        <button data-tooltip-target="tooltip-default" type="button"
+                            class="w-full md:w-auto px-4 py-2 bg-gray-400 text-white rounded-lg shadow cursor-not-allowed"
+                            disabled>
+                            Cancel Order
                         </button>
-                    </form>
 
-                    <!-- Return/Refund Button -->
-                    @if (!$order->refund)
-                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
-                        class="w-full md:w-auto px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg shadow transition-colors">
-                        Return/Refund
-                    </button>
-                    @else
-                    <p class="text-red-500 text-sm md:text-base">Refund request already submitted for this
-                        order.</p>
-                    @endif
-                    @elseif ($order->delivery->status == 'completed')
-                    <!-- Review Button -->
-                    @if (!$order->reviews->where('order_id', $order->id)->count())
-                    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                        class="w-full md:w-auto px-4 py-2 text-white bg-blue-700 hover:bg-blue-800 rounded-lg shadow transition-colors">
-                        Review
-                    </button>
-                    @else
-                    <p class="text-green-500 text-sm md:text-base">You have already reviewed this order.</p>
-                    @endif
+                        <div id="tooltip-default" role="tooltip"
+                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                            Order cannot be cancelled while in transit. </br> You can initiate a refund/return after
+                            delivery.
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    @elseif ($order->delivery->status == 'delivered')
+                        <!-- Received Button -->
+                        <form action="{{ route('client.order.update', $order) }}" method="POST"
+                            class="w-full md:w-auto">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="completed">
+                            <button type="submit"
+                                class="w-full md:w-auto px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors">
+                                Received
+                            </button>
+                        </form>
 
-                    <!-- Return/Refund Button -->
-                    @if (!$order->refund)
-                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
-                        class="w-full md:w-auto px-4 py-2 text-white bg-red-700 hover:bg-red-800 rounded-lg shadow transition-colors">
-                        Return/Refund
-                    </button>
-                    @else
-                    <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted
-                        for this order. Please wait for further updates.</p>
-                    @endif
+                        <!-- Return/Refund Button -->
+                        @if (!$order->refund)
+                            <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
+                                class="w-full md:w-auto px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg shadow transition-colors">
+                                Return/Refund
+                            </button>
+                        @else
+                            <p class="text-red-500 text-sm md:text-base">Refund request already submitted for this
+                                order.</p>
+                        @endif
                     @elseif ($order->status == 'hold')
-                    <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted for
-                        this order. </br> Please wait for further updates.</p>
+                        <p class="text-red-500 text-sm md:text-base">A refund request has already been submitted for
+                            this order. </br> Please wait for further updates.</p>
                     @elseif ($order->status == 'returned')
-                    <p class="text-red-500 text-sm md:text-base">Your order has been refunded with a 10% service
-                        fee deducted. </br> Please check your payment method for the refund.</p>
+                        <p class="text-red-500 text-sm md:text-base">Your order has been refunded with a 10% service
+                            fee deducted. </br> Please check your payment method for the refund.</p>
                     @endif
                 </div>
 
                 <!-- Order Actions Section -->
                 @if (!in_array($order->delivery->status, ['pending', 'in-transit', 'cancelled']))
-                <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col justify-center">
+                    <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col justify-center">
 
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        @if ($order->delivery->status == 'completed')
-                        @if (!$order->reviews->where('order_id', $order->id)->count())
-                        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                            class="w-full px-4 py-3 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors font-medium flex items-center justify-center"
-                            type="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="mr-2">
-                                <path
-                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5z" />
-                            </svg>
-                            Write a Review
-                        </button>
-                        @else
-                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="text-green-500 mr-3">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                <path d="m9 11 3 3L22 4" />
-                            </svg>
-                            <p class="text-green-700 font-medium">You have already reviewed this order</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            @if ($order->delivery->status == 'completed')
+                                @if (!$order->reviews->where('order_id', $order->id)->count())
+                                    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                                        class="w-full px-4 py-3 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors font-medium flex items-center justify-center"
+                                        type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="mr-2">
+                                            <path
+                                                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5z" />
+                                        </svg>
+                                        Write a Review
+                                    </button>
+                                @else
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="text-green-500 mr-3">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                            <path d="m9 11 3 3L22 4" />
+                                        </svg>
+                                        <p class="text-green-700 font-medium">You have already reviewed this order</p>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
-                        @endif
-                        @endif
                     </div>
-                </div>
                 @endif
             </div>
 

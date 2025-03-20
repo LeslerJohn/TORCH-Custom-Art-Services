@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Attachment;
 use App\Models\Commission;
 use App\Models\Delivery;
+use App\Models\Payout;
 use App\Models\Refund;
 use App\Models\Request as ModelsRequest;
 use Carbon\Carbon;
@@ -66,12 +67,15 @@ class CommissionController extends Controller
             'status' => 'completed',
         ]);
 
+        $commission->request->payout->update([
+            'status' => 'ready',
+        ]);
+
         return redirect()->route('client.commission.show', $commission)->with('success', 'Commission received!');
     }
 
     public function return(Request $request, Commission $commission)
     {
-        // dd($request->all());
         $request->validate([
             'reason' => 'required|string',
             'evidence' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -86,9 +90,11 @@ class CommissionController extends Controller
             'mime_type' => $file->getMimeType(),
         ]);
 
-        // Company cut (10% fee) on refund amount
-        $company_cut = ($commission->request->total_price * $commission->request->quantity) * 0.10; // Adjust percentage as needed
-        $refund_amount = ($commission->request->total_price * $commission->request->quantity) - $company_cut;
+        // Calculate the total deduction (15% of the total amount)
+        $total_deduction = ($commission->request->total_price * $commission->request->quantity) * 0.15;
+
+        // Calculate the refund amount after deductions
+        $refund_amount = ($commission->request->total_price * $commission->request->quantity) - $total_deduction;
 
         // Create a refund request
         $refund = Refund::create([

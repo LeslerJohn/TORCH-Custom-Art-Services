@@ -29,9 +29,9 @@
     </div>
 
     <!-- Support Section -->
-    <div class="flex flex-col items-center sm:items-start">
-        <h2 class="font-bold">Support</h2>
-        <p class="text-sm text-gray-500 mt-2 w-full sm:w-[300px] text-center sm:text-left">Feel free to reach out to us with any questions or concerns you may have. We're here to help!</p>
+    <div class="flex flex-col items-center sm:items-start sm:w-1/3">
+        <h2 class="font-bold text-center sm:text-left">Support</h2>
+        <p class="text-sm text-gray-500 mt-2 w-full sm:w-auto text-center sm:text-left">Feel free to reach out to us with any questions or concerns you may have. We're here to help!</p>
         <button onclick="window.location.href='mailto:torchtech2024@gmail.com'" class="w-full sm:w-auto text-lg font-semibold mb-2 text-white py-2 px-4 rounded-full mt-4 bg-orange-500 hover:text-orange-600 hover:bg-white hover:border hover:border-orange-500 transform hover:scale-110 transition duration-300">
             Contact us
         </button>
