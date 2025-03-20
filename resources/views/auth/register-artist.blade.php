@@ -685,7 +685,7 @@
             registerButton.classList.add('cursor-not-allowed', 'opacity-75');
 
             // Update text and show spinner
-            registerText.textContent = "submit...";
+            registerText.textContent = "Submitting...";
             spinner.classList.remove('hidden');
 
             // Allow form submission

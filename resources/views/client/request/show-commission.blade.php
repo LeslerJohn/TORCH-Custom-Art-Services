@@ -82,30 +82,30 @@
                                             : 'from-gray-50 to-gray-100')))))) }}">
                 <h1 class="text-2xl font-bold mb-2 text-gray-800">
                     @if ($commission->status == 'done' && $commission->delivery->status == 'pending')
-                        Preparing to ship your order
+                    Preparing to ship your order
                     @elseif ($commission->status == 'done' && $commission->delivery->status == 'in-transit')
-                        Your order is on its way
+                    Your order is on its way
                     @elseif ($commission->status == 'wip')
-                        Your commission is in progress
+                    Your commission is in progress
                     @elseif ($commission->status == 'ready')
-                        Commission ready to start
+                    Commission ready to start
                     @elseif ($commission->status == 'completed')
-                        Commission completed
+                    Commission completed
                     @elseif ($commission->status == 'cancelled')
-                        Commission cancelled
+                    Commission cancelled
                     @elseif ($commission->status == 'hold')
-                        Commission on hold due to refund request
+                    Commission on hold due to refund request
                     @elseif ($commission->status == 'returned')
-                        Commission refunded
+                    Commission refunded
                     @else
-                        Commission status unknown
+                    Commission status pending
                     @endif
                 </h1>
                 <p class="text-sm text-gray-600">
                     @if ($commission->delivery && $commission->delivery->expected_delivery)
-                        Expected delivery:
-                        {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} -
-                        {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}
+                    Expected delivery:
+                    {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->subDays(5)->format('j') }} -
+                    {{ \Carbon\Carbon::parse($commission->delivery->expected_delivery)->format('j F, Y') }}
                     @endif
                 </p>
             </div>
@@ -546,65 +546,65 @@
 
         <!-- Extension Information -->
         @if ($commission->extension && $commission->extension->status == 'approved')
-            <div class="mx-6 my-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-yellow-800">Extension Approved</h3>
-                        <div class="mt-1 text-sm text-yellow-700">
-                            <p>Your commission has been granted an extension of 7 days. Please note the updated delivery
-                                date.</p>
-                        </div>
+        <div class="mx-6 my-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-yellow-800">Extension Approved</h3>
+                    <div class="mt-1 text-sm text-yellow-700">
+                        <p>Your commission has been granted an extension of 7 days. Please note the updated delivery
+                            date.</p>
                     </div>
                 </div>
             </div>
+        </div>
         @endif
 
         <!-- Drafts -->
         @if (count($commission->drafts) > 0)
-            <div class="p-6 border-t border-gray-100">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">Drafts</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    @foreach ($commission->drafts as $draft)
-                        <div
-                            class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-                            <img src="{{ asset('storage/' . $draft->attachment->path) }}" alt="Draft Image"
-                                class="w-full h-48 object-cover">
-                            <div class="p-3">
-                                <p class="text-sm text-gray-600">{{ $draft->description }}</p>
-                            </div>
-                        </div>
-                    @endforeach
+        <div class="p-6 border-t border-gray-100">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Drafts</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach ($commission->drafts as $draft)
+                <div
+                    class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <img src="{{ asset('storage/' . $draft->attachment->path) }}" alt="Draft Image"
+                        class="w-full h-48 object-cover">
+                    <div class="p-3">
+                        <p class="text-sm text-gray-600">{{ $draft->description }}</p>
+                    </div>
                 </div>
+                @endforeach
             </div>
+        </div>
         @endif
 
         @if ($commission->delivery->status === 'completed')
-            <div class="bg-gray-50 p-6 mt-8 mb-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @foreach ($commission->delivery->proofs as $proof)
-                        <div class="relative group">
-                            <img src="{{ asset('storage/' . $proof->attachment->path) }}" alt="Proof of Delivery"
-                                class="w-full h-32 object-cover rounded-md shadow-md">
-                            <div
-                                class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
-                                <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank"
-                                    class="text-white text-sm font-semibold underline">
-                                    View Full Image
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
+        <div class="bg-gray-50 p-6 mt-8 mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Proof of Delivery</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                @foreach ($commission->delivery->proofs as $proof)
+                <div class="relative group">
+                    <img src="{{ asset('storage/' . $proof->attachment->path) }}" alt="Proof of Delivery"
+                        class="w-full h-32 object-cover rounded-md shadow-md">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
+                        <a href="{{ asset('storage/' . $proof->attachment->path) }}" target="_blank"
+                            class="text-white text-sm font-semibold underline">
+                            View Full Image
+                        </a>
+                    </div>
                 </div>
+                @endforeach
             </div>
+        </div>
         @endif
 
         <!-- Action Buttons -->
@@ -623,37 +623,37 @@
 
                 <div class="flex space-x-3">
                     @if ($commission->status == 'done' && $commission->delivery->status == 'pending')
-                        <p class="text-blue-500 font-medium">Your commission is ready for delivery.</p>
+                    <p class="text-blue-500 font-medium">Your commission is ready for delivery.</p>
                     @elseif ($commission->delivery->status == 'delivered')
-                        <form action="{{ route('client.commission.receive', $commission) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-sm transition-colors">
-                                Received
-                            </button>
-                        </form>
+                    <form action="{{ route('client.commission.receive', $commission) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-sm transition-colors">
+                            Received
+                        </button>
+                    </form>
 
-                        @if (!$commission->refund)
-                            <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
-                                class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg shadow-sm transition-colors">
-                                Return/Refund
-                            </button>
-                        @else
-                            <p class="text-red-500 text-sm md:text-base">Refund request already submitted</p>
-                        @endif
+                    @if (!$commission->refund)
+                    <button data-modal-target="return-refund-modal" data-modal-toggle="return-refund-modal"
+                        class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg shadow-sm transition-colors">
+                        Return/Refund
+                    </button>
+                    @else
+                    <p class="text-red-500 text-sm md:text-base">Refund request already submitted</p>
+                    @endif
                     @elseif ($commission->status == 'completed')
-                        @if (!$commission->reviews->where('commission_id', $commission->id)->count())
-                            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-sm transition-colors">
-                                Leave a Review
-                            </button>
-                        @else
-                            <p class="text-green-500 font-medium">Thanks for your review!</p>
-                        @endif
+                    @if (!$commission->reviews->where('commission_id', $commission->id)->count())
+                    <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                        class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-sm transition-colors">
+                        Leave a Review
+                    </button>
+                    @else
+                    <p class="text-green-500 font-medium">Thanks for your review!</p>
+                    @endif
                     @elseif ($commission->status == 'hold')
-                        <p class="text-red-500 text-sm md:text-base">Refund request is being processed</p>
+                    <p class="text-red-500 text-sm md:text-base">Refund request is being processed</p>
                     @elseif ($commission->status == 'returned')
-                        <p class="text-red-500 text-sm md:text-base">Refunded with 10% service fee deducted</p>
+                    <p class="text-red-500 text-sm md:text-base">Refunded with 10% service fee deducted</p>
                     @endif
                 </div>
             </div>

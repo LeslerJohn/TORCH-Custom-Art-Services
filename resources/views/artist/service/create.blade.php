@@ -17,12 +17,12 @@
                         <select id="categories" name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option selected disabled>Choose a category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                     </div>
-                    
+
                     <div class="w-full mt-4">
                         <label for="tags" class="block mb-2 text-cm">Select Tags</label>
                         <div id="tags-container" class="flex flex-wrap gap-4"></div>
@@ -35,7 +35,7 @@
                         <div class="flex">
                             <x-text-input id="price_rate" class="block mt-1 w-full" type="number" name="price_rate" required placeholder="Set base price per cm." value="{{ old('price_rate') }}" />
                             <button data-tooltip-target="tooltip-price" type="button" class="ml-4"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </button>
                         </div>
@@ -46,7 +46,7 @@
                         <p class="text-sm">Your base price will be used in the system's calculators framework width x height x base price.</p>
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
-    
+
                     <div id="tooltip-rush-price" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-300 rounded-lg shadow-xs opacity-0 tooltip">
                         <p class="text-sm">Rush base price is applied when the client makes a rush order.</p>
                         <div class="tooltip-arrow" data-popper-arrow></div>
@@ -56,7 +56,7 @@
                         <div class="flex">
                             <x-text-input id="rush_price_rate" class="block mt-1 w-full" type="number" name="rush_price_rate" required placeholder="Set base price for rush order." value="{{ old('rush_price_rate') }}" />
                             <button data-tooltip-target="tooltip-rush-price" type="button" class="ml-4"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </button>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="flex">
                             <x-text-input id="normal_timeframe" class="block mt-1 w-full" type="number" name="normal_timeframe" required placeholder="No. of days completion." value="{{ old('normal_timeframe') }}" />
                             <button data-tooltip-target="tooltip-animation" type="button" class="ml-4"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                             </button>
                         </div>
@@ -114,7 +114,7 @@
                             });
                         });
                     </script>
-                    
+
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             const categorySelect = document.getElementById('categories');
@@ -172,11 +172,11 @@
                     </div>
                     <div class="flex items-center justify-center w-full">
                         @if ($errors->any())
-                            <div class="text-red-500">
-                                @foreach ($errors->all() as $error)
-                                    <p>{{ $error }}</p>
-                                @endforeach
-                            </div>
+                        <div class="text-red-500">
+                            @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                            @endforeach
+                        </div>
                         @endif
 
                         <label for="dropzone-file"
@@ -259,7 +259,11 @@
     </div>
 
     <div id="success-message" class="hidden z-50 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="bg-white p-6 rounded-lg shadow-lg flex items-center">
+            <svg class="animate-spin h-5 w-5 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
             <p class="text-lg font-semibold">Creating service...</p>
         </div>
     </div>
@@ -277,7 +281,8 @@
     </script>
     <style>
         .selected-tag {
-            border-color: #3b82f6 !important; /* Tailwind blue-500 */
+            border-color: #3b82f6 !important;
+            /* Tailwind blue-500 */
         }
     </style>
 </x-artist-layout>

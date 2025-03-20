@@ -36,16 +36,6 @@
                     </form>
                     @endif
 
-                    <!-- Notifications -->
-                    <button class="text-gray-700 hover:text-orange-500 relative p-1 rounded-full hover:bg-gray-100 transition-colors duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell">
-                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                        </svg>
-                        <!-- Notification badge (if needed) -->
-                        <!-- <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">5</span> -->
-                    </button>
-
                     <!-- User Menu -->
                     <x-dropdown align="right" width="56">
                         <x-slot name="trigger">
