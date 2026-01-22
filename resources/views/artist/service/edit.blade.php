@@ -1,6 +1,6 @@
 <x-artist-layout>
-    <div class="flex justify-between pt-16">
-        <h1 class="text-2lg text-bold text-black-500">Edit Service</h1>
+    <div class="flex flex-col md:flex-row justify-between pt-16">
+        <h1 class="text-2lg font-bold text-black-500">Edit Service</h1>
         <a href="{{ route('artist.service.index') }}">
             <x-secondary-button class="justify-center py-1 w-20 text-md hover:selected-tag">
                 Back
@@ -11,8 +11,8 @@
         <form id="artwork-form" action="{{ route('artist.service.update', $service->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="flex gap-16">
-                <div class="flex flex-col w-[400px]">
+            <div class="flex flex-col md:flex-row gap-16">
+                <div class="flex flex-col w-full md:w-[400px]">
                     <div>
                         <label for="categories" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a Category</label>
                         <select id="categories" name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -21,14 +21,16 @@
                                 <option value="{{ $category->id }}" {{ $category->id == $service->category_id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                     </div>
                     
                     <div class="w-full mt-4">
-                        <label for="tags" class="block mb-2 text-cm">Select Tags</label>
+                        <label for="tags" class="block mb-2 text-sm">Select Tags</label>
                         <div id="tags-container" class="flex flex-wrap gap-4">
                             <!-- Tags will be populated by AJAX -->
                         </div>
                         <input type="hidden" id="selected-tags" name="tags[]" value="{{ implode(',', $service->tags->pluck('id')->toArray()) }}">
+                        <x-input-error :messages="$errors->get('tags')" class="mt-2" />
                     </div>
 
                     <div class="mt-6">
@@ -155,7 +157,7 @@
                         });
                     </script>
                 </div>
-                <div>
+                <div class="w-full">
                     <div class="mt-6">
                         <h2>Media</h2>
                         <p class="text-sm mb-1">A maximum of 5MB per file.</p>
@@ -186,10 +188,11 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, or SVG (MAX.
                                     800x400px)</p>
                             </div>
-                            <input id="dropzone-file" type="file" class="hidden" name="thumbnails[]" accept="image/*" multiple onchange="updateFilePreview()" />
+                            <input id="dropzone-file" type="file" class="hidden" name="thumbnails[]" accept="image/*" multiple onchange="updateFilePreview()"/>
                         </label>
+                        <x-input-error :messages="$errors->get('thumbnails')" class="mt-2" />
                     </div>
-                    <div id="file-preview" class="mt-4 grid grid-cols-3 gap-4">
+                    <div id="file-preview" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                         @foreach ($service->images as $thumbnail)
                         <img src="{{ asset('storage/' . $thumbnail->attachment->path) }}" class="w-32 h-32 object-cover rounded-lg border border-gray-300">
                         @endforeach
@@ -197,16 +200,16 @@
                 </div>
             </div>
             <div class="mt-6">
-                <x-primary-button class="justify-center py-4 w-[200px] text-md">
+                <x-primary-button class="justify-center py-4 w-full md:w-[200px] text-md">
                     {{ __('Update Artwork') }}
                 </x-primary-button>
             </div>
         </form>
     </div>
 
-    <div id="success-message" class="hidden z-500 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+    <div id="success-message" class="hidden z-50 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <p class="text-lg font-semibold">service updated successfully</p>
+            <p class="text-lg font-semibold">Updating service...</p>
         </div>
     </div>
 

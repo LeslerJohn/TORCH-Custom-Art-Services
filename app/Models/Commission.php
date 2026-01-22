@@ -43,4 +43,14 @@ class Commission extends Model
     {
         return $this->hasMany(Payment::class, 'commission_id');
     }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'commission_id');
+    }
+
+    public function extension()
+    {
+        return $this->hasOne(Extension::class, 'commission_id');
+    }
 }

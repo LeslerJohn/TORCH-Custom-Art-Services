@@ -1,4 +1,10 @@
 <x-admin-layout>
+    <div class="flex justify-between mb-6">
+        <h1 class="text-4xl">Overview</h1>
+        <a href="{{ route('admin.dashboard.export-all') }}" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">
+            Download All Statistics (CSV)
+        </a>
+    </div>
     <main class="grid grid-cols-1 md:grid-cols-10 gap-4 w-full">
         <section class="col-span-1 md:col-span-3 flex flex-col gap-4">
             <div class="shadow-lg bg-white rounded-lg p-6">
@@ -21,6 +27,7 @@
                             <p class="text-sm text-gray-500">Artists this month</p>
                         </div>
                     </div>
+                    <a href="{{ route('admin.dashboard.export', ['type' => 'artists']) }}" class="text-blue-500 text-sm mt-2 inline-block">Download CSV</a>
                 </div>
                 <hr class="my-4">
                 <!-- Clients Section -->
@@ -42,6 +49,7 @@
                             <p class="text-sm text-gray-500">Clients this month</p>
                         </div>
                     </div>
+                    <a href="{{ route('admin.dashboard.export', ['type' => 'clients']) }}" class="text-blue-500 text-sm mt-2 inline-block">Download CSV</a>
                 </div>
             </div>
 
@@ -72,6 +80,7 @@
                         </div>
                     @endforeach
                 </div>
+                <a href="{{ route('admin.dashboard.export', ['type' => 'applications']) }}" class="text-blue-500 text-sm mt-2 inline-block">Download CSV</a>
             </div>
         </section>
 
@@ -109,6 +118,7 @@
                 <div class="relative w-full h-fit">
                     <canvas id="newArtistsChart"></canvas>
                 </div>
+                <a href="{{ route('admin.dashboard.export', ['type' => 'transactions']) }}" class="text-blue-500 text-sm mt-2 inline-block">Download CSV</a>
             </div>
             {{-- TRANSACTION GRAPH --}}
             <div class="bg-white rounded-lg shadow p-6 w-full">

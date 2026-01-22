@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -31,9 +32,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -43,7 +41,60 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
+        // Handle profile image removal
+        if ($request->has('remove_profile_image') && $request->remove_profile_image == '1') {
+            if ($user->profile_image_id) {
+                // Delete the existing profile image from storage
+                $profileImage = Attachment::find($user->profile_image_id);
+                if ($profileImage) {
+                    Storage::disk('public')->delete($profileImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->profile_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $profileImage->delete();
+                }
+            }
+        }
+
+        // Handle cover image removal
+        if ($request->has('remove_cover_image') && $request->remove_cover_image == '1') {
+            if ($user->cover_image_id) {
+                // Delete the existing cover image from storage
+                $coverImage = Attachment::find($user->cover_image_id);
+                if ($coverImage) {
+                    Storage::disk('public')->delete($coverImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->cover_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $coverImage->delete();
+                }
+            }
+        }
+
+        // Handle new profile image upload
         if ($request->hasFile('profile_image')) {
+            // Delete the existing profile image if it exists
+            if ($user->profile_image_id) {
+                $profileImage = Attachment::find($user->profile_image_id);
+                if ($profileImage) {
+                    Storage::disk('public')->delete($profileImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->profile_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $profileImage->delete();
+                }
+            }
+
+            // Store the new profile image
             $file = $request->file('profile_image');
             $path = $file->store('profile_images', 'public');
             $attachment = Attachment::create([
@@ -54,7 +105,24 @@ class ProfileController extends Controller
             $user->profile_image_id = $attachment->id;
         }
 
+        // Handle new cover image upload
         if ($request->hasFile('cover_image')) {
+            // Delete the existing cover image if it exists
+            if ($user->cover_image_id) {
+                $coverImage = Attachment::find($user->cover_image_id);
+                if ($coverImage) {
+                    Storage::disk('public')->delete($coverImage->path);
+
+                    // Remove the foreign key reference before deleting
+                    $user->cover_image_id = null;
+                    $user->save();
+
+                    // Now delete the attachment
+                    $coverImage->delete();
+                }
+            }
+
+            // Store the new cover image
             $file = $request->file('cover_image');
             $path = $file->store('cover_images', 'public');
             $attachment = Attachment::create([
@@ -65,8 +133,21 @@ class ProfileController extends Controller
             $user->cover_image_id = $attachment->id;
         }
 
+        // Update phone number
         if ($request->has('phone_number')) {
             $user->phone_number = $request->input('phone_number');
+        }
+
+        // Update artist-specific fields
+        if ($user->isArtist()) {
+            $artistProfile = $user->artist;
+            $artistProfile->location = $request->input('location');
+            $artistProfile->birthdate = $request->input('birthdate');
+            $artistProfile->gender = $request->input('gender');
+            $artistProfile->username = $request->input('username');
+            $artistProfile->max_commissions = $request->input('max_commissions');
+            $artistProfile->bio = $request->input('bio');
+            $artistProfile->save();
         }
 
         $user->save();
@@ -98,8 +179,18 @@ class ProfileController extends Controller
     public function showClientProfile()
     {
         $client = ClientProfile::where('id', Auth::id())->first();
-        $collections = Order::where('client_id', Auth::id())->get();
-        $liked = ClientLiked::where('client_id', Auth::id())->get();
+        $collections = Order::where('client_id', Auth::id())
+            ->where('status', 'completed')
+            ->whereHas('items.artwork')
+            ->with('items.artwork')
+            ->latest()
+            ->get();
+
+        $liked = ClientLiked::where('client_id', Auth::id())
+            ->with('artwork')
+            ->latest()
+            ->get();
+
         return view('client.profile.show', compact('client', 'collections', 'liked'));
     }
 
@@ -109,10 +200,8 @@ class ProfileController extends Controller
         $artworks = $artist->artworks()->get();
         $isOwner = Auth::check() && Auth::id() === $artist->id;
 
-        $order_reviews = OrderReview::whereHas('order.items.artwork', function ($query) use ($artist) {
-            $query->whereHas('artist', function ($q) use ($artist) {
-                $q->where('id', $artist->id);
-            });
+        $order_reviews = OrderReview::whereHas('order.items.artwork.artist', function ($query) use ($artist) {
+            $query->where('id', $artist->id);
         })
             ->whereNotNull('review')
             ->with([
@@ -124,12 +213,8 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        $commission_reviews = CommissionReview::whereHas('commission.request', function ($query) use ($artist) {
-            $query->whereHas('service', function ($q) use ($artist) {
-                $q->whereHas('artist', function ($subQ) use ($artist) {
-                    $subQ->where('id', $artist->id);
-                });
-            });
+        $commission_reviews = CommissionReview::whereHas('commission.request.service.artist', function ($query) use ($artist) {
+            $query->where('id', $artist->id);
         })
             ->whereNotNull('review')
             ->with([
@@ -143,10 +228,17 @@ class ProfileController extends Controller
 
         $reviews = $commission_reviews->merge($order_reviews);
 
-        $collections = $isOwner ? Order::whereHas('items.artwork', function ($query) use ($artist) {
-            $query->where('artist_id', $artist->id);
-        })->get() : collect();
-        $liked = $isOwner ? ClientLiked::where('artist_id', $artist->id)->get() : collect();
+        $collections = Order::where('client_id', Auth::id())
+            ->where('status', 'completed')
+            ->whereHas('items.artwork')
+            ->with('items.artwork')
+            ->latest()
+            ->get();
+
+        $liked = ClientLiked::where('client_id', $artist->id)
+            ->with('artwork')
+            ->latest()
+            ->get();
 
         return view('artist.profile.show', compact('artist', 'services', 'artworks', 'reviews', 'collections', 'liked', 'isOwner'));
     }
@@ -166,7 +258,7 @@ class ProfileController extends Controller
             'house_number' => $request->house_number,
         ]);
 
-        return Redirect::route('client.profile')->with('success', 'Address updated successfully!');
+        return Redirect::route('profile.edit')->with('success', 'Address updated successfully!');
     }
 
     public function storeAddress(Request $request, User $user)
@@ -184,6 +276,23 @@ class ProfileController extends Controller
             'house_number' => $request->house_number,
         ]);
 
-        return Redirect::route('client.profile')->with('success', 'Address added successfully!');
+        return Redirect::back()->with('success', 'Address added successfully!');
+    }
+
+    public function updatePaymentMethod(Request $request)
+    {
+        $request->validate([
+            'payment_method' => 'required|string|max:255',
+            'payment_name' => 'required|string|max:255',
+            'payment_number' => 'required|string|max:10',
+        ]);
+
+        $user = Auth::user()->artist->payment;
+        $user->payment_method = $request->input('payment_method');
+        $user->account_name = $request->input('payment_name');
+        $user->account_number = $request->input('payment_number');
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'payment-method-updated');
     }
 }

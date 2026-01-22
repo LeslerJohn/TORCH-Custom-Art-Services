@@ -13,6 +13,7 @@
     <link rel="icon" href="{{ asset('images/icon.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('images/icon.png') }}">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -34,10 +35,12 @@
         @include('layouts.artist-sidebar')
 
         <!-- Page Content -->
-        <main class="max-w-7xl mx-auto ml-[260px] py-6 px-4 sm:px-6 lg:px-8">
+        <main class="max-w-7xl mx-auto lg:ml-[300px] py-6 px-4 sm:px-6 lg:px-8 transition-all duration-300">
             {{ $slot }}
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
     @stack('scripts')
 </body>
 

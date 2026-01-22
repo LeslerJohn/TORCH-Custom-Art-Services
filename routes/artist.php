@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\Artist\ArtworkController;
 use App\Http\Controllers\Artist\CommissionController;
+use App\Http\Controllers\Artist\DashboardController;
 use App\Http\Controllers\Artist\DiscountController;
 use App\Http\Controllers\Artist\OrderController;
 use App\Http\Controllers\Artist\ReviewController;
 use App\Http\Controllers\Artist\ServiceController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/artist', [App\Http\Controllers\Artist\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('artist.dashboard');
+Route::get('/artist', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('artist.dashboard');
 
 use Illuminate\Http\Request;
 use App\Models\Tag;
@@ -22,7 +23,9 @@ Route::get('/get-tags/{categoryId}', function ($categoryId) {
     return response()->json($tags);
 });
 
-Route::post('/artist/availability', [App\Http\Controllers\Artist\DashboardController::class, 'availability'])->middleware(['auth', 'verified'])->name('artist.availability');
+Route::post('/artist/availability', [DashboardController::class, 'availability'])->middleware(['auth', 'verified'])->name('artist.availability');
+
+Route::get('/artist/dashboard/export-all', [DashboardController::class, 'exportAllStatistics'])->name('artist.dashboard.export-all');
 
 // Showcase Routes
 // Route::middleware(['auth', 'verified'])->group(function () {
@@ -83,6 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/artist/commission/{commission}/deliver', [CommissionController::class, 'deliver'])->name('artist.commission.deliver');
     Route::post('/artist/commission/{commission}/delivered', [CommissionController::class, 'delivered'])->name('artist.commission.delivered');
     Route::post('/artist/commission/{commission}/draft', [CommissionController::class, 'draft'])->name('artist.commission.draft');
+    Route::post('/artist/commission/{commission}/request-extension', [CommissionController::class, 'requestExtension'])->name('artist.commission.request-extension');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -96,3 +100,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/artist/discount/{discount}', [DiscountController::class, 'status_update'])->name('artist.discount.status-update');
     Route::delete('/artist/discount/{discount}', [DiscountController::class, 'destroy'])->name('artist.discount.destroy');
 });
+
+
+Route::post('/artist/commission/export-csv', [DashboardController::class, 'exportCommissionList'])->name('artist.commission.export-csv');
+Route::post('/artist/order/export-csv', [DashboardController::class, 'exportOrderList'])->name('artist.order.export-csv');

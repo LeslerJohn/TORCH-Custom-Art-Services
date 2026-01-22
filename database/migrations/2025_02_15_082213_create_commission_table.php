@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('deadline')->nullable();
             $table->boolean('is_extended')->default(false);
             $table->date('extended_deadline')->nullable()->default(null);
-            $table->enum('status', ['pending', 'ready', 'wip', 'done', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'ready', 'wip', 'done', 'completed', 'returned', 'hold'])->default('pending');
             $table->timestamps();
         });
 

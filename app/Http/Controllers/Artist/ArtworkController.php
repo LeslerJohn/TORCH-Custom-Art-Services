@@ -84,7 +84,7 @@ class ArtworkController extends Controller
             $artwork->tags()->attach($tags);
         }
 
-        return redirect()->route('artist.artwork.index')->with('success', 'Artwork created successfully');
+        return redirect()->route('artist.artwork.show', $artwork)->with('success', 'Artwork created successfully');
     }
 
     /**
@@ -167,7 +167,7 @@ class ArtworkController extends Controller
             $artwork->tags()->sync($tags);
         }
 
-        return redirect()->route('artist.artwork.index')->with('success', 'Artwork updated successfully');
+        return redirect()->route('artist.artwork.show', $artwork)->with('success', 'Artwork updated successfully');
     }
 
     /**

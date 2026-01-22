@@ -12,11 +12,14 @@ class Refund extends Model
         'payment_id',
         'commission_id',
         'order_id',
+        'request_id',
         'client_id',
         'artist_id',
         'amount',
         'reason',
+        'attachment_id',
         'refund_method',
+        'transaction_id',
         'status',
         'admin_approved',
     ];
@@ -29,6 +32,11 @@ class Refund extends Model
     public function commission()
     {
         return $this->belongsTo(Commission::class, 'commission_id');
+    }
+
+    public function request()
+    {
+        return $this->belongsTo(Request::class, 'request_id');
     }
 
     public function order()
@@ -44,5 +52,10 @@ class Refund extends Model
     public function artist()
     {
         return $this->belongsTo(ArtistProfile::class, 'artist_id');
+    }
+
+    public function attachment()
+    {
+        return $this->belongsTo(Attachment::class, 'attachment_id');
     }
 }

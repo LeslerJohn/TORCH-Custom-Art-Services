@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUlid('client_id')->constrained('client_profile')->cascadeOnDelete();
             $table->decimal('total', 10, 2);
             $table->foreignUlid('delivery_id')->constrained('delivery')->cascadeOnDelete();
-            $table->enum('status', ['pending', 'accepted', 'in-transit', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'in-transit', 'completed', 'cancelled', 'returned', 'hold'])->default('pending');
             $table->timestamps();
         });
 
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->date('expected_delivery')->nullable();
             $table->foreignUlid('address_id')->constrained('address')->cascadeOnDelete();
-            $table->enum('status', ['pending', 'in-transit', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'in-transit', 'delivered', 'completed', 'cancelled', 'returned', 'hold'])->default('pending');
             $table->timestamps();
         });
 

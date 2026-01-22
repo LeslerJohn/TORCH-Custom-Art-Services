@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Artist;
 
+use App\Mail\OrderTrackingMail;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use App\Models\Attachment;
+use App\Models\ProofOfDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -50,14 +54,48 @@ class OrderController extends Controller
         $order->delivery->update(['status' => 'in-transit']);
         $order->update(['status' => 'accepted']);
 
+        // Send email to client
+        Mail::to($order->client->user->email)->send(new OrderTrackingMail(
+            $order->client->user->name,
+            'In-transit',
+            'Your order is now in transit. You can track it using the tracking number: ' . $order->delivery->id . '.'
+        ));
+
         return redirect()->route('artist.order.show', $order);
     }
 
     
-    public function delivered(Order $order)
+    public function delivered(Request $request, Order $order)
     {
-        $order->delivery->update(['status' => 'completed']);
-        $order->update(['status' => 'completed']);
+        $request->validate([
+            'proof_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('proof_images')) {
+            foreach ($request->file('proof_images') as $image) {
+                $path = $image->store('proof_of_delivery', 'public');
+
+                $attachment = Attachment::create([
+                    'filename' => $image->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $image->getMimeType(),
+                ]);
+
+                ProofOfDelivery::create([
+                    'delivery_id' => $order->delivery->id,
+                    'attachment_id' => $attachment->id,
+                ]);
+
+                $order->delivery->update(['status' => 'delivered']);
+
+                // Send email to client
+                Mail::to($order->client->user->email)->send(new OrderTrackingMail(
+                    $order->client->user->name,
+                    'Delivered',
+                    'Your order has been delivered. You can view the proof of delivery in your account.'
+                ));
+            }
+        }
 
         return redirect()->route('artist.order.show', $order);
     }
