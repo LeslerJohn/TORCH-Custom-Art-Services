@@ -1,173 +1,359 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TORCH - Custom Art Services and E-commerce Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based art marketplace connecting artists and clients for artwork sales and commission services.
 
-# TORCHV2
+## Requirements
 
-## Project Setup and Configuration
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- npm
+- SQLite (default) or MySQL/PostgreSQL
 
-Follow the steps below to set up and run the TORCHV2 project on your local machine.
+## Quick Start
 
----
-
-### 1. Clone the Repository
 ```bash
-git clone https://github.com/LeslerJohn/TORCHV2.git
-cd TORCHV2
-```
+# Clone repository
+git clone https://github.com/LeslerJohn/TORCH-Custom-Art-Services.git
+cd TORCH-Custom-Art-Services
 
----
+# Install dependencies
+composer install
+npm install
 
-### 2. Setup `.env` File
-```bash
+# Setup environment
 cp .env.example .env
-```
-Update the `.env` file with the following configurations:
+php artisan key:generate
 
-#### Mail Configuration
+# Create database and run migrations
+touch database/database.sqlite
+php artisan migrate
+
+# Create storage symlink
+php artisan storage:link
+
+# Seed the database (choose one)
+php artisan db:seed                              # Basic: admin + categories/tags only
+php artisan db:seed --class=ComprehensiveSeeder  # Full demo data
+
+# Start development server
+composer run dev
+```
+
+---
+
+## Environment Configuration
+
+Copy `.env.example` to `.env` and configure the following sections:
+
+### Application Settings
+
+```env
+APP_NAME=TORCH
+APP_ENV=local
+APP_DEBUG=true
+APP_TIMEZONE=Asia/Manila
+APP_URL=http://localhost:8000
+```
+
+### Database Configuration
+
+**SQLite (Default)**
+
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database/database.sqlite
+```
+
+**MySQL**
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=torchv2
+DB_USERNAME=root
+DB_PASSWORD=your-password
+```
+
+### Mail Configuration (Mailgun)
+
 ```env
 MAIL_MAILER=mailgun
-MAIL_FROM_ADDRESS=your-email@example.com
-MAIL_FROM_NAME="Your App Name"
-MAILGUN_DOMAIN=your-mailgun-domain
-MAILGUN_SECRET=your-mailgun-secret
+MAIL_FROM_ADDRESS=noreply@yourdomain.com
+MAIL_FROM_NAME="${APP_NAME}"
+MAILGUN_DOMAIN=your-mailgun-domain.mailgun.org
+MAILGUN_SECRET=your-mailgun-api-key
 ```
 
-#### Payment Configuration
+> Get credentials from [Mailgun Dashboard](https://app.mailgun.com/)
+
+### Payment Configuration (Xendit)
+
 ```env
+XENDIT_SECRET_KEY=xnd_development_xxxx
+XENDIT_PUBLIC_KEY=xnd_public_development_xxxx
+XENDIT_WEBHOOK_VERIFICATION_TOKEN=your-webhook-token
 AUTH_PAY=your-auth-pay-key
 ```
 
-#### Google OAuth Configuration
+> Get credentials from [Xendit Dashboard](https://dashboard.xendit.co/)
+
+### Google OAuth Configuration
+
 ```env
-GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
 
----
-
-### 3. Install Dependencies
-
-#### Backend Dependencies
-```bash
-composer install
-```
-
-#### Frontend Dependencies
-```bash
-npm install
-npm run build
-npm install -D tailwindcss postcss autoprefixer flowbite
-```
+> Configure at [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
 
 ---
 
-### 4. Generate Key and Data
+## Database Seeding
 
-#### TailwindCSS Configuration
+### Seeder Options
+
+| Command                                           | Description                                                                   |
+| ------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `php artisan db:seed`                             | Default seeder: Admin user + Categories/Tags                                  |
+| `php artisan db:seed --class=ComprehensiveSeeder` | Full demo data with artists, clients, artworks, services, orders, commissions |
+| `php artisan db:seed --class=BasicSeeder`         | Minimal: 3 users only (Admin, Artist, Client)                                 |
+
+### Fresh Migration with Seeding
+
 ```bash
-npx tailwindcss init -p
+# Reset database and seed with comprehensive data
+php artisan migrate:fresh && php artisan db:seed --class=ComprehensiveSeeder
 ```
 
-#### Laravel Key and Database Setup
+### Seeded User Credentials
+
+All users have password: `password`
+
+| Role   | Email                       | Name                   |
+| ------ | --------------------------- | ---------------------- |
+| Admin  | admin@gmail.com             | Admin User             |
+| Artist | maria.santos@example.com    | Maria Clara Santos     |
+| Artist | juan.delacruz@example.com   | Juan Paulo dela Cruz   |
+| Artist | ana.reyes@example.com       | Ana Marie Reyes        |
+| Artist | miguel.bautista@example.com | Miguel Angelo Bautista |
+| Artist | sofia.cruz@example.com      | Sofia Isabelle Cruz    |
+| Client | pedro.gonzales@example.com  | Pedro Jose Gonzales    |
+| Client | rosa.villanueva@example.com | Rosa Maria Villanueva  |
+| Client | carlos.mendoza@example.com  | Carlos Miguel Mendoza  |
+| Client | isabella.tan@example.com    | Isabella Grace Tan     |
+| Client | antonio.garcia@example.com  | Antonio Luis Garcia    |
+
+### Comprehensive Seeder Includes
+
+- 5 Artists with complete profiles, payment accounts, and tags
+- 9 Services (1-2 per artist) with images and tags
+- 17 Artworks with images, tags, and showcases
+- 5 Clients with addresses and carts
+- 2 Completed orders with payments, payouts, and reviews
+- 2 Commissions (1 completed, 1 in-progress) with drafts and payments
+
+---
+
+## Storage Setup
+
+Laravel requires a symbolic link from `public/storage` to `storage/app/public`:
+
 ```bash
-php artisan key:generate
-php artisan migrate
-php artisan db:seed
 php artisan storage:link
 ```
 
+### Storage Structure
+
+```
+storage/app/public/
+├── profiles/      # User profile images
+├── covers/        # Artist cover images
+├── services/      # Service images
+├── artworks/      # Artwork images
+├── references/    # Commission reference images
+└── drafts/        # Commission draft images
+```
+
+### Sample Image for Seeding
+
+Place a sample image at `public/images/anime-girl.jpg` before running seeders.
+
 ---
 
-### 5. Run the Application
+## Running the Application
 
-#### Development Environment
+### Development (Recommended)
+
+Starts server, queue worker, logs, and Vite in parallel:
+
 ```bash
 composer run dev
-npm run dev
-php artisan serve
 ```
 
----
+### Manual Start
 
-### 6. Payment and Mail Integration
-
-#### Install Required Packages
 ```bash
-composer require symfony/mailgun-mailer symfony/http-client
-composer require laravel/socialite
+# Terminal 1: Laravel server
+php artisan serve
+
+# Terminal 2: Queue worker (for emails/notifications)
+php artisan queue:listen --tries=1
+
+# Terminal 3: Vite dev server
+npm run dev
+
+# Terminal 4: Logs (optional)
+php artisan pail --timeout=0
+```
+
+### Production Build
+
+```bash
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
 ---
 
-### 7. Additional Notes
+## Payment Integration (Xendit)
 
-- Ensure all dependencies are installed and configured properly to avoid errors.
-- Check for any missing configurations in the `.env` file and update accordingly.
-- For further assistance, refer to the Laravel documentation or the project's source code.
+This project uses [Xendivel](https://github.com/glennraya/xendivel) for Xendit payment integration.
+
+### Supported Payment Methods
+
+- GCash
+- PayMaya
+- Bank Transfer
+- Credit/Debit Cards
+
+### Webhook Configuration
+
+1. Set your webhook URL in Xendit Dashboard: `https://yourdomain.com/xendit/webhook`
+2. Copy the verification token to `.env`:
+    ```env
+    XENDIT_WEBHOOK_VERIFICATION_TOKEN=your-token
+    ```
+
+### Testing Payments
+
+Use Xendit's test mode credentials for development. Switch to live credentials for production.
 
 ---
 
-## About Laravel
+## Mail Integration
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Mailgun Setup
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Create a Mailgun account at [mailgun.com](https://www.mailgun.com/)
+2. Add and verify your domain
+3. Get API credentials from the dashboard
+4. Update `.env`:
+    ```env
+    MAIL_MAILER=mailgun
+    MAILGUN_DOMAIN=mg.yourdomain.com
+    MAILGUN_SECRET=key-xxxxxxxxxxxxx
+    ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Queue Configuration
 
-## Learning Laravel
+Emails are queued by default. Ensure the queue worker is running:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+php artisan queue:listen
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Google OAuth
 
-## Laravel Sponsors
+### Setup Steps
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials
+5. Add authorized redirect URI: `http://127.0.0.1:8000/auth/google/callback`
+6. Copy Client ID and Secret to `.env`
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Useful Commands
 
-## Contributing
+```bash
+# Clear all caches
+php artisan optimize:clear
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Run tests
+php artisan test
 
-## Code of Conduct
+# Check routes
+php artisan route:list
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Run queue worker
+php artisan queue:work
 
-## Security Vulnerabilities
+# View logs
+php artisan pail
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
+
+## Troubleshooting
+
+### Storage Link Issues
+
+If images don't load, recreate the storage link:
+
+```bash
+# Windows
+rmdir public\storage
+php artisan storage:link
+
+# Linux/Mac
+rm public/storage
+php artisan storage:link
+```
+
+### Permission Issues (Linux/Mac)
+
+```bash
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+```
+
+### Queue Not Processing
+
+Ensure queue worker is running:
+
+```bash
+php artisan queue:listen --tries=3
+```
+
+### Database Reset
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+---
+
+## Tech Stack
+
+- **Backend**: Laravel 11
+- **Frontend**: Blade, Alpine.js, Tailwind CSS, Flowbite
+- **Database**: SQLite/MySQL
+- **Payments**: Xendit (via Xendivel)
+- **Mail**: Mailgun
+- **Authentication**: Laravel Breeze, Laravel Socialite (Google OAuth)
+- **Queue**: Database driver
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
