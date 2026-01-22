@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Artist;
 
+use App\Mail\OrderTrackingMail;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use App\Models\Attachment;
 use App\Models\ProofOfDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -52,6 +54,13 @@ class OrderController extends Controller
         $order->delivery->update(['status' => 'in-transit']);
         $order->update(['status' => 'accepted']);
 
+        // Send email to client
+        Mail::to($order->client->user->email)->send(new OrderTrackingMail(
+            $order->client->user->name,
+            'In-transit',
+            'Your order is now in transit. You can track it using the tracking number: ' . $order->delivery->id . '.'
+        ));
+
         return redirect()->route('artist.order.show', $order);
     }
 
@@ -78,6 +87,13 @@ class OrderController extends Controller
                 ]);
 
                 $order->delivery->update(['status' => 'delivered']);
+
+                // Send email to client
+                Mail::to($order->client->user->email)->send(new OrderTrackingMail(
+                    $order->client->user->name,
+                    'Delivered',
+                    'Your order has been delivered. You can view the proof of delivery in your account.'
+                ));
             }
         }
 

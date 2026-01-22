@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Mail\ArtistWelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredArtistController extends Controller
 {
@@ -132,7 +134,9 @@ class RegisteredArtistController extends Controller
             if (!empty($tags)) {
                 $artist->tags()->attach($tags);
             }
-        }        
+        } 
+
+        Mail::to($user->email)->send(new ArtistWelcomeMail($user->name));
 
         event(new Registered($user));
 

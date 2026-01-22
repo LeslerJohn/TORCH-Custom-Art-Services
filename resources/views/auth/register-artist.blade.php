@@ -541,7 +541,7 @@
                     <input id="policy" type="checkbox"
                         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                         name="policy" required>
-                    <span class="ms-2 text-sm text-gray-600">I agree to the <a href="{{ route('privacy') }}"
+                    <span class="ms-2 text-sm text-gray-600">I agree to the <a href="{{ route('artist-agreement') }}" target="_blank"
                             class="text-blue-400 underline">Terms and Privacy Policy</a></span>
                 </label>
             </div>

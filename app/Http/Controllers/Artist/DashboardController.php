@@ -266,6 +266,140 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function exportCommissionList(Request $request)
+    {
+        $artist = Auth::user()->artist;
+        if (!$artist) {
+            abort(404);
+        }
+
+        $status = $request->input('status', 'all');
+
+        // Fetch commissions based on the status filter
+        $commissions = Commission::with('request.client.user')
+            ->whereHas('request.service', function ($query) use ($artist) {
+                $query->where('artist_id', $artist->id);
+            })
+            ->when($status !== 'all', function ($query) use ($status) {
+                return $query->where('status', $status);
+            })
+            ->get();
+
+        // Check if there are commissions to export
+        if ($commissions->isEmpty()) {
+            return back()->with('error', 'No commissions found for the selected status.');
+        }
+
+        // Prepare CSV headers
+        $headers = [
+            'Status',
+            'Commission Deadline',
+            'Total Price',
+            'Client Name',
+            'Phone Number',
+            'Client Shipping Address',
+            'Service Details',
+            'Description',
+        ];
+
+        // Initialize CSV data with headers
+        $csvData = implode(',', $headers) . "\n";
+
+        // Populate CSV rows
+        foreach ($commissions as $commission) {
+            $row = [
+                ucfirst($commission->status),
+                $commission->deadline ? \Carbon\Carbon::parse($commission->deadline)->format('Y-m-d') : 'N/A',
+                number_format($commission->request->total_price, 2, '.', ','),
+                $commission->request->client->user->name,
+                $commission->request->client->user->phone_number ?? 'N/A',
+                ($commission->request->client->user->address->house_number ?? 'N/A') . ' ' .
+                ($commission->request->client->user->address->street ?? 'N/A') . ' ' .
+                ($commission->request->client->user->address->barangay ?? 'N/A'),
+                $commission->request->service->category->name,
+                $commission->request->description,
+            ];
+
+            $csvData .= implode(',', $row) . "\n";
+        }
+
+        $filename = "commission_list_" . now()->format('Y-m-d') . ".csv";
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ]);
+    }
+
+    public function exportOrderList(Request $request)
+    {
+        $artist = Auth::user()->artist;
+        if (!$artist) {
+            abort(404);
+        }
+
+        $status = $request->input('status', 'all');
+
+        // Fetch orders based on the status filter
+        $orders = Order::with('items.artwork')
+            ->whereHas('items.artwork', function ($query) use ($artist) {
+            $query->where('artist_id', $artist->id);
+            })
+            ->when($status !== 'all', function ($query) use ($status) {
+            return $query->where('status', $status);
+            })
+            ->get();
+
+        // Check if there are orders to export
+        if ($orders->isEmpty()) {
+            return back()->with('error', 'No orders found for the selected status.');
+        }
+
+        // Prepare CSV headers
+        $headers = [
+            'Status',
+            'Order Date',
+            'Order Deadline',
+            'Total Price',
+            'Client Name',
+            'Phone Number',
+            'Client Shipping Address',
+            'Artwork Details'
+        ];
+
+        // Initialize CSV data with headers
+        $csvData = implode(',', $headers) . "\n";
+
+        // Populate CSV rows
+        foreach ($orders as $order) {
+            $artworkDetails = $order->items->map(function ($item) {
+            return $item->artwork->title . ' (' . $item->artwork->price . ')';
+            })->implode('; ');
+
+            $row = [
+                ucfirst($order->status),
+                $order->created_at->format('Y-m-d'),
+                $order->delivery ? \Carbon\Carbon::parse($order->delivery->expected_delivery)->format('Y-m-d') : 'N/A',
+                number_format($order->total, 2, '.', ','),
+                $order->client->user->name,
+                $order->client->user->phone_number ?? 'N/A',
+                ($order->client->user->address->house_number ?? 'N/A') . ' ' .
+                ($order->client->user->address->street ?? 'N/A') . ' ' .
+                ($order->client->user->address->barangay ?? 'N/A'),
+                $artworkDetails
+            ];
+
+            $csvData .= implode(',', $row) . "\n";
+        }
+
+        $filename = "order_list_" . now()->format('Y-m-d') . ".csv";
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ]);
+    }
+
     public function availability()
     {
         $artist = Auth::user()->artist;

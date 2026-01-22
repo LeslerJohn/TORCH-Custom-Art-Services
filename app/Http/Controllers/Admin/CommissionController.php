@@ -10,6 +10,8 @@ use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DeadlineExtensionResponseMail;
 
 class CommissionController extends Controller
 {
@@ -122,6 +124,18 @@ class CommissionController extends Controller
         $commission->extension->update([
             'status' => 'approved',
         ]);
+
+        Mail::to($commission->request->client->user->email)->send(new DeadlineExtensionResponseMail(
+            $commission->request->client->user->name,
+            $commission->request->service->artist->user->name,
+            'Your commission deadline has been extended to ' . $newDeadline->format('Y-m-d') . '.'
+        ));
+
+        Mail::to($commission->request->service->artist->user->email)->send(new DeadlineExtensionResponseMail(
+            $commission->request->client->user->name,
+            $commission->request->service->artist->user->name,
+            'Your commission deadline has been extended to ' . $newDeadline->format('Y-m-d') . '.'
+        ));
 
         return redirect()->route('admin.commission.show', $commission)->with('success', 'Commission deadline extended successfully.');
     }

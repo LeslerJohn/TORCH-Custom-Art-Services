@@ -110,6 +110,21 @@
                     });
                 });
             </script>
+
+            <div>
+                <form method="POST" action="{{ route('artist.order.export-csv') }}">
+                    @csrf
+                    <input type="hidden" name="status" id="export-status" value="all">
+                    <button type="submit"
+                        class="inline-flex items-center text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-orange-700 dark:hover:bg-orange-800 dark:focus:ring-orange-900">
+                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Export to CSV
+                    </button>
+                </form>
+            </div>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

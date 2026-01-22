@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use App\Mail\CartCheckoutMail;
+use App\Mail\OrderCancelledMail;
+use App\Mail\OrderReturnedMail;
+use App\Mail\OrderTrackingMail;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -212,6 +217,13 @@ class OrderController extends Controller
                 'status' => 'pending',
             ]);
 
+            // Send email notification
+            Mail::to($request->user()->email)->send(new CartCheckoutMail(
+                $request->user()->name,
+                $artwork->title,
+                $payment->data->attributes->amount / 100
+            ));
+
             return redirect()->route('client.order.show', $order)->with('success', 'Order placed successfully!');
         } else {
             return redirect()->route('client.order.index')->withErrors(['error' => 'Payment failed.']);
@@ -278,6 +290,12 @@ class OrderController extends Controller
             $order->delivery->update(['status' => 'hold']);
         }
 
+        // Send email notification
+        Mail::to($request->user()->email)->send(new OrderReturnedMail(
+            $request->user()->name,
+            "Order #{$order->id} - Total: PHP " . number_format($order->total, 2)
+        ));
+
         return redirect()->route('client.order.show', $order)->with('success', 'Order return request sent.');
     }
 
@@ -295,6 +313,12 @@ class OrderController extends Controller
         $order->payout->update([
             'status' => 'ready'
         ]);
+
+        Mail::to($order->client->user->email)->send(new OrderTrackingMail(
+            $order->client->user->name,
+            'Order Completed',
+            "Your order #{$order->id} has been completed. Thank you for your purchase!"
+        ));
 
         return redirect()->route('client.order.show', $order)->with('success', 'Order status updated successfully.');
     }
@@ -370,6 +394,12 @@ class OrderController extends Controller
                     $item->artwork->discount->update(['status' => 'active']);
                 }
             }
+
+            // Send email notification
+            Mail::to(Auth::user()->email)->send(new OrderCancelledMail(
+                Auth::user()->name,
+                "Order #{$order->id} - Total: PHP " . number_format($order->total, 2)
+            ));
 
             return redirect()->route('client.order.show', $order)->with('success', 'Order cancelled and refund processed successfully.');
         } else {

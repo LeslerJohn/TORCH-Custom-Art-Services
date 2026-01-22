@@ -910,18 +910,38 @@
                                                 </div>
 
                                                 <!-- Modal footer -->
-                                                <div
-                                                    class="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
-                                                    <button type="button"
-                                                        class="px-5 py-2.5 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
-                                                        data-modal-hide="payment-modal">
-                                                        Back
-                                                    </button>
-                                                    <button type="submit"
-                                                        class="px-5 py-2.5 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                                                        Submit Request
-                                                    </button>
-                                                </div>
+                                                @if (auth()->check() && auth()->user()->address && auth()->user()->phone_number)
+                                                    <div
+                                                        class="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
+                                                        <button type="button"
+                                                            class="px-5 py-2.5 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+                                                            data-modal-hide="payment-modal">
+                                                            Back
+                                                        </button>
+                                                        <button type="submit"
+                                                            class="px-5 py-2.5 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                                                            Submit Request
+                                                        </button>
+                                                    </div>
+                                                @else
+                                                    <div class="border rounded-lg p-4 bg-yellow-50 border-yellow-200">
+                                                        <div class="flex items-start">
+                                                            <svg class="w-6 h-6 text-yellow-600 mr-3 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                                            </svg>
+                                                            <div>
+                                                                <h5 class="font-medium text-gray-900">Address and Phone Number Required</h5>
+                                                                <p class="text-sm text-gray-700 mb-4">Please add your address and phone number before submitting the request.</p>
+                                                                <a href="{{ route('profile.edit') }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                                                                    <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                                    </svg>
+                                                                    Add Address and Phone Number
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

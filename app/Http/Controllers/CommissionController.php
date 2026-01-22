@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\CommissionTrackingMail;
 use App\Models\Address;
 use App\Models\Attachment;
 use App\Models\Commission;
@@ -13,6 +14,7 @@ use App\Models\Request as ModelsRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CommissionController extends Controller
 {
@@ -70,6 +72,12 @@ class CommissionController extends Controller
         $commission->request->payout->update([
             'status' => 'ready',
         ]);
+
+        Mail::to($commission->request->client->user->email)->send(new CommissionTrackingMail(
+            $commission->request->client->user->name,
+            'Completed',
+            'Your commission has been completed. Thank you for your patronage!'
+        ));
 
         return redirect()->route('client.commission.show', $commission)->with('success', 'Commission received!');
     }

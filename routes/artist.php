@@ -100,3 +100,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/artist/discount/{discount}', [DiscountController::class, 'status_update'])->name('artist.discount.status-update');
     Route::delete('/artist/discount/{discount}', [DiscountController::class, 'destroy'])->name('artist.discount.destroy');
 });
+
+
+Route::post('/artist/commission/export-csv', [DashboardController::class, 'exportCommissionList'])->name('artist.commission.export-csv');
+Route::post('/artist/order/export-csv', [DashboardController::class, 'exportOrderList'])->name('artist.order.export-csv');

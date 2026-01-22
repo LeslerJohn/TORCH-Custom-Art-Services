@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ServiceRequestMail;
 use App\Models\Attachment;
 use App\Models\Commission;
 use App\Models\Payment;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Session;
 use App\Mail\RequestDetailsMail;
 use App\Mail\NewRequestMail;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestCancelledMail;
 
 class RequestController extends Controller
 {
@@ -251,6 +253,11 @@ class RequestController extends Controller
                 //     'price' => $decodedRequestData['total_price'],
                 //     'deadline' => $decodedRequestData['deadline'],
                 // ]));
+            
+                Mail::to(Auth::user()->email)->send(new ServiceRequestMail(
+                    Auth::user()->name,
+                    'Description: ' . $decodedRequestData['description'] . ', Price: ' . $decodedRequestData['total_price'] . ', Deadline: ' . $decodedRequestData['deadline']
+                ));
 
                 return redirect()->route('client.request.show', $modelrequest)->with('success', 'Request created successfully!');
             }
@@ -344,6 +351,11 @@ class RequestController extends Controller
 
             // Update request status
             $request->update(['status' => 'cancelled']);
+
+            Mail::to($request->client->user->email)->send(new RequestCancelledMail(
+                $request->client->user->name,
+                'Your request has been cancelled successfully. A refund has been processed.'
+            ));
 
             $request->payout->delete();
 

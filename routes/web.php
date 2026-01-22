@@ -12,6 +12,7 @@ use App\Http\Controllers\ReviewController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Artist\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,12 @@ Route::get('/terms & conditions', function () {
 Route::get('/privacy policy', function () {
     return view('statics/privacy');
 })->name('privacy');
+Route::get('/artist-agreement', function () {
+    return view('statics/artist-agreement');
+})->name('artist-agreement');
+Route::get('/client-agreement', function () {
+    return view('statics/client-agreement');
+})->name('client-agreement');
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', [HomeController::class, 'index']);
@@ -93,6 +100,8 @@ Route::get('mail/{name}', function ($name) {
 
 Route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');
 Route::get('auth/google/callback', [GoogleController::class, 'googleCallback'])->name('auth.google.callback');
+
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/artist.php';

@@ -7,6 +7,113 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# TORCHV2
+
+## Project Setup and Configuration
+
+Follow the steps below to set up and run the TORCHV2 project on your local machine.
+
+---
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/LeslerJohn/TORCHV2.git
+cd TORCHV2
+```
+
+---
+
+### 2. Setup `.env` File
+```bash
+cp .env.example .env
+```
+Update the `.env` file with the following configurations:
+
+#### Mail Configuration
+```env
+MAIL_MAILER=mailgun
+MAIL_FROM_ADDRESS=your-email@example.com
+MAIL_FROM_NAME="Your App Name"
+MAILGUN_DOMAIN=your-mailgun-domain
+MAILGUN_SECRET=your-mailgun-secret
+```
+
+#### Payment Configuration
+```env
+AUTH_PAY=your-auth-pay-key
+```
+
+#### Google OAuth Configuration
+```env
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
+```
+
+---
+
+### 3. Install Dependencies
+
+#### Backend Dependencies
+```bash
+composer install
+```
+
+#### Frontend Dependencies
+```bash
+npm install
+npm run build
+npm install -D tailwindcss postcss autoprefixer flowbite
+```
+
+---
+
+### 4. Generate Key and Data
+
+#### TailwindCSS Configuration
+```bash
+npx tailwindcss init -p
+```
+
+#### Laravel Key and Database Setup
+```bash
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan storage:link
+```
+
+---
+
+### 5. Run the Application
+
+#### Development Environment
+```bash
+composer run dev
+npm run dev
+php artisan serve
+```
+
+---
+
+### 6. Payment and Mail Integration
+
+#### Install Required Packages
+```bash
+composer require symfony/mailgun-mailer symfony/http-client
+composer require laravel/socialite
+```
+
+---
+
+### 7. Additional Notes
+
+- Ensure all dependencies are installed and configured properly to avoid errors.
+- Check for any missing configurations in the `.env` file and update accordingly.
+- For further assistance, refer to the Laravel documentation or the project's source code.
+
+---
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

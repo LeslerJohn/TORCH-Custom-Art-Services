@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
+use App\Mail\ClientWelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -53,6 +55,8 @@ class RegisteredUserController extends Controller
             'rating' => 0,
             'is_suspended' => false,
         ]);
+
+        Mail::to($user->email)->send(new ClientWelcomeMail($user->name));
 
         event(new Registered($user));
 
