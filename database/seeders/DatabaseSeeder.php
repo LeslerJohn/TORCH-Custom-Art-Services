@@ -4,20 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\ClientProfile;
-use App\Models\ArtistProfile;
 use App\Models\Category;
 use App\Models\Tag;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-
-        // Seed admin user
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@gmail.com',
@@ -35,21 +28,18 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($categories as $categoryName => $tags) {
-            // Create Category
             $category = Category::factory()->create(['name' => $categoryName]);
-        
-            // Create Tags & Extract IDs
+
             $tagIds = collect($tags)->map(function ($tagName) {
-                return Tag::factory()->create(['name' => $tagName])->id; // Get ULID ID
-            })->toArray(); // Convert collection to array
-        
-            // Attach only the IDs (ULIDs)
+                return Tag::factory()->create(['name' => $tagName])->id;
+            })->toArray();
+
             $category->tags()->attach($tagIds);
         }
-        
-        // $this->call([
-        //     ArtistSeeder::class,
-        //     ClientSeeder::class,
-        // ]);
+
+        $this->call([
+            ArtistSeeder::class,
+            ClientSeeder::class
+        ]);
     }
 }
